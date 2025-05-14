@@ -382,17 +382,13 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.showPlaylists.addEventListener('click', navigation.showPlaylists);
     elements.themeToggle.addEventListener('click', theme.toggle);
     
-    // User selection
-    document.getElementById('userSelectForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('userDropdown').value;
-        await users.select(username);
-        modals.hideUserSelect();
-    });
+    // Jobs section
+    document.getElementById('refreshJobs')?.addEventListener('click', jobs.load);
     
-    document.getElementById('cancelUserSelect').addEventListener('click', modals.hideUserSelect);
+    // Playlists section
+    document.getElementById('createPlaylist')?.addEventListener('click', modals.showCreatePlaylist);
     
-    // Create playlist
+    // Create playlist modal
     document.getElementById('createPlaylistForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('playlistName').value;
@@ -405,10 +401,107 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     document.getElementById('cancelCreate')?.addEventListener('click', modals.hideCreatePlaylist);
+    document.getElementById('confirmCreate')?.addEventListener('click', async () => {
+        const name = document.getElementById('playlistName').value;
+        if (!name) {
+            utils.showError('Please enter a playlist name');
+            return;
+        }
+        try {
+            await playlists.create(name);
+            modals.hideCreatePlaylist();
+        } catch (error) {
+            // Error already handled in create method
+        }
+    });
     
-    // Job search
-    document.getElementById('jobSearch')?.addEventListener('input', (e) => {
-        jobs.search(e.target.value);
+    // Add jobs modal
+    document.getElementById('cancelAddJobs')?.addEventListener('click', modals.hideAddJobs);
+    document.getElementById('confirmAddJobs')?.addEventListener('click', async () => {
+        if (!state.currentPlaylist) return;
+        
+        const selectedJobs = Array.from(state.selectedJobs.values());
+        if (selectedJobs.length === 0) {
+            utils.showError('Please select at least one job');
+            return;
+        }
+        
+        utils.showLoading();
+        try {
+            for (const job of selectedJobs) {
+                await API.playlists.addJob(state.currentPlaylist._id, job);
+            }
+            await playlists.view(state.currentPlaylist._id);
+            modals.hideAddJobs();
+        } catch (error) {
+            utils.showError('Failed to add jobs: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    });
+    
+    // Manage players modal
+    document.getElementById('cancelManagePlayers')?.addEventListener('click', modals.hideManagePlayers);
+    document.getElementById('saveManagePlayers')?.addEventListener('click', async () => {
+        if (!state.currentPlaylist) return;
+        
+        const checkboxes = document.querySelectorAll('#playersCheckboxList input[type="checkbox"]');
+        const selectedPlayers = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+            
+        if (selectedPlayers.length === 0) {
+            utils.showError('Please select at least one player');
+            return;
+        }
+        
+        utils.showLoading();
+        try {
+            await API.playlists.updatePlayers(state.currentPlaylist._id, selectedPlayers);
+            await playlists.view(state.currentPlaylist._id);
+            modals.hideManagePlayers();
+        } catch (error) {
+            utils.showError('Failed to update players: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    });
+    
+    // User selection
+    document.getElementById('userSelectForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('userDropdown').value;
+        await users.select(username);
+        modals.hideUserSelect();
+    });
+    
+    document.getElementById('cancelUserSelect')?.addEventListener('click', modals.hideUserSelect);
+    
+    // Edit playlist modal
+    document.getElementById('cancelEdit')?.addEventListener('click', () => {
+        elements.editPlaylistModal.classList.add('hidden');
+    });
+    
+    document.getElementById('confirmEdit')?.addEventListener('click', async () => {
+        if (!state.currentPlaylist) return;
+        
+        const newName = document.getElementById('editPlaylistName').value;
+        if (!newName) {
+            utils.showError('Please enter a playlist name');
+            return;
+        }
+        
+        utils.showLoading();
+        try {
+            await API.playlists.update(state.currentPlaylist._id, { name: newName });
+            state.currentPlaylist.name = newName;
+            playlists.renderDetails();
+            elements.editPlaylistModal.classList.add('hidden');
+        } catch (error) {
+            utils.showError('Failed to update playlist: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
     });
 });
 
