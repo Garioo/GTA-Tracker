@@ -109,16 +109,21 @@ const API = {
         },
 
         async delete(id) {
-            const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
-                method: 'DELETE'
-            });
-            
-            // Handle the response
-            if (response.status === 404) {
-                throw new Error('Playlist not found');
+            try {
+                const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                // Handle 404 specifically for delete operations
+                if (response.status === 404) {
+                    return { success: true, message: 'Playlist not found - it may have been deleted already' };
+                }
+                
+                return API.handleResponse(response);
+            } catch (error) {
+                console.error('Delete error:', error);
+                throw error;
             }
-            
-            return API.handleResponse(response);
         },
 
         async addJob(id, job) {
