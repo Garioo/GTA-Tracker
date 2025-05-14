@@ -78,7 +78,7 @@ const PlaylistDetails = (playlist) => `
                 </div>
             </div>
         </div>
-        <div class="w-2/3">
+        <div class="w-1/2">
             <div class="minimal-card p-4">
                 <div class="flex justify-between items-center mb-4">
                     <div>
