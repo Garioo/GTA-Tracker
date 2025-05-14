@@ -272,7 +272,7 @@
                         <button id="managePlayersBtn" class="minimal-btn"><i class="fas fa-users mr-2"></i>Manage Players</button>
                     </div>
                 </div>
-                <div id="playlistJobs" class="space-y-4">
+                <div id="playlistJobs" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Playlist jobs will be inserted here -->
                 </div>
             </div>
@@ -656,10 +656,13 @@
                 if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
                 if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
                 if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                html += `<div class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left focus:outline-none" data-job="${job.url}">
+                html += `<div class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left focus:outline-none w-full md:w-1/2" data-job="${job.url}">
                     <div class="flex items-center cursor-pointer job-header" data-job="${job.url}">
                         <i class="fas fa-flag-checkered text-blue-700 mr-2"></i>
                         <span class="font-bold text-base">${job.title}</span>
+                    </div>
+                    <div class='flex flex-row flex-wrap items-center gap-1 text-xs mt-1 mb-1'>
+                        ${info.map(item => `<span class='truncate max-w-[90px]'>${item}</span>`).join('')}
                     </div>`;
                 if (isExpanded) {
                     html += `<div class='flex flex-col md:flex-row gap-1 mt-2 items-start'>
@@ -702,9 +705,10 @@
                         </div>`;
                     });
                     html += `</div></div>
-                        <div class='minimal-card p-1 text-xs w-full md:w-auto md:min-w-[180px] md:max-w-[220px] ml-0 md:ml-3 flex flex-row flex-nowrap items-center gap-1 overflow-x-auto'>
-                            ${info.map(item => `<span class='truncate max-w-[90px]'>${item}</span>`).join('')}
-                        </div>
+                        <div class="flex justify-end mt-2">
+                            <button class="btn save-stats-btn" data-job="${job.url}"><i class="fas fa-save mr-1"></i>Save All</button>
+                        </div>`;
+                    html += `</div></div>
                     </div>`;
                 }
                 html += `</div>`;
@@ -716,6 +720,36 @@
                     const card = header.closest('.minimal-card[data-job]');
                     expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
                     renderStatsTable(window.currentPlaylistObj);
+                };
+            });
+            // After rendering job cards, attach click handler for Save All buttons
+            document.querySelectorAll('.save-stats-btn').forEach(btn => {
+                btn.onclick = async (e) => {
+                    const jobUrl = btn.dataset.job;
+                    // Collect all stat inputs for this job
+                    const stats = [];
+                    document.querySelectorAll(`.stat-input[data-job='${jobUrl}']`).forEach(input => {
+                        const user = input.dataset.user;
+                        const field = input.dataset.field;
+                        let stat = stats.find(s => s.username === user);
+                        if (!stat) {
+                            stat = { username: user, jobUrl };
+                            stats.push(stat);
+                        }
+                        if (field === 'placement') stat.placement = input.value;
+                        if (field === 'lapType') {
+                            stat.fastestLap = input.value === 'Fastest';
+                            stat.slowestLap = input.value === 'Slowest';
+                        }
+                        if (field === 'statNotes') stat.statNotes = input.value;
+                    });
+                    // Send to backend
+                    await fetch(`${API_URL}/playlists/${currentPlaylistId}/stats`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ stats })
+                    });
+                    alert('Stats saved!');
                 };
             });
         }
