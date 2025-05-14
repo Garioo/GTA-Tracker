@@ -109,43 +109,32 @@ const API = {
         },
 
         async delete(id) {
-            try {
-                const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
-                    method: 'DELETE'
-                });
-                if (response.status === 404) {
-                    // If the playlist is not found, return success since the end result is the same
-                    return { success: true, message: 'Playlist already deleted' };
-                }
-                return API.handleResponse(response);
-            } catch (error) {
-                if (error.message.includes('404') || error.message.includes('not found')) {
-                    return { success: true, message: 'Playlist already deleted' };
-                }
-                throw error;
+            const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
+                method: 'DELETE'
+            });
+            
+            // Only treat as success if we get a 200 OK
+            if (response.status === 200) {
+                return { success: true, message: 'Playlist deleted successfully' };
             }
+            
+            // For any other status, including 404, throw an error
+            return API.handleResponse(response);
         },
 
         async addJob(id, job) {
-            // Match the exact structure from the API
+            // Send only the essential job data
             const jobData = {
-                _id: job._id,
                 url: job.url,
                 title: job.title,
                 creator: job.creator,
                 rating: job.rating,
                 gameMode: job.gameMode,
                 routeType: job.routeType,
-                routeLength: job.routeLength,
-                players: job.players,
-                teams: job.teams,
-                vehicleClasses: job.vehicleClasses,
-                locations: job.locations,
-                creationDate: job.creationDate,
-                lastPlayed: job.lastPlayed,
-                lastUpdated: job.lastUpdated
+                routeLength: job.routeLength
             };
             
+            console.log('Sending job data:', jobData);
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

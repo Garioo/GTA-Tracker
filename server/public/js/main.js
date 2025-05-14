@@ -307,21 +307,16 @@ const playlists = {
         utils.showLoading();
         try {
             console.log('Deleting playlist:', id);
-            await API.playlists.delete(id);
-            console.log('Playlist deleted successfully');
+            const result = await API.playlists.delete(id);
+            console.log('Delete result:', result);
+            
+            // Remove from local state regardless of whether it was just deleted or already deleted
             state.playlists = state.playlists.filter(p => p._id !== id);
             playlists.render();
             navigation.showPlaylists();
         } catch (error) {
             console.error('Delete playlist error:', error);
-            if (error.message.includes('404') || error.message.includes('not found')) {
-                // If the playlist is not found, remove it from the local state
-                state.playlists = state.playlists.filter(p => p._id !== id);
-                playlists.render();
-                navigation.showPlaylists();
-            } else {
-                utils.showError('Failed to delete playlist: ' + error.message);
-            }
+            utils.showError('Failed to delete playlist: ' + error.message);
         } finally {
             utils.hideLoading();
         }
