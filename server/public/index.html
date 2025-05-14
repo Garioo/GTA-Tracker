@@ -358,13 +358,13 @@
         </div>
     </div>
     <script>
+    let expandedJobUrl = null;
     window.addEventListener('DOMContentLoaded', function() {
         const API_URL = 'https://trackers.studio/api';
         let currentPlaylistId = null;
         let selectedJobs = new Map();
         let currentUser = null;
         let currentPlaylistPlayers = [];
-        let expandedJobUrl = null;
         
         // UI Elements
         const jobsSection = document.getElementById('jobsSection');
@@ -718,7 +718,7 @@
                         const card = header.closest('.minimal-card[data-job]');
                         expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
                         console.log('Clicked job header:', card.dataset.job, 'ExpandedJobUrl now:', expandedJobUrl);
-                        viewPlaylist(currentPlaylistId);
+                        renderStatsTable(playlist);
                     };
                 });
 
