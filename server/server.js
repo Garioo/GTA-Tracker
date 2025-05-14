@@ -199,9 +199,9 @@ app.put('/api/playlists/:id', async (req, res) => {
 app.delete('/api/playlists/:id', async (req, res) => {
   try {
     console.log('Attempting to delete playlist:', req.params.id);
-    const result = await Playlist.findByIdAndDelete(req.params.id);
+    const result = await Playlist.deleteOne({ _id: req.params.id });
     
-    if (!result) {
+    if (result.deletedCount === 0) {
       console.log('Playlist not found:', req.params.id);
       return res.status(404).json({ 
         success: false, 
