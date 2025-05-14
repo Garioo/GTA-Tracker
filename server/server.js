@@ -43,9 +43,17 @@ const jobSchema = new mongoose.Schema({
   vehicleClasses: [String],
   locations: [String]
 });
+const playerStatSchema = new mongoose.Schema({
+  username: String,
+  jobUrl: String,
+  placement: Number,
+  lapTime: Number,
+  dnf: Boolean
+}, { _id: false });
 const playlistSchema = new mongoose.Schema({
   name: String,
   jobs: [jobSchema],
+  stats: [playerStatSchema],
   scores: {},
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
@@ -177,6 +185,35 @@ app.post('/api/playlists/:id/reorder', async (req, res) => {
   playlist.updatedAt = new Date();
   await playlist.save();
   res.json(playlist);
+});
+
+// Bulk stats endpoint
+app.post('/api/playlists/:id/stats/bulk', async (req, res) => {
+  const { stats } = req.body; // array of { username, jobUrl, placement, lapTime, dnf }
+  const playlist = await Playlist.findById(req.params.id);
+  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+
+  // Remove all stats for the jobs/users in the incoming array
+  stats.forEach(stat => {
+    playlist.stats = playlist.stats.filter(
+      s => !(s.username === stat.username && s.jobUrl === stat.jobUrl)
+    );
+  });
+  // Add all new stats
+  playlist.stats.push(...stats);
+  playlist.updatedAt = new Date();
+  await playlist.save();
+  res.json(playlist);
+});
+
+// User delete endpoint (and remove their stats from all playlists)
+app.delete('/api/users/:username', async (req, res) => {
+  const username = req.params.username;
+  const result = await User.deleteOne({ username });
+  // Remove user stats from all playlists
+  await Playlist.updateMany({}, { $pull: { stats: { username } } });
+  if (result.deletedCount === 0) return res.status(404).json({ error: 'User not found' });
+  res.json({ success: true });
 });
 
 app.listen(port, () => {

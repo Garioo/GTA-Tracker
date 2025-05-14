@@ -455,12 +455,85 @@
                     </div>
                 `).join('');
 
+                // Render stats table for all jobs and users
+                renderStatsTable(playlist);
+
                 playlistsSection.classList.add('hidden');
                 playlistDetailsSection.classList.remove('hidden');
             } catch (error) {
                 console.error('Error loading playlist details:', error);
                 alert('Error loading playlist details: ' + error.message);
             }
+        };
+
+        // Fast stat entry table for playlist jobs and users
+        function renderStatsTable(playlist) {
+            fetch(`${API_URL}/users`).then(r => r.json()).then(users => {
+                const jobs = playlist.jobs;
+                const stats = playlist.stats || [];
+                let html = '<h3 class="font-bold text-lg mt-6 mb-2">Player Stats</h3>';
+                jobs.forEach(job => {
+                    html += `<div class="mb-4"><h4 class="font-bold">${job.title}</h4>`;
+                    html += `<table class="min-w-full text-sm mb-2"><thead><tr>
+                        <th class="px-2">Player</th>
+                        <th class="px-2">Placement</th>
+                        <th class="px-2">Lap Time (s)</th>
+                        <th class="px-2">DNF</th>
+                    </tr></thead><tbody>`;
+                    users.forEach(user => {
+                        const stat = stats.find(s => s.username === user.username && s.jobUrl === job.url) || {};
+                        html += `<tr>
+                            <td class="px-2">${user.username}</td>
+                            <td class="px-2"><input type="number" min="1" class="stat-input border rounded w-16" data-job="${job.url}" data-user="${user.username}" data-field="placement" value="${stat.placement || ''}"></td>
+                            <td class="px-2"><input type="number" min="0" step="0.01" class="stat-input border rounded w-20" data-job="${job.url}" data-user="${user.username}" data-field="lapTime" value="${stat.lapTime || ''}"></td>
+                            <td class="px-2 text-center"><input type="checkbox" class="stat-input" data-job="${job.url}" data-user="${user.username}" data-field="dnf" ${stat.dnf ? 'checked' : ''}></td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table></div>';
+                });
+                html += `<button id="saveStatsBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save All Stats</button>`;
+                document.getElementById('playlistJobs').insertAdjacentHTML('beforeend', html);
+
+                document.getElementById('saveStatsBtn').onclick = () => {
+                    // Gather all stats
+                    const inputs = document.querySelectorAll('.stat-input');
+                    const statsMap = {};
+                    inputs.forEach(input => {
+                        const jobUrl = input.dataset.job;
+                        const username = input.dataset.user;
+                        const field = input.dataset.field;
+                        const key = `${username}|${jobUrl}`;
+                        if (!statsMap[key]) statsMap[key] = { username, jobUrl };
+                        if (field === 'dnf') {
+                            statsMap[key][field] = input.checked;
+                        } else {
+                            statsMap[key][field] = input.value ? Number(input.value) : undefined;
+                        }
+                    });
+                    // Only send stats with at least one value
+                    const stats = Object.values(statsMap).filter(s => s.placement || s.lapTime || s.dnf);
+                    fetch(`${API_URL}/playlists/${playlist._id}/stats/bulk`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ stats })
+                    }).then(r => r.json()).then(data => {
+                        alert('Stats saved!');
+                        viewPlaylist(playlist._id); // Refresh
+                    }).catch(e => alert('Error saving stats: ' + e.message));
+                };
+            });
+        }
+
+        // User removal function
+        window.deleteUser = function(username) {
+            if (!confirm(`Delete user ${username}?`)) return;
+            fetch(`${API_URL}/users/${encodeURIComponent(username)}`, { method: 'DELETE' })
+                .then(r => r.json())
+                .then(data => {
+                    alert('User deleted');
+                    populateUserDropdown(); // Refresh user list
+                })
+                .catch(e => alert('Error deleting user: ' + e.message));
         };
 
         // Remove job from playlist
