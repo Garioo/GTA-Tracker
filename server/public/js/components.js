@@ -61,46 +61,78 @@ const PlaylistDetails = (playlist) => `
     <div class="flex gap-4">
         <div class="w-1/2">
             <div class="minimal-card p-4">
-                <h3 class="font-bold text-lg mb-2">Playlist Stats</h3>
-                <div class="text-sm mb-1">
-                    <i class="fas fa-list mr-1"></i>Total Jobs: <span class="font-semibold">${playlist.jobs.length}</span>
+                <h3 class="font-bold text-lg mb-4 flex items-center">
+                    <i class="fas fa-chart-bar mr-2 text-blue-500"></i>
+                    Playlist Overview
+                </h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <div class="text-sm text-blue-600 mb-1">
+                            <i class="fas fa-list mr-1"></i>Total Jobs
+                        </div>
+                        <div class="text-2xl font-bold text-blue-700">${playlist.jobs.length}</div>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <div class="text-sm text-green-600 mb-1">
+                            <i class="fas fa-users mr-1"></i>Total Players
+                        </div>
+                        <div class="text-2xl font-bold text-green-700">${playlist.players?.length || 0}</div>
+                    </div>
                 </div>
-                <div class="text-sm mb-1">
-                    <i class="fas fa-users mr-1"></i>Total Players: <span class="font-semibold">${playlist.players?.length || 0}</span>
-                </div>
-                <div class="text-sm mb-3">
-                    <i class="fas fa-trophy mr-1"></i>Total Points: <span class="font-semibold">${
+                <div class="bg-purple-50 p-3 rounded-lg mb-4">
+                    <div class="text-sm text-purple-600 mb-1">
+                        <i class="fas fa-trophy mr-1"></i>Total Points
+                    </div>
+                    <div class="text-2xl font-bold text-purple-700">${
                         playlist.stats?.reduce((total, stat) => {
                             const points = [15,12,10,8,7,6,5,4,3,2,1,0][stat.placement - 1] || 0;
                             return total + points;
                         }, 0) || 0
-                    }</span>
+                    }</div>
+                </div>
+                <div class="text-sm text-gray-500">
+                    <i class="fas fa-calendar mr-1"></i>
+                    Created: ${new Date(playlist.createdAt).toLocaleDateString()}
                 </div>
             </div>
         </div>
         <div class="w-1/2">
             <div class="minimal-card p-4">
-                <div class="flex justify-end space-x-2 mb-4">
-                    <button id="addJobsToPlaylist" class="minimal-btn">
-                        <i class="fas fa-plus mr-2"></i>Add Jobs
-                    </button>
-                    <button id="managePlayersBtn" class="minimal-btn">
-                        <i class="fas fa-users mr-2"></i>Manage Players
-                    </button>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg flex items-center">
+                        <i class="fas fa-flag-checkered mr-2 text-red-500"></i>
+                        Race Jobs
+                    </h3>
+                    <div class="flex space-x-2">
+                        <button id="addJobsToPlaylist" class="minimal-btn bg-blue-500 text-white hover:bg-blue-600">
+                            <i class="fas fa-plus mr-2"></i>Add Jobs
+                        </button>
+                        <button id="managePlayersBtn" class="minimal-btn bg-green-500 text-white hover:bg-green-600">
+                            <i class="fas fa-users mr-2"></i>Manage Players
+                        </button>
+                    </div>
                 </div>
                 <div id="playlistJobs" class="grid grid-cols-1 gap-2">
                     ${playlist.jobs.map(job => `
-                        <div class="job-card p-3 flex justify-between items-center">
+                        <div class="job-card p-3 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg">
                             <div>
-                                <h3 class="font-semibold">${job.title}</h3>
-                                <div class="text-sm text-muted">
-                                    <span>${job.gameMode}</span> • 
-                                    <span>${job.routeType}</span> • 
-                                    <span>${job.routeLength}</span>
+                                <h3 class="font-semibold text-gray-800">${job.title}</h3>
+                                <div class="text-sm text-gray-500">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                                        <i class="fas fa-gamepad mr-1"></i>${job.gameMode}
+                                    </span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-2">
+                                        <i class="fas fa-route mr-1"></i>${job.routeType}
+                                    </span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                                        <i class="fas fa-ruler mr-1"></i>${job.routeLength}
+                                    </span>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="text-sm">Rating: ${job.rating}</p>
+                                <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <i class="fas fa-star mr-1"></i>${job.rating}
+                                </div>
                             </div>
                         </div>
                     `).join('')}
