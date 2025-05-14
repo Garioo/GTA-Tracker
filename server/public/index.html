@@ -655,90 +655,100 @@
             fetch(`${API_URL}/users`).then(r => r.json()).then(users => {
                 const jobs = playlist.jobs;
                 const stats = playlist.stats || [];
-                let html = `
-                <div class="mt-6 mb-4 minimal-card p-2 shadow-lg">
-                    <h3 class="font-bold text-lg mb-1 flex items-center">
-                        <i class="fas fa-trophy text-yellow-500 mr-2"></i>Player Stats
-                    </h3>
-                `;
+                const pointsTable = [15,12,10,8,7,6,5,4,3,2,1,0];
+                let html = `<div class="mt-6 mb-4 minimal-card p-2 shadow-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-lg flex items-center">
+                            <i class="fas fa-trophy text-yellow-500 mr-2"></i>Player Stats
+                        </h3>
+                        <button id="saveAllStatsBtn" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded shadow text-xs ml-2"><i class="fas fa-save mr-1"></i>Save All</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">`;
                 if (users.length === 0 || jobs.length === 0) {
                     html += `<div class="text-gray-500 italic mb-2 text-xs">No users or jobs available to enter stats.</div></div>`;
-                    document.getElementById('playlistJobs').insertAdjacentHTML('beforeend', html);
+                    document.getElementById('playlistJobs').innerHTML = html;
                     return;
                 }
                 jobs.forEach(job => {
-                    html += `<div class="mb-4">
-                        <h4 class="font-bold text-base mb-1 text-blue-700 flex items-center"><i class="fas fa-flag-checkered mr-2"></i>${job.title}</h4>
-                        <div class="overflow-x-auto">
-                        <table class="stats-table min-w-full text-xs rounded-lg overflow-hidden border border-gray-200 mt-2">
-                            <thead>
-                                <tr>
-                                    <th class="px-2 py-1 text-left font-semibold">Player</th>
-                                    <th class="px-2 py-1 text-center font-semibold" title="Placement"><i class='fas fa-medal'></i></th>
-                                    <th class="px-2 py-1 text-center font-semibold" title="Lap Time"><i class='fas fa-stopwatch'></i></th>
-                                    <th class="px-2 py-1 text-center font-semibold" title="DNF"><i class='fas fa-flag'></i></th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100">
+                    html += `<div class="minimal-card p-3 shadow flex flex-col">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-flag-checkered text-blue-700 mr-2"></i>
+                            <span class="font-bold text-base">${job.title}</span>
+                        </div>
+                        <div class="space-y-2">
                     `;
-                    const currentPlayers = currentPlaylistPlayers.filter(p => p === job.creator);
-                    currentPlayers.forEach((user, idx) => {
+                    (currentPlaylistPlayers || []).forEach((user, idx) => {
                         const stat = stats.find(s => s.username === user && s.jobUrl === job.url) || {};
-                        html += `<tr>
-                            <td class="px-2 py-1 font-medium">${user}</td>
-                            <td class="px-2 py-1 text-center">
-                                <input type="number" min="1" class="stat-input border rounded w-12 px-1 py-0.5 focus:ring-1 focus:ring-blue-400 focus:border-blue-400 transition text-xs" data-job="${job.url}" data-user="${user}" data-field="placement" value="${stat.placement || ''}">
-                            </td>
-                            <td class="px-2 py-1 text-center">
-                                <input type="number" min="0" step="0.01" class="stat-input border rounded w-16 px-1 py-0.5 focus:ring-1 focus:ring-blue-400 focus:border-blue-400 transition text-xs" data-job="${job.url}" data-user="${user}" data-field="lapTime" value="${stat.lapTime || ''}">
-                            </td>
-                            <td class="px-2 py-1 text-center">
-                                <input type="checkbox" class="stat-input h-4 w-4 text-blue-600 rounded focus:ring-blue-500" data-job="${job.url}" data-user="${user}" data-field="dnf" ${stat.dnf ? 'checked' : ''}>
-                            </td>
-                        </tr>`;
-                    });
-                    html += `</tbody></table></div></div>`;
-                });
-                html += `
-                    <div class="flex justify-end mt-3">
-                        <button id="saveStatsBtn" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-lg shadow hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all transform hover:scale-105 active:scale-95 text-xs">
-                            <i class="fas fa-save mr-1"></i>Save All Stats
-                        </button>
-                        <span id="statsSavedMsg" class="ml-2 text-green-600 font-semibold hidden transition-opacity duration-500 text-xs"><i class='fas fa-check-circle'></i> Saved!</span>
-                    </div>
-                </div>`;
-                document.getElementById('playlistJobs').insertAdjacentHTML('beforeend', html);
-
-                document.getElementById('saveStatsBtn').onclick = () => {
-                    // Gather all stats
-                    const inputs = document.querySelectorAll('.stat-input');
-                    const statsMap = {};
-                    inputs.forEach(input => {
-                        const jobUrl = input.dataset.job;
-                        const username = input.dataset.user;
-                        const field = input.dataset.field;
-                        const key = `${username}|${jobUrl}`;
-                        if (!statsMap[key]) statsMap[key] = { username, jobUrl };
-                        if (field === 'dnf') {
-                            statsMap[key][field] = input.checked;
-                        } else {
-                            statsMap[key][field] = input.value ? Number(input.value) : undefined;
+                        let placement = stat.placement || '';
+                        let isDNF = placement === 'DNF' || placement === 0;
+                        const statNotes = stat.statNotes || '';
+                        // Fastest lap split into h/m/s fields for UI
+                        let lapSec = stat.lapTime || 0;
+                        let h = Math.floor(lapSec/3600), m = Math.floor((lapSec%3600)/60), s = (lapSec%60).toFixed(2);
+                        if (!lapSec) h=m=s='';
+                        // Points calculation
+                        let points = '';
+                        if (isDNF) {
+                            points = 0;
+                        } else if (placement && placement >= 1) {
+                            points = pointsTable[placement-1] !== undefined ? pointsTable[placement-1] : 0;
                         }
+                        html += `<div class="flex items-center space-x-2 text-xs">
+                            <span class="w-20 font-semibold">${user}</span>
+                            <select class="stat-input border rounded px-1 py-0.5 w-16" data-job="${job.url}" data-user="${user}" data-field="placement">
+                                <option value=""></option>
+                                ${Array.from({length:16},(_,i)=>`<option value="${i+1}"${placement==i+1?' selected':''}>${i+1}</option>`).join('')}
+                                <option value="DNF"${isDNF?' selected':''}>DNF</option>
+                            </select>
+                            <span class="text-gray-400">P</span>
+                            <input type="number" min="0" class="stat-input border rounded w-8 px-1 py-0.5" placeholder="h" data-job="${job.url}" data-user="${user}" data-field="lapH" value="${h}">
+                            <span>:</span>
+                            <input type="number" min="0" max="59" class="stat-input border rounded w-8 px-1 py-0.5" placeholder="m" data-job="${job.url}" data-user="${user}" data-field="lapM" value="${m}">
+                            <span>:</span>
+                            <input type="number" min="0" max="59.99" step="0.01" class="stat-input border rounded w-12 px-1 py-0.5" placeholder="s" data-job="${job.url}" data-user="${user}" data-field="lapS" value="${s}">
+                            <span class="text-gray-400">F/L</span>
+                            <input type="text" class="stat-input border rounded w-20 px-1 py-0.5" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">
+                            <span class="ml-2 font-bold text-blue-600">${points}</span>
+                        </div>`;
                     });
-                    // Only send stats with at least one value
-                    const stats = Object.values(statsMap).filter(s => s.placement || s.lapTime || s.dnf);
+                    html += `</div></div>`;
+                });
+                html += `</div></div>`;
+                document.getElementById('playlistJobs').innerHTML = html;
+
+                // Save All button logic
+                document.getElementById('saveAllStatsBtn').onclick = () => {
+                    const stats = [];
+                    (jobs || []).forEach(job => {
+                        (currentPlaylistPlayers || []).forEach(user => {
+                            let placement = document.querySelector(`.stat-input[data-job='${job.url}'][data-user='${user}'][data-field='placement']`).value;
+                            if (placement === 'DNF') placement = 0;
+                            const lapH = document.querySelector(`.stat-input[data-job='${job.url}'][data-user='${user}'][data-field='lapH']`).value;
+                            const lapM = document.querySelector(`.stat-input[data-job='${job.url}'][data-user='${user}'][data-field='lapM']`).value;
+                            const lapS = document.querySelector(`.stat-input[data-job='${job.url}'][data-user='${user}'][data-field='lapS']`).value;
+                            const statNotes = document.querySelector(`.stat-input[data-job='${job.url}'][data-user='${user}'][data-field='statNotes']`).value;
+                            // Convert h/m/s to seconds
+                            let lapTime = '';
+                            if (lapH || lapM || lapS) {
+                                lapTime = (parseInt(lapH)||0)*3600 + (parseInt(lapM)||0)*60 + (parseFloat(lapS)||0);
+                            }
+                            stats.push({
+                                username: user,
+                                jobUrl: job.url,
+                                placement: placement ? Number(placement) : undefined,
+                                lapTime: lapTime || undefined,
+                                statNotes: statNotes || undefined
+                            });
+                        });
+                    });
                     fetch(`${API_URL}/playlists/${playlist._id}/stats/bulk`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ stats })
                     }).then(r => r.json()).then(data => {
-                        const msg = document.getElementById('statsSavedMsg');
-                        msg.classList.remove('hidden');
-                        msg.style.opacity = 1;
-                        setTimeout(() => {
-                            msg.style.opacity = 0;
-                            setTimeout(() => msg.classList.add('hidden'), 500);
-                        }, 1200);
+                        const btn = document.getElementById('saveAllStatsBtn');
+                        btn.textContent = 'Saved!';
+                        setTimeout(()=>{ btn.innerHTML = '<i class="fas fa-save mr-1"></i>Save All'; }, 1200);
                         viewPlaylist(playlist._id); // Refresh
                     }).catch(e => alert('Error saving stats: ' + e.message));
                 };
