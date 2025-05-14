@@ -672,7 +672,9 @@
                         html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
                     });
                     html += `</div></div>
-                        <div class='minimal-card p-2 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-col gap-1 h-fit'>${info.join('')}</div>
+                        <div class='minimal-card p-1 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-row flex-wrap items-center gap-2 h-fit overflow-hidden'>
+                            ${info.map(item => `<span class='truncate max-w-[120px]'>${item}</span>`).join('')}
+                        </div>
                     </div>`;
                     return html;
                 }).join('');
@@ -755,7 +757,9 @@
                             html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
                         });
                         html += `</div></div>
-                            <div class='minimal-card p-2 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-col gap-1 h-fit'>${info.join('')}</div>
+                            <div class='minimal-card p-1 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-row flex-wrap items-center gap-2 h-fit overflow-hidden'>
+                                ${info.map(item => `<span class='truncate max-w-[120px]'>${item}</span>`).join('')}
+                            </div>
                         </div>`;
                     }
                     html += `</button>`;
