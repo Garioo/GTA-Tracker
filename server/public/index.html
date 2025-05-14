@@ -762,7 +762,7 @@
                 // Edit button logic
                 document.querySelectorAll('.minimal-card[data-job]').forEach(card => {
                     card.onclick = (e) => {
-                        if (e.target === card) {
+                        if (!e.target.closest('input,select,textarea,button')) {
                             expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
                             renderStatsTable(playlist);
                         }
