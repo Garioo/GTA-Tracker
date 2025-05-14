@@ -149,14 +149,17 @@
         }
         .stats-table thead tr {
             background: var(--color-card-light);
+            color: var(--color-text-light);
             border-bottom: 2px solid var(--color-muted);
         }
         body.theme-dark .stats-table thead tr {
             background: var(--color-card-dark);
+            color: var(--color-text-dark);
             border-bottom: 2px solid #23232b;
         }
         body.theme-black .stats-table thead tr {
             background: var(--color-card-black);
+            color: var(--color-text-black);
             border-bottom: 2px solid #222;
         }
     </style>
@@ -625,10 +628,10 @@
                         <table class="stats-table min-w-full text-sm rounded-lg overflow-hidden border border-gray-200 mt-4">
                             <thead>
                                 <tr>
-                                    <th class="px-4 py-2 text-left font-semibold text-gray-700">Player</th>
-                                    <th class="px-4 py-2 text-left font-semibold text-gray-700">Placement <i class="fas fa-question-circle text-xs text-gray-400" title="Finishing position"></i></th>
-                                    <th class="px-4 py-2 text-left font-semibold text-gray-700">Lap Time (s) <i class="fas fa-question-circle text-xs text-gray-400" title="Total time in seconds"></i></th>
-                                    <th class="px-4 py-2 text-center font-semibold text-gray-700">DNF <i class="fas fa-question-circle text-xs text-gray-400" title="Did Not Finish"></i></th>
+                                    <th class="px-4 py-2 text-left font-semibold">Player</th>
+                                    <th class="px-4 py-2 text-left font-semibold">Placement <i class="fas fa-question-circle text-xs text-gray-400" title="Finishing position"></i></th>
+                                    <th class="px-4 py-2 text-left font-semibold">Lap Time (s) <i class="fas fa-question-circle text-xs text-gray-400" title="Total time in seconds"></i></th>
+                                    <th class="px-4 py-2 text-center font-semibold">DNF <i class="fas fa-question-circle text-xs text-gray-400" title="Did Not Finish"></i></th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
