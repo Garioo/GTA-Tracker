@@ -633,12 +633,18 @@
                     const isExpanded = expandedJobUrl === job.url;
                     let info = [];
                     if (job.creator) info.push(`<span><i class='fas fa-user mr-1'></i>${job.creator}</span>`);
-                    if (job.date) info.push(`<span><i class='fas fa-calendar mr-1'></i>${job.date}</span>`);
-                    if (job.type) info.push(`<span><i class='fas fa-tag mr-1'></i>${job.type}</span>`);
-                    if (job.laps) info.push(`<span><i class='fas fa-sync-alt mr-1'></i>${job.laps} laps</span>`);
-                    if (job.checkpoints) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.checkpoints} CP</span>`);
-                    if (job.km) info.push(`<span><i class='fas fa-road mr-1'></i>${job.km} km</span>`);
-                    if (job.notes) info.push(`<span><i class='fas fa-sticky-note mr-1'></i>${job.notes}</span>`);
+                    if (job.description) info.push(`<span><i class='fas fa-align-left mr-1'></i>${job.description}</span>`);
+                    if (job.rating) info.push(`<span><i class='fas fa-star mr-1'></i>${job.rating}</span>`);
+                    if (job.creationDate) info.push(`<span><i class='fas fa-calendar-plus mr-1'></i>${job.creationDate}</span>`);
+                    if (job.lastUpdated) info.push(`<span><i class='fas fa-clock mr-1'></i>${job.lastUpdated}</span>`);
+                    if (job.lastPlayed) info.push(`<span><i class='fas fa-history mr-1'></i>${job.lastPlayed}</span>`);
+                    if (job.players) info.push(`<span><i class='fas fa-users mr-1'></i>${job.players}</span>`);
+                    if (job.teams) info.push(`<span><i class='fas fa-people-group mr-1'></i>${job.teams} teams</span>`);
+                    if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
+                    if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
+                    if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
+                    if (job.vehicleClasses && job.vehicleClasses.length) info.push(`<span><i class='fas fa-car mr-1'></i>${job.vehicleClasses.join(', ')}</span>`);
+                    if (job.locations && job.locations.length) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.locations.join(', ')}</span>`);
                     let html = `<div class='flex flex-col md:flex-row gap-2 mt-2'>
                         <div class='flex-1'>
                             <div class=\"space-y-2\">`;
@@ -707,15 +713,21 @@
                     const isExpanded = expandedJobUrl === job.url;
                     html += `<button type="button" class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left cursor-pointer hover:ring-2 hover:ring-blue-400 focus:outline-none" data-job="${job.url}">\n<div class="flex items-center">\n<i class="fas fa-flag-checkered text-blue-700 mr-2"></i>\n<span class="font-bold text-base">${job.title}</span>\n</div>`;
                     if (isExpanded) {
-                        // Race info summary
+                        // Race info summary (use correct field names)
                         let info = [];
                         if (job.creator) info.push(`<span><i class='fas fa-user mr-1'></i>${job.creator}</span>`);
-                        if (job.date) info.push(`<span><i class='fas fa-calendar mr-1'></i>${job.date}</span>`);
-                        if (job.type) info.push(`<span><i class='fas fa-tag mr-1'></i>${job.type}</span>`);
-                        if (job.laps) info.push(`<span><i class='fas fa-sync-alt mr-1'></i>${job.laps} laps</span>`);
-                        if (job.checkpoints) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.checkpoints} CP</span>`);
-                        if (job.km) info.push(`<span><i class='fas fa-road mr-1'></i>${job.km} km</span>`);
-                        if (job.notes) info.push(`<span><i class='fas fa-sticky-note mr-1'></i>${job.notes}</span>`);
+                        if (job.description) info.push(`<span><i class='fas fa-align-left mr-1'></i>${job.description}</span>`);
+                        if (job.rating) info.push(`<span><i class='fas fa-star mr-1'></i>${job.rating}</span>`);
+                        if (job.creationDate) info.push(`<span><i class='fas fa-calendar-plus mr-1'></i>${job.creationDate}</span>`);
+                        if (job.lastUpdated) info.push(`<span><i class='fas fa-clock mr-1'></i>${job.lastUpdated}</span>`);
+                        if (job.lastPlayed) info.push(`<span><i class='fas fa-history mr-1'></i>${job.lastPlayed}</span>`);
+                        if (job.players) info.push(`<span><i class='fas fa-users mr-1'></i>${job.players}</span>`);
+                        if (job.teams) info.push(`<span><i class='fas fa-people-group mr-1'></i>${job.teams} teams</span>`);
+                        if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
+                        if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
+                        if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
+                        if (job.vehicleClasses && job.vehicleClasses.length) info.push(`<span><i class='fas fa-car mr-1'></i>${job.vehicleClasses.join(', ')}</span>`);
+                        if (job.locations && job.locations.length) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.locations.join(', ')}</span>`);
                         html += `<div class='flex flex-col md:flex-row gap-2 mt-2'>
                             <div class='flex-1'>
                                 <div class=\"space-y-2\">`;
@@ -1109,9 +1121,6 @@
             managePlayersModal.classList.add('hidden');
             viewPlaylist(currentPlaylistId);
         });
-
-        // Initial state check
-        checkSavedState();
 
         // On initial load, set the default active button:
         setActiveNav('jobs');
