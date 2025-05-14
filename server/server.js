@@ -25,7 +25,9 @@ const mongoOptions = {
 };
 
 // Connect to MongoDB Atlas
-mongoose.connect('mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker', mongoOptions)
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker';
+
+mongoose.connect(MONGODB_URI, mongoOptions)
     .then(() => {
         console.log('Successfully connected to MongoDB Atlas.');
     })
@@ -195,9 +197,32 @@ app.put('/api/playlists/:id', async (req, res) => {
 
 // Delete playlist
 app.delete('/api/playlists/:id', async (req, res) => {
-  const result = await Playlist.findByIdAndDelete(req.params.id);
-  if (!result) return res.status(404).json({ error: 'Playlist not found' });
-  res.json({ success: true });
+  try {
+    console.log('Attempting to delete playlist:', req.params.id);
+    const result = await Playlist.findByIdAndDelete(req.params.id);
+    
+    if (!result) {
+      console.log('Playlist not found:', req.params.id);
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Playlist not found',
+        message: 'The playlist may have been deleted already'
+      });
+    }
+    
+    console.log('Successfully deleted playlist:', req.params.id);
+    res.json({ 
+      success: true, 
+      message: 'Playlist deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting playlist:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to delete playlist',
+      message: error.message
+    });
+  }
 });
 
 // Add jobs to playlist
