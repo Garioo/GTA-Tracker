@@ -109,22 +109,38 @@ const API = {
         },
 
         async delete(id) {
-            const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
-                method: 'DELETE'
-            });
-            return API.handleResponse(response);
+            try {
+                const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
+                    method: 'DELETE'
+                });
+                return API.handleResponse(response);
+            } catch (error) {
+                // If we get a 404, the playlist might have been deleted already
+                if (error.message.includes('404') || error.message.includes('not found')) {
+                    return { success: true, message: 'Playlist already deleted' };
+                }
+                throw error;
+            }
         },
 
         async addJob(id, job) {
-            // Extract only the required fields from the job object
+            // Match the exact structure from the API
             const jobData = {
+                _id: job._id,
                 url: job.url,
                 title: job.title,
                 creator: job.creator,
                 rating: job.rating,
                 gameMode: job.gameMode,
                 routeType: job.routeType,
-                routeLength: job.routeLength
+                routeLength: job.routeLength,
+                players: job.players,
+                teams: job.teams,
+                vehicleClasses: job.vehicleClasses,
+                locations: job.locations,
+                creationDate: job.creationDate,
+                lastPlayed: job.lastPlayed,
+                lastUpdated: job.lastUpdated
             };
             
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs`, {
