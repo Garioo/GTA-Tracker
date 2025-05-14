@@ -316,9 +316,21 @@ const playlists = {
                 playlists.render();
                 navigation.showPlaylists();
                 
-                // Show appropriate message
+                // Show success message instead of error for "already deleted" case
                 if (result.message && result.message.includes('already')) {
-                    utils.showError('Playlist was already deleted');
+                    const successDiv = document.createElement('div');
+                    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
+                    successDiv.textContent = 'Playlist was already deleted';
+                    
+                    // Add close button
+                    const closeButton = document.createElement('button');
+                    closeButton.className = 'ml-2 text-white hover:text-gray-200';
+                    closeButton.innerHTML = '&times;';
+                    closeButton.onclick = () => successDiv.remove();
+                    successDiv.appendChild(closeButton);
+                    
+                    document.body.appendChild(successDiv);
+                    setTimeout(() => successDiv.remove(), 5000);
                 }
             } else {
                 utils.showError('Failed to delete playlist: Unexpected response from server');
