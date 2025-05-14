@@ -221,20 +221,10 @@ const playlists = {
         const container = elements.playlistDetailsSection;
         container.innerHTML = Components.PlaylistDetails(state.currentPlaylist);
         
-        // Add stats table if there are players
-        if (state.currentPlaylist.players?.length) {
-            const statsContainer = document.createElement('div');
-            statsContainer.innerHTML = Components.StatsTable(
-                state.currentPlaylist,
-                state.currentPlaylist.players
-            );
-            container.appendChild(statsContainer);
-        }
-        
         // Add event listeners
-        document.getElementById('backToPlaylists').addEventListener('click', navigation.showPlaylists);
-        document.getElementById('addJobsToPlaylist').addEventListener('click', modals.showAddJobs);
-        document.getElementById('managePlayersBtn').addEventListener('click', modals.showManagePlayers);
+        document.getElementById('backToPlaylists')?.addEventListener('click', navigation.showPlaylists);
+        document.getElementById('addJobsToPlaylist')?.addEventListener('click', modals.showAddJobs);
+        document.getElementById('managePlayersBtn')?.addEventListener('click', modals.showManagePlayers);
     },
     
     removeJob: async (jobUrl) => {
@@ -265,6 +255,38 @@ const playlists = {
         } catch (error) {
             utils.showError('Failed to create playlist: ' + error.message);
             throw error;
+        } finally {
+            utils.hideLoading();
+        }
+    },
+
+    edit: async (id, newName) => {
+        utils.showLoading();
+        try {
+            await API.playlists.update(id, { name: newName });
+            const playlist = state.playlists.find(p => p._id === id);
+            if (playlist) {
+                playlist.name = newName;
+            }
+            playlists.render();
+        } catch (error) {
+            utils.showError('Failed to update playlist: ' + error.message);
+            throw error;
+        } finally {
+            utils.hideLoading();
+        }
+    },
+
+    delete: async (id) => {
+        if (!confirm('Are you sure you want to delete this playlist?')) return;
+        
+        utils.showLoading();
+        try {
+            await API.playlists.delete(id);
+            state.playlists = state.playlists.filter(p => p._id !== id);
+            playlists.render();
+        } catch (error) {
+            utils.showError('Failed to delete playlist: ' + error.message);
         } finally {
             utils.hideLoading();
         }
@@ -522,8 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         utils.showLoading();
         try {
-            await API.playlists.update(state.currentPlaylist._id, { name: newName });
-            state.currentPlaylist.name = newName;
+            await playlists.edit(state.currentPlaylist._id, newName);
             playlists.renderDetails();
             modals.hideEditPlaylist();
         } catch (error) {
@@ -536,21 +557,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export functions for use in HTML
 window.viewPlaylist = playlists.view;
-window.editPlaylist = (id) => modals.showEditPlaylist(id);
-window.deletePlaylist = async (id) => {
-    if (!confirm('Are you sure you want to delete this playlist?')) return;
-    
-    utils.showLoading();
-    try {
-        await API.playlists.delete(id);
-        state.playlists = state.playlists.filter(p => p._id !== id);
-        playlists.render();
-    } catch (error) {
-        utils.showError('Failed to delete playlist: ' + error.message);
-    } finally {
-        utils.hideLoading();
+window.editPlaylist = (id) => {
+    const playlist = state.playlists.find(p => p._id === id);
+    if (playlist) {
+        state.currentPlaylist = playlist;
+        const modal = document.getElementById('editPlaylistModal');
+        document.getElementById('editPlaylistName').value = playlist.name;
+        modal.classList.remove('hidden');
     }
 };
+window.deletePlaylist = playlists.delete;
 window.removeJobFromPlaylist = playlists.removeJob;
 window.showUserSelectModal = modals.showUserSelect;
 window.toggleJobSelection = (checkbox, job) => {
