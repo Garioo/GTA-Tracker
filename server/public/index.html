@@ -455,7 +455,7 @@
         // Load and display playlists
         async function loadPlaylists() {
             try {
-                const response = await fetchWithAuth(`${API_URL}/playlists`);
+                const response = await fetch(`${API_URL}/playlists`);
                 const playlists = await response.json();
                 console.log('Loaded playlists:', playlists); // Debug log
                 const playlistsList = document.getElementById('playlistsList');
@@ -623,7 +623,7 @@
             console.log('Adding jobs:', jobsToAdd);
             
             try {
-                const response = await fetchWithAuth(`${API_URL}/playlists/${currentPlaylistId}/jobs`, {
+                const response = await fetch(`${API_URL}/playlists/${currentPlaylistId}/jobs`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -654,7 +654,7 @@
             if (!name) return;
 
             try {
-                const response = await fetchWithAuth(`${API_URL}/playlists`, {
+                const response = await fetch(`${API_URL}/playlists`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -695,7 +695,7 @@
             if (!newName) return;
 
             try {
-                const response = await fetchWithAuth(`${API_URL}/playlists/${currentPlaylistId}`, {
+                const response = await fetch(`${API_URL}/playlists/${currentPlaylistId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -774,7 +774,7 @@
             userDropdown.innerHTML = '<option value="">Loading...</option>';
             let users = [];
             try {
-                const response = await fetchWithAuth(`${API_URL}/users`);
+                const response = await fetch(`${API_URL}/users`);
                 users = await response.json();
             } catch (error) {
                 // Ignore error, will handle below

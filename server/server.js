@@ -5,9 +5,6 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 3001;
 
-// Website password (in production, use environment variable)
-const WEBSITE_PASSWORD = 'gta123';
-
 // Enable CORS for the extension
 app.use(cors({
     origin: '*'
@@ -58,22 +55,13 @@ const User = mongoose.model('User', userSchema);
 const Job = mongoose.model('Job', jobSchema);
 const Playlist = mongoose.model('Playlist', playlistSchema);
 
-// Verify website password middleware
-const verifyPassword = (req, res, next) => {
-    const password = req.headers['x-website-password'];
-    if (password !== WEBSITE_PASSWORD) {
-        return res.status(401).json({ error: 'Invalid password' });
-    }
-    next();
-};
-
 // Test endpoint
 app.get('/api', (req, res) => {
     res.json({ message: 'Server is running!' });
 });
 
 // Create or get user
-app.post('/api/users', verifyPassword, async (req, res) => {
+app.post('/api/users', async (req, res) => {
   const { username } = req.body;
   if (!username) return res.status(400).json({ error: 'Username is required' });
   let user = await User.findOne({ username });
@@ -84,13 +72,13 @@ app.post('/api/users', verifyPassword, async (req, res) => {
 });
 
 // Get all users
-app.get('/api/users', verifyPassword, async (req, res) => {
+app.get('/api/users', async (req, res) => {
   const users = await User.find();
   res.json(users);
 });
 
 // Save a job
-app.post('/api/jobs', verifyPassword, async (req, res) => {
+app.post('/api/jobs', async (req, res) => {
   const job = req.body;
   try {
     const existingJob = await Job.findOne({ url: job.url });
@@ -103,13 +91,13 @@ app.post('/api/jobs', verifyPassword, async (req, res) => {
 });
 
 // Get all jobs
-app.get('/api/jobs', verifyPassword, async (req, res) => {
+app.get('/api/jobs', async (req, res) => {
   const jobs = await Job.find();
   res.json(jobs);
 });
 
 // Delete a job
-app.delete('/api/jobs/:url', verifyPassword, async (req, res) => {
+app.delete('/api/jobs/:url', async (req, res) => {
   const url = decodeURIComponent(req.params.url);
   const result = await Job.deleteOne({ url });
   if (result.deletedCount === 0) return res.status(404).json({ error: 'Job not found' });
@@ -117,7 +105,7 @@ app.delete('/api/jobs/:url', verifyPassword, async (req, res) => {
 });
 
 // Create a playlist
-app.post('/api/playlists', verifyPassword, async (req, res) => {
+app.post('/api/playlists', async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'Name is required' });
   const playlist = await Playlist.create({ name, jobs: [], scores: {} });
@@ -125,20 +113,20 @@ app.post('/api/playlists', verifyPassword, async (req, res) => {
 });
 
 // Get all playlists
-app.get('/api/playlists', verifyPassword, async (req, res) => {
+app.get('/api/playlists', async (req, res) => {
   const playlists = await Playlist.find();
   res.json(playlists);
 });
 
 // Get playlist by ID
-app.get('/api/playlists/:id', verifyPassword, async (req, res) => {
+app.get('/api/playlists/:id', async (req, res) => {
   const playlist = await Playlist.findById(req.params.id);
   if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
   res.json(playlist);
 });
 
 // Update playlist name
-app.put('/api/playlists/:id', verifyPassword, async (req, res) => {
+app.put('/api/playlists/:id', async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'Name is required' });
   const playlist = await Playlist.findById(req.params.id);
@@ -150,7 +138,7 @@ app.put('/api/playlists/:id', verifyPassword, async (req, res) => {
 });
 
 // Add jobs to playlist
-app.post('/api/playlists/:id/jobs', verifyPassword, async (req, res) => {
+app.post('/api/playlists/:id/jobs', async (req, res) => {
   const { jobs } = req.body;
   if (!Array.isArray(jobs)) return res.status(400).json({ error: 'Jobs must be an array' });
   const playlist = await Playlist.findById(req.params.id);
@@ -166,7 +154,7 @@ app.post('/api/playlists/:id/jobs', verifyPassword, async (req, res) => {
 });
 
 // Remove job from playlist
-app.delete('/api/playlists/:id/jobs/:url', verifyPassword, async (req, res) => {
+app.delete('/api/playlists/:id/jobs/:url', async (req, res) => {
   const playlist = await Playlist.findById(req.params.id);
   if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
   const jobUrl = decodeURIComponent(req.params.url);
@@ -177,7 +165,7 @@ app.delete('/api/playlists/:id/jobs/:url', verifyPassword, async (req, res) => {
 });
 
 // Reorder jobs in playlist
-app.post('/api/playlists/:id/reorder', verifyPassword, async (req, res) => {
+app.post('/api/playlists/:id/reorder', async (req, res) => {
   const { fromIndex, toIndex } = req.body;
   if (typeof fromIndex !== 'number' || typeof toIndex !== 'number') {
     return res.status(400).json({ error: 'fromIndex and toIndex are required' });
