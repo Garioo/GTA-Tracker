@@ -10,13 +10,10 @@
     <style>
         :root {
             --color-bg-light: #f8fafc;
-            --color-bg-dark: #18181b;
             --color-bg-black: #000;
             --color-card-light: #fff;
-            --color-card-dark: #23232b;
             --color-card-black: #111;
             --color-text-light: #232946;
-            --color-text-dark: #f3f4f6;
             --color-text-black: #fff;
             --color-accent: #2563eb;
             --color-muted: #e5e7eb;
@@ -28,10 +25,6 @@
             min-height: 100vh;
             transition: background 0.3s, color 0.3s;
         }
-        body.theme-dark {
-            background: var(--color-bg-dark);
-            color: var(--color-text-dark);
-        }
         body.theme-black {
             background: var(--color-bg-black);
             color: var(--color-text-black);
@@ -41,10 +34,6 @@
             color: var(--color-text-light);
             box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
             transition: background 0.3s, color 0.3s;
-        }
-        body.theme-dark nav {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
         }
         body.theme-black nav {
             background: var(--color-card-black);
@@ -58,11 +47,6 @@
             border: 1px solid var(--color-muted);
             transition: background 0.3s, color 0.3s;
         }
-        body.theme-dark .minimal-card {
-            background: var(--color-card-dark) !important;
-            color: var(--color-text-dark) !important;
-            border: 1px solid #23232b;
-        }
         body.theme-black .minimal-card {
             background: var(--color-card-black) !important;
             color: var(--color-text-black) !important;
@@ -75,11 +59,6 @@
             box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
             border: 1px solid var(--color-muted);
             transition: background 0.3s, color 0.3s;
-        }
-        body.theme-dark .job-card {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
-            border: 1px solid #23232b;
         }
         body.theme-black .job-card {
             background: var(--color-card-black);
@@ -113,9 +92,6 @@
             color: var(--color-text-light);
             font-weight: 500;
         }
-        body.theme-dark .label {
-            color: var(--color-text-dark);
-        }
         body.theme-black .label {
             color: var(--color-text-black);
         }
@@ -127,11 +103,6 @@
             padding: 0.5rem;
             transition: background 0.2s, color 0.2s, border 0.2s;
         }
-        body.theme-dark .input {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
-            border: 1px solid #23232b;
-        }
         body.theme-black .input {
             background: var(--color-card-black);
             color: var(--color-text-black);
@@ -141,16 +112,13 @@
             color: var(--color-text-light);
             font-weight: 700;
         }
-        body.theme-dark .section-title {
-            color: var(--color-text-dark);
-        }
         body.theme-black .section-title {
             color: var(--color-text-black);
         }
         .text-muted {
             color: var(--color-muted);
         }
-        body.theme-dark .text-muted, body.theme-black .text-muted {
+        body.theme-black .text-muted {
             color: #888;
         }
         .minimal-btn {
@@ -195,10 +163,6 @@
             border-top-right-radius: 2rem;
             transition: background 0.3s, color 0.3s;
         }
-        body.theme-dark footer {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
-        }
         body.theme-black footer {
             background: var(--color-card-black);
             color: var(--color-text-black);
@@ -208,11 +172,6 @@
             color: var(--color-text-light);
             border-bottom: 2px solid var(--color-muted);
         }
-        body.theme-dark .stats-table thead tr {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
-            border-bottom: 2px solid #23232b;
-        }
         body.theme-black .stats-table thead tr {
             background: var(--color-card-black);
             color: var(--color-text-black);
@@ -220,9 +179,6 @@
         }
         .stats-table tbody tr {
             background: var(--color-card-light);
-        }
-        body.theme-dark .stats-table tbody tr {
-            background: var(--color-card-dark);
         }
         body.theme-black .stats-table tbody tr {
             background: var(--color-card-black);
@@ -233,12 +189,6 @@
             color: var(--color-text-light);
             border: 1px solid var(--color-muted);
         }
-        body.theme-dark .stats-table input[type='number'],
-        body.theme-dark .stats-table input[type='text'] {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
-            border: 1px solid #23232b;
-        }
         body.theme-black .stats-table input[type='number'],
         body.theme-black .stats-table input[type='text'] {
             background: var(--color-card-black);
@@ -247,9 +197,6 @@
         }
         .modal-title {
             color: var(--color-text-light);
-        }
-        body.theme-dark .modal-title {
-            color: var(--color-text-dark);
         }
         body.theme-black .modal-title {
             color: var(--color-text-black);
@@ -415,7 +362,7 @@
         const userSection = document.getElementById('userSection');
 
         // Theme toggle logic
-        const themeOrder = ['theme-light', 'theme-dark', 'theme-black'];
+        const themeOrder = ['theme-light', 'theme-black'];
         let themeIdx = 0;
         const body = document.body;
         const themeToggle = document.getElementById('themeToggle');
