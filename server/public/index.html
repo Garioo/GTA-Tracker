@@ -817,13 +817,11 @@
                 }
                 
                 availableJobs.innerHTML = jobs.map(job => `
-                    <div class="flex items-center p-3 bg-white rounded shadow">
-                        <input type="checkbox" 
-                               class="mr-3 h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
-                               onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/"/g, '&quot;')})">
+                    <div class="minimal-card flex items-center p-3 shadow rounded mb-2">
+                        <input type="checkbox" class="mr-3 h-5 w-5 text-blue-600 rounded focus:ring-blue-500" onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/\"/g, '&quot;')})">
                         <div class="flex-1">
-                            <h4 class="font-bold">${job.title}</h4>
-                            <p class="text-sm text-gray-600">by ${job.creator}</p>
+                            <h4 class="font-bold section-title">${job.title}</h4>
+                            <p class="label text-sm">by ${job.creator}</p>
                         </div>
                     </div>
                 `).join('');
