@@ -603,14 +603,18 @@
         window.viewPlaylist = async (playlistId) => {
             currentPlaylistId = playlistId;
             try {
-                const response = await fetch(`${API_URL}/playlists/${playlistId}`);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch playlist: ${response.status} ${response.statusText}`);
-                }
-                const playlist = await response.json();
-                if (!playlist || !playlist.jobs) {
-                    throw new Error('Playlist data is missing or invalid');
-                }
+                const [playlistRes, jobsRes] = await Promise.all([
+                    fetch(`${API_URL}/playlists/${playlistId}`),
+                    fetch(`${API_URL}/jobs`)
+                ]);
+                if (!playlistRes.ok) throw new Error(`Failed to fetch playlist: ${playlistRes.status} ${playlistRes.statusText}`);
+                if (!jobsRes.ok) throw new Error(`Failed to fetch jobs: ${jobsRes.status} ${jobsRes.statusText}`);
+                const playlist = await playlistRes.json();
+                const allJobs = await jobsRes.json();
+                if (!playlist || !playlist.jobs) throw new Error('Playlist data is missing or invalid');
+                // Merge each playlist job with the full job object
+                const jobsByUrl = Object.fromEntries(allJobs.map(j => [j.url, j]));
+                playlist.jobs = playlist.jobs.map(j => ({...jobsByUrl[j.url], ...j}));
 
                 document.getElementById('playlistDetailsTitle').innerHTML = `
                     ${playlist.name}
