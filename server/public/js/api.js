@@ -113,9 +113,12 @@ const API = {
                 const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
                     method: 'DELETE'
                 });
+                if (response.status === 404) {
+                    // If the playlist is not found, return success since the end result is the same
+                    return { success: true, message: 'Playlist already deleted' };
+                }
                 return API.handleResponse(response);
             } catch (error) {
-                // If we get a 404, the playlist might have been deleted already
                 if (error.message.includes('404') || error.message.includes('not found')) {
                     return { success: true, message: 'Playlist already deleted' };
                 }
