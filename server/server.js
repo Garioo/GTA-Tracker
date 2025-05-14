@@ -24,13 +24,13 @@ const mongoOptions = {
     socketTimeoutMS: 45000,
 };
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/gta-tracker', mongoOptions)
+// Connect to MongoDB Atlas
+mongoose.connect('mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker', mongoOptions)
     .then(() => {
-        console.log('Successfully connected to MongoDB.');
+        console.log('Successfully connected to MongoDB Atlas.');
     })
     .catch((error) => {
-        console.error('Error connecting to MongoDB:', error);
+        console.error('Error connecting to MongoDB Atlas:', error);
         process.exit(1);
     });
 
