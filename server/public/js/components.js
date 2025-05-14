@@ -246,83 +246,6 @@ const ManagePlayersModal = () => `
     </div>
 `;
 
-// Stats Components
-const StatsTable = (playlist, players) => {
-    const pointsTable = [15,12,10,8,7,6,5,4,3,2,1,0];
-    const playerTotals = {};
-    players.forEach(player => { playerTotals[player] = 0; });
-
-    // Calculate total points per player
-    if (playlist.stats && playlist.stats.length) {
-        playlist.stats.forEach(stat => {
-            if (stat.username && playerTotals.hasOwnProperty(stat.username)) {
-                let points = 0;
-                if (stat.placement && stat.placement !== 'DNF' && stat.placement >= 1) {
-                    points = pointsTable[stat.placement-1] !== undefined ? pointsTable[stat.placement-1] : 0;
-                }
-                playerTotals[stat.username] += points;
-            }
-        });
-    }
-
-    // Build player totals table
-    let playerTotalsTable = `
-        <table class='w-full text-xs mb-3'>
-            <thead>
-                <tr>
-                    <th class='text-left'>Player</th>
-                    <th class='text-right'>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${Object.entries(playerTotals).map(([player, total]) => `
-                    <tr>
-                        <td>${player}</td>
-                        <td class='text-right font-semibold'>${total}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-
-    // Build race overview table
-    let raceOverviewTable = `
-        <table class='w-full text-xs'>
-            <thead>
-                <tr>
-                    <th>Race</th>
-                    ${players.map(player => `<th>${player}</th>`).join('')}
-                </tr>
-            </thead>
-            <tbody>
-                ${playlist.jobs.map(job => `
-                    <tr>
-                        <td class='font-semibold'>${job.title}</td>
-                        ${players.map(player => {
-                            const stat = (playlist.stats || []).find(s => s.username === player && s.jobUrl === job.url);
-                            let cell = '';
-                            if (stat) {
-                                if (stat.placement === 'DNF' || stat.placement === 0) cell = 'DNF';
-                                else if (stat.placement && stat.placement >= 1) {
-                                    cell = pointsTable[stat.placement-1] !== undefined ? pointsTable[stat.placement-1] : 0;
-                                }
-                            }
-                            return `<td class='text-center'>${cell}</td>`;
-                        }).join('')}
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-
-    return `
-        <div class='minimal-card p-4 h-fit w-full md:w-1/2'>
-            <div class='mb-3'>${playerTotalsTable}</div>
-            <div>${raceOverviewTable}</div>
-        </div>
-    `;
-};
-
 // Export components
 window.Components = {
     JobCard,
@@ -332,6 +255,5 @@ window.Components = {
     CreatePlaylistModal,
     AddJobsModal,
     UserSelectModal,
-    ManagePlayersModal,
-    StatsTable
+    ManagePlayersModal
 }; 
