@@ -471,27 +471,44 @@
             fetch(`${API_URL}/users`).then(r => r.json()).then(users => {
                 const jobs = playlist.jobs;
                 const stats = playlist.stats || [];
-                let html = '<h3 class="font-bold text-lg mt-6 mb-2">Player Stats</h3>';
+                let html = `
+                <div class="mt-8 mb-8 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+                    <h3 class="font-bold text-2xl mb-4 flex items-center"><i class="fas fa-trophy text-yellow-500 mr-2"></i>Player Stats</h3>
+                `;
                 jobs.forEach(job => {
-                    html += `<div class="mb-4"><h4 class="font-bold">${job.title}</h4>`;
-                    html += `<table class="min-w-full text-sm mb-2"><thead><tr>
-                        <th class="px-2">Player</th>
-                        <th class="px-2">Placement</th>
-                        <th class="px-2">Lap Time (s)</th>
-                        <th class="px-2">DNF</th>
-                    </tr></thead><tbody>`;
-                    users.forEach(user => {
+                    html += `<div class="mb-8">
+                        <h4 class="font-bold text-lg mb-2 text-blue-700 flex items-center"><i class="fas fa-flag-checkered mr-2"></i>${job.title}</h4>
+                        <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm rounded-lg overflow-hidden border border-gray-200">
+                            <thead class="bg-blue-100 sticky top-0 z-10">
+                                <tr>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-700">Player</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-700">Placement</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-700">Lap Time (s)</th>
+                                    <th class="px-4 py-2 text-center font-semibold text-gray-700">DNF</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                `;
+                    users.forEach((user, idx) => {
                         const stat = stats.find(s => s.username === user.username && s.jobUrl === job.url) || {};
-                        html += `<tr>
-                            <td class="px-2">${user.username}</td>
-                            <td class="px-2"><input type="number" min="1" class="stat-input border rounded w-16" data-job="${job.url}" data-user="${user.username}" data-field="placement" value="${stat.placement || ''}"></td>
-                            <td class="px-2"><input type="number" min="0" step="0.01" class="stat-input border rounded w-20" data-job="${job.url}" data-user="${user.username}" data-field="lapTime" value="${stat.lapTime || ''}"></td>
-                            <td class="px-2 text-center"><input type="checkbox" class="stat-input" data-job="${job.url}" data-user="${user.username}" data-field="dnf" ${stat.dnf ? 'checked' : ''}></td>
+                        html += `<tr class="${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors">
+                            <td class="px-4 py-2 font-medium text-gray-800">${user.username}</td>
+                            <td class="px-4 py-2"><input type="number" min="1" class="stat-input border border-gray-300 rounded w-20 px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" data-job="${job.url}" data-user="${user.username}" data-field="placement" value="${stat.placement || ''}"></td>
+                            <td class="px-4 py-2"><input type="number" min="0" step="0.01" class="stat-input border border-gray-300 rounded w-28 px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" data-job="${job.url}" data-user="${user.username}" data-field="lapTime" value="${stat.lapTime || ''}"></td>
+                            <td class="px-4 py-2 text-center"><input type="checkbox" class="stat-input h-5 w-5 text-blue-600 rounded focus:ring-blue-500" data-job="${job.url}" data-user="${user.username}" data-field="dnf" ${stat.dnf ? 'checked' : ''}></td>
                         </tr>`;
                     });
-                    html += '</tbody></table></div>';
+                    html += `</tbody></table></div></div>`;
                 });
-                html += `<button id="saveStatsBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save All Stats</button>`;
+                html += `
+                    <div class="flex justify-end mt-6">
+                        <button id="saveStatsBtn" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-lg shadow hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all transform hover:scale-105 active:scale-95">
+                            <i class="fas fa-save mr-2"></i>Save All Stats
+                        </button>
+                        <span id="statsSavedMsg" class="ml-4 text-green-600 font-semibold hidden transition-opacity duration-500"><i class='fas fa-check-circle'></i> Saved!</span>
+                    </div>
+                </div>`;
                 document.getElementById('playlistJobs').insertAdjacentHTML('beforeend', html);
 
                 document.getElementById('saveStatsBtn').onclick = () => {
@@ -517,7 +534,13 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ stats })
                     }).then(r => r.json()).then(data => {
-                        alert('Stats saved!');
+                        const msg = document.getElementById('statsSavedMsg');
+                        msg.classList.remove('hidden');
+                        msg.style.opacity = 1;
+                        setTimeout(() => {
+                            msg.style.opacity = 0;
+                            setTimeout(() => msg.classList.add('hidden'), 500);
+                        }, 1200);
                         viewPlaylist(playlist._id); // Refresh
                     }).catch(e => alert('Error saving stats: ' + e.message));
                 };
