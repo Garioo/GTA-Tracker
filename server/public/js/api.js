@@ -13,7 +13,17 @@ const API = {
                 if (errorText.includes('<!DOCTYPE html>')) {
                     throw new Error('Server error: Please try again later');
                 }
-                throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                // Add more specific error messages based on status code
+                switch (response.status) {
+                    case 400:
+                        throw new Error('Invalid request: Please check the data and try again');
+                    case 404:
+                        throw new Error('Resource not found: The requested item does not exist');
+                    case 500:
+                        throw new Error('Server error: Please try again later');
+                    default:
+                        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
             }
         }
         return response.json();
@@ -106,10 +116,21 @@ const API = {
         },
 
         async addJob(id, job) {
+            // Extract only the required fields from the job object
+            const jobData = {
+                url: job.url,
+                title: job.title,
+                creator: job.creator,
+                rating: job.rating,
+                gameMode: job.gameMode,
+                routeType: job.routeType,
+                routeLength: job.routeLength
+            };
+            
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ job })
+                body: JSON.stringify({ job: jobData })
             });
             return API.handleResponse(response);
         },

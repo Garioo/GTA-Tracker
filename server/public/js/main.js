@@ -59,8 +59,17 @@ const utils = {
     
     showError: (message) => {
         state.error = message;
-        // TODO: Implement error notification UI
-        console.error(message);
+        console.error('Error:', message);
+        // Show error in UI
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50';
+        errorDiv.textContent = message;
+        document.body.appendChild(errorDiv);
+        
+        // Remove error after 5 seconds
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 5000);
     },
     
     debounce: (func, wait) => {
