@@ -16,10 +16,43 @@ app.use(express.json());
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Connect to MongoDB Atlas
-mongoose.connect('mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+// MongoDB connection options
+const mongoOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+};
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/gta-tracker', mongoOptions)
+    .then(() => {
+        console.log('Successfully connected to MongoDB.');
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error);
+        process.exit(1);
+    });
+
+// Handle MongoDB connection events
+mongoose.connection.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB disconnected');
+});
+
+// Handle process termination
+process.on('SIGINT', async () => {
+    try {
+        await mongoose.connection.close();
+        console.log('MongoDB connection closed through app termination');
+        process.exit(0);
+    } catch (err) {
+        console.error('Error during MongoDB connection closure:', err);
+        process.exit(1);
+    }
 });
 
 // Define Schemas
