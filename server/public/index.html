@@ -796,6 +796,47 @@
                     }
                 });
             }
+            // Calculate total points per player
+            const playerTotals = {};
+            (currentPlaylistPlayers || []).forEach(player => { playerTotals[player] = 0; });
+            if (playlist.stats && playlist.stats.length) {
+                playlist.stats.forEach(stat => {
+                    if (stat.username && playerTotals.hasOwnProperty(stat.username)) {
+                        let points = 0;
+                        if (stat.placement && stat.placement !== 'DNF' && stat.placement >= 1) {
+                            points = pointsTable[stat.placement-1] !== undefined ? pointsTable[stat.placement-1] : 0;
+                        }
+                        playerTotals[stat.username] += points;
+                    }
+                });
+            }
+            // Build player totals table
+            let playerTotalsTable = `<table class='w-full text-xs mb-3'><thead><tr><th class='text-left'>Player</th><th class='text-right'>Total</th></tr></thead><tbody>`;
+            Object.entries(playerTotals).forEach(([player, total]) => {
+                playerTotalsTable += `<tr><td>${player}</td><td class='text-right font-semibold'>${total}</td></tr>`;
+            });
+            playerTotalsTable += '</tbody></table>';
+            // Build race overview table
+            let raceOverviewTable = `<table class='w-full text-xs'><thead><tr><th>Race</th>`;
+            (currentPlaylistPlayers || []).forEach(player => {
+                raceOverviewTable += `<th>${player}</th>`;
+            });
+            raceOverviewTable += '</tr></thead><tbody>';
+            playlist.jobs.forEach(job => {
+                raceOverviewTable += `<tr><td class='font-semibold'>${job.title}</td>`;
+                (currentPlaylistPlayers || []).forEach(player => {
+                    const stat = (playlist.stats || []).find(s => s.username === player && s.jobUrl === job.url);
+                    let cell = '';
+                    if (stat) {
+                        if (stat.placement === 'DNF' || stat.placement === 0) cell = 'DNF';
+                        else if (stat.placement && stat.placement >= 1) cell = pointsTable[stat.placement-1] !== undefined ? pointsTable[stat.placement-1] : 0;
+                        else cell = '';
+                    }
+                    raceOverviewTable += `<td class='text-center'>${cell}</td>`;
+                });
+                raceOverviewTable += '</tr>';
+            });
+            raceOverviewTable += '</tbody></table>';
             // Render jobs grid
             playlistJobs.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 flex-1';
             // Add or update the playlist stats box
@@ -810,7 +851,9 @@
                 <h3 class='font-bold text-lg mb-2'>Playlist Stats</h3>
                 <div class='text-sm mb-1'><i class='fas fa-list mr-1'></i>Total Jobs: <span class='font-semibold'>${totalJobs}</span></div>
                 <div class='text-sm mb-1'><i class='fas fa-users mr-1'></i>Total Players: <span class='font-semibold'>${totalPlayers}</span></div>
-                <div class='text-sm'><i class='fas fa-trophy mr-1'></i>Total Points: <span class='font-semibold'>${totalPoints}</span></div>
+                <div class='text-sm mb-3'><i class='fas fa-trophy mr-1'></i>Total Points: <span class='font-semibold'>${totalPoints}</span></div>
+                <div class='mb-3'>${playerTotalsTable}</div>
+                <div>${raceOverviewTable}</div>
             `;
         }
 
