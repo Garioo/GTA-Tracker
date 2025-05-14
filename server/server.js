@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const mongoose = require('mongoose');
 const app = express();
 const port = 3001;
 
@@ -18,10 +19,44 @@ app.use(express.json());
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// In-memory storage (replace with a database in production)
-let jobs = [];
-let playlists = [];
-let users = [];
+// Connect to MongoDB Atlas
+mongoose.connect('mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+// Define Schemas
+const userSchema = new mongoose.Schema({
+  username: { type: String, unique: true },
+  createdAt: { type: Date, default: Date.now }
+});
+const jobSchema = new mongoose.Schema({
+  url: { type: String, unique: true },
+  title: String,
+  creator: String,
+  rating: String,
+  creationDate: String,
+  lastUpdated: String,
+  lastPlayed: String,
+  players: String,
+  teams: String,
+  gameMode: String,
+  routeType: String,
+  routeLength: String,
+  vehicleClasses: [String],
+  locations: [String]
+});
+const playlistSchema = new mongoose.Schema({
+  name: String,
+  jobs: [jobSchema],
+  scores: {},
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const User = mongoose.model('User', userSchema);
+const Job = mongoose.model('Job', jobSchema);
+const Playlist = mongoose.model('Playlist', playlistSchema);
 
 // Verify website password middleware
 const verifyPassword = (req, res, next) => {
@@ -38,186 +73,122 @@ app.get('/api', (req, res) => {
 });
 
 // Create or get user
-app.post('/api/users', verifyPassword, (req, res) => {
-    const { username } = req.body;
-    if (!username) {
-        return res.status(400).json({ error: 'Username is required' });
-    }
-
-    let user = users.find(u => u.username === username);
-    if (!user) {
-        user = {
-            id: Date.now().toString(),
-            username,
-            createdAt: new Date()
-        };
-        users.push(user);
-    }
-
-    res.json(user);
+app.post('/api/users', verifyPassword, async (req, res) => {
+  const { username } = req.body;
+  if (!username) return res.status(400).json({ error: 'Username is required' });
+  let user = await User.findOne({ username });
+  if (!user) {
+    user = await User.create({ username });
+  }
+  res.json(user);
 });
 
 // Get all users
-app.get('/api/users', verifyPassword, (req, res) => {
-    res.json(users);
+app.get('/api/users', verifyPassword, async (req, res) => {
+  const users = await User.find();
+  res.json(users);
 });
 
 // Save a job
-app.post('/api/jobs', verifyPassword, (req, res) => {
-    const job = req.body;
-    // Check if job already exists
-    const existingJob = jobs.find(j => j.url === job.url);
-    if (existingJob) {
-        return res.status(400).json({ error: 'Job already exists' });
-    }
-    jobs.push(job);
-    res.json({ success: true, job });
+app.post('/api/jobs', verifyPassword, async (req, res) => {
+  const job = req.body;
+  try {
+    const existingJob = await Job.findOne({ url: job.url });
+    if (existingJob) return res.status(400).json({ error: 'Job already exists' });
+    const newJob = await Job.create(job);
+    res.json({ success: true, job: newJob });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Get all jobs
-app.get('/api/jobs', verifyPassword, (req, res) => {
-    res.json(jobs);
+app.get('/api/jobs', verifyPassword, async (req, res) => {
+  const jobs = await Job.find();
+  res.json(jobs);
 });
 
 // Delete a job
-app.delete('/api/jobs/:url', verifyPassword, (req, res) => {
-    const url = decodeURIComponent(req.params.url);
-    const index = jobs.findIndex(j => j.url === url);
-    if (index === -1) {
-        return res.status(404).json({ error: 'Job not found' });
-    }
-    jobs.splice(index, 1);
-    res.json({ success: true });
+app.delete('/api/jobs/:url', verifyPassword, async (req, res) => {
+  const url = decodeURIComponent(req.params.url);
+  const result = await Job.deleteOne({ url });
+  if (result.deletedCount === 0) return res.status(404).json({ error: 'Job not found' });
+  res.json({ success: true });
 });
 
 // Create a playlist
-app.post('/api/playlists', verifyPassword, (req, res) => {
-    const { name } = req.body;
-    if (!name) {
-        return res.status(400).json({ error: 'Name is required' });
-    }
-
-    const playlist = {
-        id: Date.now().toString(),
-        name,
-        jobs: [],
-        scores: {},
-        createdAt: new Date(),
-        updatedAt: new Date()
-    };
-    playlists.push(playlist);
-    res.json(playlist);
+app.post('/api/playlists', verifyPassword, async (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: 'Name is required' });
+  const playlist = await Playlist.create({ name, jobs: [], scores: {} });
+  res.json(playlist);
 });
 
 // Get all playlists
-app.get('/api/playlists', verifyPassword, (req, res) => {
-    res.json(playlists);
-});
-
-// Get playlists by user
-app.get('/api/playlists/user/:userId', verifyPassword, (req, res) => {
-    const userPlaylists = playlists.filter(p => p.userId === req.params.userId);
-    res.json(userPlaylists);
+app.get('/api/playlists', verifyPassword, async (req, res) => {
+  const playlists = await Playlist.find();
+  res.json(playlists);
 });
 
 // Get playlist by ID
-app.get('/api/playlists/:id', verifyPassword, (req, res) => {
-    const playlist = playlists.find(p => p.id === req.params.id);
-    if (!playlist) {
-        return res.status(404).json({ error: 'Playlist not found' });
-    }
-    res.json(playlist);
+app.get('/api/playlists/:id', verifyPassword, async (req, res) => {
+  const playlist = await Playlist.findById(req.params.id);
+  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+  res.json(playlist);
 });
 
 // Update playlist name
-app.put('/api/playlists/:id', verifyPassword, (req, res) => {
-    const { name } = req.body;
-    if (!name) {
-        return res.status(400).json({ error: 'Name is required' });
-    }
-
-    const playlist = playlists.find(p => p.id === req.params.id);
-    if (!playlist) {
-        return res.status(404).json({ error: 'Playlist not found' });
-    }
-
-    playlist.name = name;
-    playlist.updatedAt = new Date();
-    res.json(playlist);
+app.put('/api/playlists/:id', verifyPassword, async (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: 'Name is required' });
+  const playlist = await Playlist.findById(req.params.id);
+  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+  playlist.name = name;
+  playlist.updatedAt = new Date();
+  await playlist.save();
+  res.json(playlist);
 });
 
 // Add jobs to playlist
-app.post('/api/playlists/:id/jobs', verifyPassword, (req, res) => {
-    const { jobs } = req.body;
-    if (!Array.isArray(jobs)) {
-        return res.status(400).json({ error: 'Jobs must be an array' });
+app.post('/api/playlists/:id/jobs', verifyPassword, async (req, res) => {
+  const { jobs } = req.body;
+  if (!Array.isArray(jobs)) return res.status(400).json({ error: 'Jobs must be an array' });
+  const playlist = await Playlist.findById(req.params.id);
+  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+  jobs.forEach(job => {
+    if (!playlist.jobs.some(j => j.url === job.url)) {
+      playlist.jobs.push(job);
     }
-
-    const playlist = playlists.find(p => p.id === req.params.id);
-    if (!playlist) {
-        return res.status(404).json({ error: 'Playlist not found' });
-    }
-
-    console.log('Adding jobs to playlist:', jobs);
-
-    jobs.forEach(job => {
-        if (!job.url) {
-            console.log('Skipping job with missing URL:', job);
-            return;
-        }
-
-        // Check if job already exists in playlist
-        const existingJob = playlist.jobs.find(j => j.url === job.url);
-        if (!existingJob) {
-            playlist.jobs.push({
-                url: job.url,
-                title: job.title || 'Untitled Job',
-                creator: job.creator || 'Unknown',
-                rating: job.rating || 0,
-                players: job.players || 0
-            });
-        }
-    });
-
-    playlist.updatedAt = new Date();
-    console.log('Updated playlist:', playlist);
-    res.json(playlist);
+  });
+  playlist.updatedAt = new Date();
+  await playlist.save();
+  res.json(playlist);
 });
 
 // Remove job from playlist
-app.delete('/api/playlists/:id/jobs/:url', verifyPassword, (req, res) => {
-    const playlist = playlists.find(p => p.id === req.params.id);
-    if (!playlist) {
-        return res.status(404).json({ error: 'Playlist not found' });
-    }
-
-    const jobUrl = decodeURIComponent(req.params.url);
-    const jobIndex = playlist.jobs.findIndex(j => j.url === jobUrl);
-    if (jobIndex === -1) {
-        return res.status(404).json({ error: 'Job not found in playlist' });
-    }
-
-    playlist.jobs.splice(jobIndex, 1);
-    playlist.updatedAt = new Date();
-    res.json(playlist);
+app.delete('/api/playlists/:id/jobs/:url', verifyPassword, async (req, res) => {
+  const playlist = await Playlist.findById(req.params.id);
+  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+  const jobUrl = decodeURIComponent(req.params.url);
+  playlist.jobs = playlist.jobs.filter(j => j.url !== jobUrl);
+  playlist.updatedAt = new Date();
+  await playlist.save();
+  res.json(playlist);
 });
 
 // Reorder jobs in playlist
-app.post('/api/playlists/:id/reorder', verifyPassword, (req, res) => {
-    const { fromIndex, toIndex } = req.body;
-    if (typeof fromIndex !== 'number' || typeof toIndex !== 'number') {
-        return res.status(400).json({ error: 'fromIndex and toIndex are required' });
-    }
-
-    const playlist = playlists.find(p => p.id === req.params.id);
-    if (!playlist) {
-        return res.status(404).json({ error: 'Playlist not found' });
-    }
-
-    const job = playlist.jobs.splice(fromIndex, 1)[0];
-    playlist.jobs.splice(toIndex, 0, job);
-    playlist.updatedAt = new Date();
-    res.json(playlist);
+app.post('/api/playlists/:id/reorder', verifyPassword, async (req, res) => {
+  const { fromIndex, toIndex } = req.body;
+  if (typeof fromIndex !== 'number' || typeof toIndex !== 'number') {
+    return res.status(400).json({ error: 'fromIndex and toIndex are required' });
+  }
+  const playlist = await Playlist.findById(req.params.id);
+  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+  const job = playlist.jobs.splice(fromIndex, 1)[0];
+  playlist.jobs.splice(toIndex, 0, job);
+  playlist.updatedAt = new Date();
+  await playlist.save();
+  res.json(playlist);
 });
 
 app.listen(port, () => {
