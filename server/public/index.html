@@ -8,33 +8,87 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --color-bg-light: #f8fafc;
+            --color-bg-dark: #18181b;
+            --color-bg-black: #000;
+            --color-card-light: #fff;
+            --color-card-dark: #23232b;
+            --color-card-black: #111;
+            --color-text-light: #232946;
+            --color-text-dark: #f3f4f6;
+            --color-text-black: #fff;
+            --color-accent: #2563eb;
+            --color-muted: #e5e7eb;
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #232946 0%, #6c63ff 100%);
+            background: var(--color-bg-light);
+            color: var(--color-text-light);
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.theme-dark {
+            background: var(--color-bg-dark);
+            color: var(--color-text-dark);
+        }
+        body.theme-black {
+            background: var(--color-bg-black);
+            color: var(--color-text-black);
         }
         nav {
-            background: rgba(30, 41, 59, 0.95);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(8px);
+            background: var(--color-card-light);
+            color: var(--color-text-light);
+            box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+            transition: background 0.3s, color 0.3s;
         }
-        .glass-card {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(8px);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.18);
+        body.theme-dark nav {
+            background: var(--color-card-dark);
+            color: var(--color-text-dark);
+        }
+        body.theme-black nav {
+            background: var(--color-card-black);
+            color: var(--color-text-black);
+        }
+        .minimal-card {
+            background: var(--color-card-light);
+            color: var(--color-text-light);
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+            border: 1px solid var(--color-muted);
+            transition: background 0.3s, color 0.3s;
+        }
+        body.theme-dark .minimal-card {
+            background: var(--color-card-dark);
+            color: var(--color-text-dark);
+            border: 1px solid #23232b;
+        }
+        body.theme-black .minimal-card {
+            background: var(--color-card-black);
+            color: var(--color-text-black);
+            border: 1px solid #222;
         }
         .job-card {
-            transition: all 0.2s;
-            background: rgba(255,255,255,0.25);
-            box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.13);
+            background: var(--color-card-light);
+            color: var(--color-text-light);
             border-radius: 1rem;
-            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+            border: 1px solid var(--color-muted);
+            transition: background 0.3s, color 0.3s;
+        }
+        body.theme-dark .job-card {
+            background: var(--color-card-dark);
+            color: var(--color-text-dark);
+            border: 1px solid #23232b;
+        }
+        body.theme-black .job-card {
+            background: var(--color-card-black);
+            color: var(--color-text-black);
+            border: 1px solid #222;
         }
         .job-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);
         }
         .fade-in {
             animation: fadeIn 0.3s ease-in;
@@ -43,76 +97,33 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        .draggable-job {
-            cursor: move;
-            user-select: none;
-        }
-        .draggable-job.dragging {
-            opacity: 0.5;
-            background-color: #f3f4f6;
-        }
-        .drag-handle {
-            cursor: move;
-            color: #6b7280;
-            padding: 0.5rem;
-        }
-        .drag-handle:hover {
-            color: #374151;
-        }
-        .leaderboard-medal {
-            font-size: 1.2em;
-            vertical-align: middle;
-        }
-        .medal-gold { color: #FFD700; }
-        .medal-silver { color: #C0C0C0; }
-        .medal-bronze { color: #CD7F32; }
-        .avatar {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 9999px;
-            background: linear-gradient(135deg, #6c63ff 0%, #232946 100%);
+        .minimal-btn {
+            background: var(--color-accent);
             color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 2px 8px rgba(31,38,135,0.12);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+            box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+            transition: background 0.2s, color 0.2s;
         }
-        .floating-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 50;
-            background: linear-gradient(135deg, #FFD700 0%, #6c63ff 100%);
-            color: #232946;
-            border-radius: 9999px;
-            box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.18);
-            padding: 1.2rem 1.5rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .floating-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+        .minimal-btn:hover {
+            background: #1d4ed8;
         }
         .dark-toggle {
-            background: rgba(255,255,255,0.12);
-            border-radius: 9999px;
-            padding: 0.5rem 1rem;
-            color: #FFD700;
-            font-size: 1.2rem;
+            background: none;
+            border: none;
+            color: var(--color-accent);
+            font-size: 1.3rem;
             margin-left: 1rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: color 0.2s;
         }
         .dark-toggle:hover {
-            background: rgba(255,255,255,0.22);
+            color: #111;
         }
         footer {
-            background: linear-gradient(90deg, #232946 0%, #6c63ff 100%);
-            color: #fff;
+            background: var(--color-card-light);
+            color: var(--color-text-light);
             text-align: center;
             padding: 1.5rem 0 0.5rem 0;
             font-size: 1rem;
@@ -120,25 +131,30 @@
             margin-top: 2rem;
             border-top-left-radius: 2rem;
             border-top-right-radius: 2rem;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.theme-dark footer {
+            background: var(--color-card-dark);
+            color: var(--color-text-dark);
+        }
+        body.theme-black footer {
+            background: var(--color-card-black);
+            color: var(--color-text-black);
         }
     </style>
 </head>
 <body class="min-h-screen">
-    <nav class="text-white p-4 shadow-lg">
+    <nav class="p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-extrabold flex items-center tracking-tight">
-                <i class="fas fa-car-side mr-2 text-yellow-400"></i>
+                <i class="fas fa-car-side mr-2 text-accent"></i>
                 GTA Race Tracker
             </h1>
             <div class="space-x-4 flex items-center">
-                <button id="showJobs" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 rounded hover:from-blue-600 hover:to-blue-800 font-semibold shadow transition-colors">
-                    <i class="fas fa-list mr-2"></i>Jobs
-                </button>
-                <button id="showPlaylists" class="px-4 py-2 bg-gradient-to-r from-green-400 to-blue-500 rounded hover:from-green-500 hover:to-blue-600 font-semibold shadow transition-colors">
-                    <i class="fas fa-music mr-2"></i>Playlists
-                </button>
+                <button id="showJobs" class="minimal-btn"><i class="fas fa-list mr-2"></i>Jobs</button>
+                <button id="showPlaylists" class="minimal-btn"><i class="fas fa-music mr-2"></i>Playlists</button>
                 <div id="userSection" class="inline-block"></div>
-                <button class="dark-toggle" title="Toggle dark mode (UI only)"><i class="fas fa-moon"></i></button>
+                <button id="themeToggle" class="dark-toggle" title="Toggle theme"><i class="fas fa-circle-half-stroke"></i></button>
             </div>
         </div>
     </nav>
@@ -147,11 +163,9 @@
         <!-- Jobs Section -->
         <section id="jobsSection" class="space-y-4 fade-in">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-white drop-shadow">Saved Jobs</h2>
+                <h2 class="text-2xl font-bold">Saved Jobs</h2>
                 <div class="flex space-x-2">
-                    <button id="refreshJobs" class="px-4 py-2 bg-gradient-to-r from-gray-600 to-blue-700 text-white rounded hover:from-gray-700 hover:to-blue-800 font-semibold shadow transition-colors">
-                        <i class="fas fa-sync-alt mr-2"></i>Refresh
-                    </button>
+                    <button id="refreshJobs" class="minimal-btn"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
                 </div>
             </div>
             <div id="jobsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -162,10 +176,8 @@
         <!-- Playlists Section -->
         <section id="playlistsSection" class="hidden space-y-4 fade-in">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-white drop-shadow">Playlists</h2>
-                <button id="createPlaylist" class="px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 font-bold rounded shadow hover:from-yellow-500 hover:to-yellow-700 transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Create New Playlist
-                </button>
+                <h2 class="text-2xl font-bold">Playlists</h2>
+                <button id="createPlaylist" class="minimal-btn"><i class="fas fa-plus mr-2"></i>Create New Playlist</button>
             </div>
             <div id="playlistsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Playlists will be inserted here -->
@@ -175,20 +187,16 @@
         <!-- Playlist Details Section -->
         <section id="playlistDetailsSection" class="hidden space-y-4 fade-in">
             <div class="flex items-center mb-4">
-                <button id="backToPlaylists" class="mr-4 px-4 py-2 bg-gradient-to-r from-gray-600 to-blue-700 text-white rounded hover:from-gray-700 hover:to-blue-800 font-semibold shadow transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Back
-                </button>
-                <h2 id="playlistDetailsTitle" class="text-2xl font-bold text-white drop-shadow"></h2>
+                <button id="backToPlaylists" class="minimal-btn mr-4"><i class="fas fa-arrow-left mr-2"></i>Back</button>
+                <h2 id="playlistDetailsTitle" class="text-2xl font-bold"></h2>
             </div>
-            <div class="glass-card p-4">
+            <div class="minimal-card p-4">
                 <div class="flex justify-between items-center mb-4">
                     <div>
-                        <p id="playlistStats" class="text-gray-200 font-semibold"></p>
-                        <p id="playlistDates" class="text-sm text-gray-300"></p>
+                        <p id="playlistStats" class="font-semibold"></p>
+                        <p id="playlistDates" class="text-sm"></p>
                     </div>
-                    <button id="addJobsToPlaylist" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded hover:from-blue-600 hover:to-blue-800 font-semibold shadow transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Add Jobs
-                    </button>
+                    <button id="addJobsToPlaylist" class="minimal-btn"><i class="fas fa-plus mr-2"></i>Add Jobs</button>
                 </div>
                 <div id="playlistJobs" class="space-y-4">
                     <!-- Playlist jobs will be inserted here -->
@@ -197,11 +205,9 @@
         </section>
     </main>
 
-    <!-- Floating Action Button for Create Playlist -->
-    <button id="fabCreatePlaylist" class="floating-btn" title="Create Playlist" style="display:none;"><i class="fas fa-plus"></i></button>
     <footer>
         <div class="container mx-auto">
-            <span>&copy; ${new Date().getFullYear()} GTA Race Tracker &mdash; All rights reserved.</span>
+            <span>&copy; <span id="yearSpan"></span> GTA Race Tracker &mdash; All rights reserved.</span>
         </div>
     </footer>
 
@@ -310,6 +316,30 @@
         const cancelUserSelectBtn = document.getElementById('cancelUserSelect');
         const userSelectForm = document.getElementById('userSelectForm');
         const userSection = document.getElementById('userSection');
+
+        // Theme toggle logic
+        const themeOrder = ['theme-light', 'theme-dark', 'theme-black'];
+        let themeIdx = 0;
+        const body = document.body;
+        const themeToggle = document.getElementById('themeToggle');
+        function setTheme(idx) {
+            themeOrder.forEach(cls => body.classList.remove(cls));
+            body.classList.add(themeOrder[idx]);
+            themeIdx = idx;
+            localStorage.setItem('gtaTheme', themeOrder[idx]);
+        }
+        // Load theme from storage
+        const savedTheme = localStorage.getItem('gtaTheme');
+        if (savedTheme && themeOrder.includes(savedTheme)) {
+            setTheme(themeOrder.indexOf(savedTheme));
+        } else {
+            setTheme(0);
+        }
+        themeToggle.addEventListener('click', () => {
+            setTheme((themeIdx + 1) % themeOrder.length);
+        });
+        // Set year in footer
+        document.getElementById('yearSpan').textContent = new Date().getFullYear();
 
         // Navigation
         showJobsBtn.addEventListener('click', () => {
