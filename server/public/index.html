@@ -625,18 +625,17 @@
                     `Updated: ${new Date(playlist.updatedAt).toLocaleDateString()}`;
                 
                 const playlistJobs = document.getElementById('playlistJobs');
-                playlistJobs.innerHTML = playlist.jobs.map(job => `
-                    <div class="job-card minimal-card p-4 flex justify-between items-center mb-4">
-                        <div>
-                            <h4 class="font-bold section-title mb-1">${job.title}</h4>
-                            <p class="label text-sm mb-1">by ${job.creator}</p>
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="${job.url}" target="_blank" class="btn flex items-center"><i class="fas fa-external-link-alt mr-1"></i>View</a>
-                            <button onclick="removeJobFromPlaylist('${playlistId}', '${job.url}')" class="btn bg-red-600 hover:bg-red-700"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                `).join('');
+                playlistJobs.innerHTML = playlist.jobs.map(job => {
+                    const isExpanded = expandedJobUrl === job.url;
+                    return `
+                        <button type="button" class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left cursor-pointer hover:ring-2 hover:ring-blue-400 focus:outline-none" data-job="${job.url}">
+                            <div class="flex items-center">
+                                <i class="fas fa-flag-checkered text-blue-700 mr-2"></i>
+                                <span class="font-bold text-base">${job.title}</span>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
 
                 // Render stats table for all jobs and users
                 renderStatsTable(playlist);
@@ -672,14 +671,7 @@
                 }
                 jobs.forEach(job => {
                     const isExpanded = expandedJobUrl === job.url;
-                    html += `<div class="minimal-card p-2 shadow flex flex-col transition-all duration-200">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <i class="fas fa-flag-checkered text-blue-700 mr-2"></i>
-                                <span class="font-bold text-base">${job.title}</span>
-                            </div>
-                            <button class="editJobBtn px-2 py-1 rounded bg-blue-500 text-white text-xs ml-2" data-job="${job.url}"><i class="fas fa-pen"></i> Edit</button>
-                        </div>`;
+                    html += `<button type="button" class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left cursor-pointer hover:ring-2 hover:ring-blue-400 focus:outline-none" data-job="${job.url}">\n<div class="flex items-center">\n<i class="fas fa-flag-checkered text-blue-700 mr-2"></i>\n<span class="font-bold text-base">${job.title}</span>\n</div>`;
                     if (isExpanded) {
                         html += `<div class="space-y-2 mt-2">`;
                         (currentPlaylistPlayers || []).forEach((user, idx) => {
@@ -703,33 +695,17 @@
                             }
                             // Placement options only up to number of players
                             const placementOptions = Array.from({length: (currentPlaylistPlayers || []).length}, (_,i) => `<option value="${i+1}"${placement==i+1?' selected':''}>${i+1}</option>`).join('');
-                            html += `<div class="flex items-center space-x-2 text-xs">
-                                <span class="w-20 font-semibold">${user}</span>
-                                <select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">
-                                    <option value=""></option>
-                                    ${placementOptions}
-                                    <option value="DNF"${isDNF?' selected':''}>DNF</option>
-                                </select>
-                                <span class="text-gray-400">P</span>
-                                <select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">
-                                    <option value=""${lapDropdown===''?' selected':''}></option>
-                                    <option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option>
-                                    <option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option>
-                                </select>
-                                <span class="text-gray-400">F/L</span>
-                                <input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">
-                                <span class="ml-2 font-bold text-blue-600">${points}</span>
-                            </div>`;
+                            html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
                         });
                         html += `</div>`;
                     }
-                    html += `</div>`;
+                    html += `</button>`;
                 });
                 html += `</div></div>`;
                 document.getElementById('playlistJobs').innerHTML = html;
 
                 // Edit button logic
-                document.querySelectorAll('.editJobBtn').forEach(btn => {
+                document.querySelectorAll('.minimal-card[data-job]').forEach(btn => {
                     btn.onclick = () => {
                         expandedJobUrl = btn.dataset.job === expandedJobUrl ? null : btn.dataset.job;
                         renderStatsTable(playlist);
