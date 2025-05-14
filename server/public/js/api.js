@@ -75,20 +75,27 @@ const API = {
             return response.json();
         },
 
-        async updateName(id, name) {
+        async update(id, data) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name })
+                body: JSON.stringify(data)
             });
             return response.json();
         },
 
-        async addJobs(id, jobs) {
+        async delete(id) {
+            const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
+                method: 'DELETE'
+            });
+            return response.json();
+        },
+
+        async addJob(id, job) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ jobs })
+                body: JSON.stringify({ job })
             });
             return response.json();
         },

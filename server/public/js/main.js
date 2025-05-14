@@ -508,6 +508,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export functions for use in HTML
 window.viewPlaylist = playlists.view;
+window.editPlaylist = (id) => {
+    state.currentPlaylist = state.playlists.find(p => p._id === id);
+    if (state.currentPlaylist) {
+        const modal = document.getElementById('editPlaylistModal');
+        document.getElementById('editPlaylistName').value = state.currentPlaylist.name;
+        modal.classList.remove('hidden');
+    }
+};
+window.deletePlaylist = async (id) => {
+    if (!confirm('Are you sure you want to delete this playlist?')) return;
+    
+    utils.showLoading();
+    try {
+        await API.playlists.delete(id);
+        state.playlists = state.playlists.filter(p => p._id !== id);
+        playlists.render();
+    } catch (error) {
+        utils.showError('Failed to delete playlist: ' + error.message);
+    } finally {
+        utils.hideLoading();
+    }
+};
 window.removeJobFromPlaylist = playlists.removeJob;
 window.showUserSelectModal = modals.showUserSelect;
 window.toggleJobSelection = (checkbox, job) => {
