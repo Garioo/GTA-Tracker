@@ -189,32 +189,11 @@
         </div>
     </div>
 
-    <!-- Website Password Modal -->
-    <div id="passwordModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
-            <h3 class="text-xl font-bold mb-4">Enter Website Password</h3>
-            <form id="passwordForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="websitePassword" required
-                           class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="submit" 
-                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                        Enter
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script>
         const API_URL = 'https://trackers.studio/api';
         let currentPlaylistId = null;
         let selectedJobs = new Map();
         let currentUser = null;
-        let websitePassword = null;
         
         // UI Elements
         const jobsSection = document.getElementById('jobsSection');
@@ -241,8 +220,6 @@
         const showUserSelectBtn = document.getElementById('showUserSelect');
         const cancelUserSelectBtn = document.getElementById('cancelUserSelect');
         const userSelectForm = document.getElementById('userSelectForm');
-        const passwordModal = document.getElementById('passwordModal');
-        const passwordForm = document.getElementById('passwordForm');
         const userSection = document.getElementById('userSection');
 
         // Navigation
@@ -289,27 +266,13 @@
 
         // Show/hide modals
         showUserSelectBtn.addEventListener('click', () => {
-            if (!websitePassword) {
-                passwordModal.classList.remove('hidden');
-            } else {
-                userSelectModal.classList.remove('hidden');
-                populateUserDropdown();
-            }
+            userSelectModal.classList.remove('hidden');
+            populateUserDropdown();
         });
 
         cancelUserSelectBtn.addEventListener('click', () => {
             userSelectModal.classList.add('hidden');
             userSelectForm.reset();
-        });
-
-        // Handle website password
-        passwordForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const password = document.getElementById('websitePassword').value;
-            websitePassword = password;
-            localStorage.setItem('websitePassword', password);
-            passwordModal.classList.add('hidden');
-            userSelectModal.classList.remove('hidden');
         });
 
         // Handle user selection
@@ -329,8 +292,7 @@
                 const response = await fetch(`${API_URL}/users`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-website-password': websitePassword
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ username })
                 });
@@ -374,54 +336,10 @@
                     </button>
                 `;
                 document.getElementById('showUserSelect').addEventListener('click', () => {
-                    if (!websitePassword) {
-                        passwordModal.classList.remove('hidden');
-                    } else {
-                        userSelectModal.classList.remove('hidden');
-                        populateUserDropdown();
-                    }
+                    userSelectModal.classList.remove('hidden');
+                    populateUserDropdown();
                 });
             }
-        }
-
-        // Check for saved password and user
-        function checkSavedState() {
-            const savedPassword = localStorage.getItem('websitePassword');
-            const savedUser = localStorage.getItem('currentUser');
-            
-            if (savedPassword) {
-                websitePassword = savedPassword;
-                console.log('Loaded saved password');
-            } else {
-                // If no password is saved, show the password modal
-                passwordModal.classList.remove('hidden');
-            }
-            
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                updateUserUI();
-            }
-        }
-
-        // Global fetch wrapper to handle 401 errors and force password prompt
-        async function fetchWithAuth(url, options = {}) {
-            if (!websitePassword) {
-                passwordModal.classList.remove('hidden');
-                throw new Error('Website password is required');
-            }
-            options.headers = {
-                ...options.headers,
-                'x-website-password': websitePassword
-            };
-            const response = await fetch(url, options);
-            if (response.status === 401) {
-                // Clear password and force prompt
-                localStorage.removeItem('websitePassword');
-                websitePassword = null;
-                passwordModal.classList.remove('hidden');
-                throw new Error('Invalid password');
-            }
-            return response;
         }
 
         // Load and display jobs
@@ -486,8 +404,14 @@
             currentPlaylistId = playlistId;
             try {
                 const response = await fetch(`${API_URL}/playlists/${playlistId}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch playlist: ${response.status} ${response.statusText}`);
+                }
                 const playlist = await response.json();
-                
+                if (!playlist || !playlist.jobs) {
+                    throw new Error('Playlist data is missing or invalid');
+                }
+
                 document.getElementById('playlistDetailsTitle').innerHTML = `
                     ${playlist.name}
                     <button onclick="openEditPlaylistModal('${playlist.id}', '${playlist.name}')" 
@@ -535,6 +459,7 @@
                 playlistDetailsSection.classList.remove('hidden');
             } catch (error) {
                 console.error('Error loading playlist details:', error);
+                alert('Error loading playlist details: ' + error.message);
             }
         };
 
