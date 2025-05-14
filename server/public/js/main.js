@@ -305,20 +305,19 @@ const users = {
     load: async () => {
         utils.showLoading();
         try {
-            const users = await API.users.getAll();
-            users.renderDropdown(users);
+            const usersList = await API.users.getAll();
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.innerHTML = usersList.map(user => `
+                    <option value="${user.username}">${user.username}</option>
+                `).join('');
+            }
         } catch (error) {
+            console.error('Error loading users:', error);
             utils.showError('Failed to load users: ' + error.message);
         } finally {
             utils.hideLoading();
         }
-    },
-    
-    renderDropdown: (users) => {
-        const dropdown = document.getElementById('userDropdown');
-        dropdown.innerHTML = users.map(user => `
-            <option value="${user.username}">${user.username}</option>
-        `).join('');
     },
     
     select: async (username) => {
@@ -327,6 +326,7 @@ const users = {
             state.currentUser = await API.users.create(username);
             users.renderSection();
         } catch (error) {
+            console.error('Error selecting user:', error);
             utils.showError('Failed to select user: ' + error.message);
         } finally {
             utils.hideLoading();
@@ -334,6 +334,8 @@ const users = {
     },
     
     renderSection: () => {
+        if (!elements.userSection) return;
+        
         elements.userSection.innerHTML = state.currentUser
             ? `
                 <span class="mr-2">${state.currentUser.username}</span>

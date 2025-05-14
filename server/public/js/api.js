@@ -2,6 +2,23 @@
 const API = {
     baseUrl: 'https://trackers.studio/api',
 
+    // Helper function to handle API responses
+    async handleResponse(response) {
+        if (!response.ok) {
+            const errorText = await response.text();
+            try {
+                const errorJson = JSON.parse(errorText);
+                throw new Error(errorJson.error || response.statusText);
+            } catch (e) {
+                if (errorText.includes('<!DOCTYPE html>')) {
+                    throw new Error('Server error: Please try again later');
+                }
+                throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            }
+        }
+        return response.json();
+    },
+
     // User endpoints
     users: {
         async create(username) {
@@ -10,12 +27,12 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username })
             });
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async getAll() {
             const response = await fetch(`${API.baseUrl}/users`);
-            return response.json();
+            return API.handleResponse(response);
         }
     },
 
@@ -27,17 +44,14 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(jobData)
             });
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async getAll() {
             try {
                 console.log('Fetching jobs from:', `${API.baseUrl}/jobs`);
                 const response = await fetch(`${API.baseUrl}/jobs`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
+                const data = await API.handleResponse(response);
                 console.log('Received jobs:', data);
                 return data;
             } catch (error) {
@@ -50,7 +64,7 @@ const API = {
             const response = await fetch(`${API.baseUrl}/jobs/${encodeURIComponent(url)}`, {
                 method: 'DELETE'
             });
-            return response.json();
+            return API.handleResponse(response);
         }
     },
 
@@ -62,26 +76,17 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name })
             });
-            if (!response.ok) {
-                throw new Error(`Failed to create playlist: ${response.statusText}`);
-            }
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async getAll() {
             const response = await fetch(`${API.baseUrl}/playlists`);
-            if (!response.ok) {
-                throw new Error(`Failed to get playlists: ${response.statusText}`);
-            }
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async getById(id) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}`);
-            if (!response.ok) {
-                throw new Error(`Failed to get playlist: ${response.statusText}`);
-            }
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async update(id, data) {
@@ -90,20 +95,14 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            if (!response.ok) {
-                throw new Error(`Failed to update playlist: ${response.statusText}`);
-            }
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async delete(id) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
                 method: 'DELETE'
             });
-            if (!response.ok) {
-                throw new Error(`Failed to delete playlist: ${response.statusText}`);
-            }
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async addJob(id, jobUrl) {
@@ -112,20 +111,14 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ jobUrl })
             });
-            if (!response.ok) {
-                throw new Error(`Failed to add job: ${response.statusText}`);
-            }
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async removeJob(id, jobUrl) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs/${encodeURIComponent(jobUrl)}`, {
                 method: 'DELETE'
             });
-            if (!response.ok) {
-                throw new Error(`Failed to remove job: ${response.statusText}`);
-            }
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async reorderJobs(id, fromIndex, toIndex) {
@@ -143,7 +136,7 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ players })
             });
-            return response.json();
+            return API.handleResponse(response);
         },
 
         async updateStats(id, stats) {
