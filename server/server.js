@@ -41,14 +41,28 @@ const jobSchema = new mongoose.Schema({
   routeType: String,
   routeLength: String,
   vehicleClasses: [String],
-  locations: [String]
+  locations: [String],
+  // New meta fields from Excel
+  raceId: String,
+  date: String,
+  type: String,
+  name: String,
+  time: String,
+  laps: Number,
+  checkpoints: Number,
+  km: Number,
+  notes: String
 });
 const playerStatSchema = new mongoose.Schema({
   username: String,
   jobUrl: String,
   placement: Number,
   lapTime: Number,
-  dnf: Boolean
+  dnf: Boolean,
+  // New stat fields
+  fastestLap: Boolean,
+  slowestLap: Boolean,
+  statNotes: String
 }, { _id: false });
 const playlistSchema = new mongoose.Schema({
   name: String,
