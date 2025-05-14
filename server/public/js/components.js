@@ -33,17 +33,17 @@ const JobCardCompact = (job) => `
 
 // Playlist Components
 const PlaylistCard = (playlist) => `
-    <div class="minimal-card p-4">
+    <div class="minimal-card p-4 hover:bg-gray-50 transition-colors cursor-pointer" onclick="viewPlaylist('${playlist._id}')">
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-lg font-semibold">${playlist.name}</h3>
                 <p class="text-sm text-muted">${playlist.jobs.length} jobs</p>
             </div>
             <div class="flex space-x-2">
-                <button class="minimal-btn" onclick="viewPlaylist('${playlist._id}')">
+                <button class="minimal-btn bg-blue-500 text-white hover:bg-blue-600" onclick="event.stopPropagation(); viewPlaylist('${playlist._id}')">
                     <i class="fas fa-eye mr-2"></i>View
                 </button>
-                <button class="minimal-btn" onclick="editPlaylist('${playlist._id}')">
+                <button class="minimal-btn bg-green-500 text-white hover:bg-green-600" onclick="event.stopPropagation(); editPlaylist('${playlist._id}')">
                     <i class="fas fa-edit mr-2"></i>Edit
                 </button>
             </div>
