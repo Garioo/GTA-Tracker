@@ -752,6 +752,39 @@
                     alert('Stats saved!');
                 };
             });
+            // Debounce utility
+            function debounce(fn, delay) {
+                let timer = null;
+                return function(...args) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => fn.apply(this, args), delay);
+                };
+            }
+            // Attach autosave to all stat inputs
+            Array.from(document.querySelectorAll('.stat-input')).forEach(input => {
+                input.onchange = debounce(async (e) => {
+                    const jobUrl = input.dataset.job;
+                    const user = input.dataset.user;
+                    // Collect all fields for this player/job
+                    const placement = document.querySelector(`.stat-input[data-job='${jobUrl}'][data-user='${user}'][data-field='placement']`)?.value;
+                    const lapType = document.querySelector(`.stat-input[data-job='${jobUrl}'][data-user='${user}'][data-field='lapType']`)?.value;
+                    const statNotes = document.querySelector(`.stat-input[data-job='${jobUrl}'][data-user='${user}'][data-field='statNotes']`)?.value;
+                    const stat = {
+                        username: user,
+                        jobUrl,
+                        placement,
+                        fastestLap: lapType === 'Fastest',
+                        slowestLap: lapType === 'Slowest',
+                        statNotes
+                    };
+                    await fetch(`${API_URL}/playlists/${currentPlaylistId}/stats`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ stats: [stat] })
+                    });
+                    // Optionally show a subtle autosave indicator here
+                }, 300);
+            });
         }
 
         // User removal function
