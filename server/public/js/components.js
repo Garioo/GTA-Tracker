@@ -317,18 +317,6 @@ const StatsTable = (playlist, players) => {
 
     return `
         <div class='minimal-card p-4 h-fit w-full md:w-1/2'>
-            <h3 class='font-bold text-lg mb-2'>Playlist Stats</h3>
-            <div class='text-sm mb-1'>
-                <i class='fas fa-list mr-1'></i>Total Jobs: <span class='font-semibold'>${playlist.jobs.length}</span>
-            </div>
-            <div class='text-sm mb-1'>
-                <i class='fas fa-users mr-1'></i>Total Players: <span class='font-semibold'>${players.length}</span>
-            </div>
-            <div class='text-sm mb-3'>
-                <i class='fas fa-trophy mr-1'></i>Total Points: <span class='font-semibold'>${
-                    Object.values(playerTotals).reduce((a, b) => a + b, 0)
-                }</span>
-            </div>
             <div class='mb-3'>${playerTotalsTable}</div>
             <div>${raceOverviewTable}</div>
         </div>
