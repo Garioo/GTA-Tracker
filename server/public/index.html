@@ -642,7 +642,7 @@
                     if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
                     if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
                     if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                    let html = `<div class='flex flex-col md:flex-row gap-2 mt-2'>
+                    let html = `<div class='flex flex-col md:flex-row gap-2 mt-2 items-stretch'>
                         <div class='flex-1'>
                             <div class=\"space-y-2\">`;
                     (currentPlaylistPlayers || []).forEach((user, idx) => {
@@ -669,7 +669,7 @@
                         html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
                     });
                     html += `</div></div>
-                        <div class='minimal-card p-1 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-row flex-wrap items-center gap-2 h-fit overflow-hidden'>
+                        <div class='minimal-card p-1 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-row flex-wrap items-center gap-2 h-full overflow-hidden'>
                             ${info.map(item => `<span class='truncate max-w-[120px]'>${item}</span>`).join('')}
                         </div>
                     </div>`;
@@ -724,7 +724,7 @@
                         if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
                         if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
                         if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                        html += `<div class='flex flex-col md:flex-row gap-2 mt-2'>
+                        html += `<div class='flex flex-col md:flex-row gap-2 mt-2 items-stretch'>
                             <div class='flex-1'>
                                 <div class=\"space-y-2\">`;
                         (currentPlaylistPlayers || []).forEach((user, idx) => {
@@ -751,7 +751,7 @@
                             html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
                         });
                         html += `</div></div>
-                            <div class='minimal-card p-1 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-row flex-wrap items-center gap-2 h-fit overflow-hidden'>
+                            <div class='minimal-card p-1 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-row flex-wrap items-center gap-2 h-full overflow-hidden'>
                                 ${info.map(item => `<span class='truncate max-w-[120px]'>${item}</span>`).join('')}
                             </div>
                         </div>`;
