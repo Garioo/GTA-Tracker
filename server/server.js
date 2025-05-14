@@ -32,16 +32,13 @@ const verifyPassword = (req, res, next) => {
     next();
 };
 
-// Apply password protection to all routes except the test endpoint
-app.use(verifyPassword);
-
 // Test endpoint
 app.get('/api', (req, res) => {
     res.json({ message: 'Server is running!' });
 });
 
 // Create or get user
-app.post('/api/users', (req, res) => {
+app.post('/api/users', verifyPassword, (req, res) => {
     const { username } = req.body;
     if (!username) {
         return res.status(400).json({ error: 'Username is required' });
@@ -61,12 +58,12 @@ app.post('/api/users', (req, res) => {
 });
 
 // Get all users
-app.get('/api/users', (req, res) => {
+app.get('/api/users', verifyPassword, (req, res) => {
     res.json(users);
 });
 
 // Save a job
-app.post('/api/jobs', (req, res) => {
+app.post('/api/jobs', verifyPassword, (req, res) => {
     const job = req.body;
     // Check if job already exists
     const existingJob = jobs.find(j => j.url === job.url);
@@ -78,12 +75,12 @@ app.post('/api/jobs', (req, res) => {
 });
 
 // Get all jobs
-app.get('/api/jobs', (req, res) => {
+app.get('/api/jobs', verifyPassword, (req, res) => {
     res.json(jobs);
 });
 
 // Delete a job
-app.delete('/api/jobs/:url', (req, res) => {
+app.delete('/api/jobs/:url', verifyPassword, (req, res) => {
     const url = decodeURIComponent(req.params.url);
     const index = jobs.findIndex(j => j.url === url);
     if (index === -1) {

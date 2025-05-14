@@ -170,9 +170,12 @@
             <h3 class="text-xl font-bold mb-4">Select User</h3>
             <form id="userSelectForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" id="username" required
-                           class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <label class="block text-sm font-medium text-gray-700">User</label>
+                    <select id="userDropdown" class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></select>
+                </div>
+                <div id="newUserSection" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700">New Username</label>
+                    <input type="text" id="newUsername" class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" id="cancelUserSelect" 
@@ -290,6 +293,7 @@
                 passwordModal.classList.remove('hidden');
             } else {
                 userSelectModal.classList.remove('hidden');
+                populateUserDropdown();
             }
         });
 
@@ -311,8 +315,16 @@
         // Handle user selection
         userSelectForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = document.getElementById('username').value;
-
+            const userDropdown = document.getElementById('userDropdown');
+            const newUsernameInput = document.getElementById('newUsername');
+            let username = userDropdown.value;
+            if (username === '__new__') {
+                username = newUsernameInput.value.trim();
+                if (!username) {
+                    alert('Please enter a username');
+                    return;
+                }
+            }
             try {
                 const response = await fetch(`${API_URL}/users`, {
                     method: 'POST',
@@ -322,7 +334,6 @@
                     },
                     body: JSON.stringify({ username })
                 });
-
                 const data = await response.json();
                 if (response.ok) {
                     currentUser = data;
@@ -367,6 +378,7 @@
                         passwordModal.classList.remove('hidden');
                     } else {
                         userSelectModal.classList.remove('hidden');
+                        populateUserDropdown();
                     }
                 });
             }
@@ -751,6 +763,40 @@
             e.target.classList.remove('dragging');
             draggedItem = null;
         };
+
+        // Populate user dropdown and handle new user option
+        async function populateUserDropdown() {
+            const userDropdown = document.getElementById('userDropdown');
+            const newUserSection = document.getElementById('newUserSection');
+            userDropdown.innerHTML = '<option value="">Loading...</option>';
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    headers: { 'x-website-password': websitePassword }
+                });
+                const users = await response.json();
+                userDropdown.innerHTML = '';
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.username;
+                    option.textContent = user.username;
+                    userDropdown.appendChild(option);
+                });
+                // Option to add new user
+                const newOption = document.createElement('option');
+                newOption.value = '__new__';
+                newOption.textContent = 'Add new user...';
+                userDropdown.appendChild(newOption);
+            } catch (error) {
+                userDropdown.innerHTML = '<option value="">Error loading users</option>';
+            }
+            userDropdown.addEventListener('change', () => {
+                if (userDropdown.value === '__new__') {
+                    newUserSection.classList.remove('hidden');
+                } else {
+                    newUserSection.classList.add('hidden');
+                }
+            });
+        }
 
         // Initial state check
         checkSavedState();
