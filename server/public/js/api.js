@@ -105,11 +105,11 @@ const API = {
             return API.handleResponse(response);
         },
 
-        async addJob(id, jobUrl) {
+        async addJob(id, job) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ jobUrl })
+                body: JSON.stringify({ job })
             });
             return API.handleResponse(response);
         },

@@ -293,7 +293,14 @@ const playlists = {
             navigation.showPlaylists();
         } catch (error) {
             console.error('Delete playlist error:', error);
-            utils.showError('Failed to delete playlist: ' + error.message);
+            if (error.message.includes('404')) {
+                // If the playlist is not found, it might have been deleted already
+                state.playlists = state.playlists.filter(p => p._id !== id);
+                playlists.render();
+                navigation.showPlaylists();
+            } else {
+                utils.showError('Failed to delete playlist: ' + error.message);
+            }
         } finally {
             utils.hideLoading();
         }
@@ -493,8 +500,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             console.log('Adding jobs to playlist:', selectedJobs);
             for (const job of selectedJobs) {
-                console.log('Adding job:', job.url);
-                await API.playlists.addJob(state.currentPlaylist._id, job.url);
+                console.log('Adding job:', job);
+                await API.playlists.addJob(state.currentPlaylist._id, job);
             }
             console.log('Jobs added successfully');
             await playlists.view(state.currentPlaylist._id);
