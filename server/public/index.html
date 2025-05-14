@@ -333,31 +333,26 @@
     <!-- Add Jobs to Playlist Modal -->
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="minimal-card p-6 w-3/4 max-h-[80vh] shadow-xl overflow-hidden flex flex-col">
-            <h3 class="text-xl font-bold mb-4">Add Jobs to Playlist</h3>
+            <h3 class="section-title text-xl mb-4">Add Jobs to Playlist</h3>
             <div class="flex-1 overflow-y-auto mb-4">
                 <div id="availableJobs" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
             <div class="flex justify-end space-x-2">
-                <button id="cancelAddJobs" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
-                <button id="confirmAddJobs" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                    Add Selected Jobs
-                </button>
+                <button id="cancelAddJobs" class="btn bg-gray-300">Cancel</button>
+                <button id="confirmAddJobs" class="btn">Add Selected Jobs</button>
             </div>
         </div>
     </div>
     <!-- Edit Playlist Modal -->
     <div id="editPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="modal-title text-2xl font-bold mb-4">Edit Playlist</h3>
-            <input type="text" id="editPlaylistName" placeholder="Playlist Name" 
-                   class="w-full p-2 border rounded mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <h3 class="modal-title section-title text-2xl mb-4">Edit Playlist</h3>
+            <input type="text" id="editPlaylistName" placeholder="Playlist Name" class="input w-full mb-4">
             <div class="flex justify-end space-x-2">
-                <button id="cancelEdit" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
-                <button id="confirmEdit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                    Save Changes
-                </button>
+                <button id="cancelEdit" class="btn bg-gray-300">Cancel</button>
+                <button id="confirmEdit" class="btn">Save Changes</button>
             </div>
         </div>
     </div>
@@ -606,19 +601,12 @@
                 const playlistsList = document.getElementById('playlistsList');
                 
                 playlistsList.innerHTML = playlists.map(playlist => `
-                    <div class="bg-white p-4 rounded-lg shadow">
-                        <h3 class="font-bold text-lg mb-2">${playlist.name}</h3>
-                        <p class="text-gray-600 mb-2">
-                            <i class="fas fa-list mr-1"></i>${playlist.jobs.length} jobs
-                        </p>
-                        <div class="text-sm text-gray-500">
-                            <p><i class="fas fa-calendar-plus mr-1"></i>Created: ${new Date(playlist.createdAt).toLocaleDateString()}</p>
-                            <p><i class="fas fa-clock mr-1"></i>Updated: ${new Date(playlist.updatedAt).toLocaleDateString()}</p>
-                        </div>
-                        <button onclick="viewPlaylist('${playlist._id}')" 
-                                class="mt-4 w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                            <i class="fas fa-eye mr-1"></i>View Playlist
-                        </button>
+                    <div class="minimal-card p-6 mb-6">
+                        <h3 class="section-title text-xl mb-2">${playlist.name}</h3>
+                        <p class="label mb-1"><i class="fas fa-list mr-1"></i>${playlist.jobs.length} jobs</p>
+                        <p class="label mb-1"><i class="fas fa-calendar-plus mr-1"></i>Created: ${new Date(playlist.createdAt).toLocaleDateString()}</p>
+                        <p class="label mb-3"><i class="fas fa-clock mr-1"></i>Updated: ${new Date(playlist.updatedAt).toLocaleDateString()}</p>
+                        <button onclick="viewPlaylist('${playlist._id}')" class="btn w-full flex items-center justify-center"><i class="fas fa-eye mr-1"></i>View Playlist</button>
                     </div>
                 `).join('');
             } catch (error) {
@@ -652,32 +640,15 @@
                     `Updated: ${new Date(playlist.updatedAt).toLocaleDateString()}`;
                 
                 const playlistJobs = document.getElementById('playlistJobs');
-                playlistJobs.innerHTML = playlist.jobs.map((job, index) => `
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded draggable-job" 
-                         draggable="true" 
-                         data-index="${index}"
-                         ondragstart="handleDragStart(event)"
-                         ondragover="handleDragOver(event)"
-                         ondrop="handleDrop(event)"
-                         ondragend="handleDragEnd(event)">
-                        <div class="flex items-center flex-1">
-                            <div class="drag-handle">
-                                <i class="fas fa-grip-vertical"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold">${job.title}</h4>
-                                <p class="text-sm text-gray-600">by ${job.creator}</p>
-                            </div>
+                playlistJobs.innerHTML = playlist.jobs.map(job => `
+                    <div class="job-card minimal-card p-4 flex justify-between items-center mb-4">
+                        <div>
+                            <h4 class="font-bold section-title mb-1">${job.title}</h4>
+                            <p class="label text-sm mb-1">by ${job.creator}</p>
                         </div>
                         <div class="flex space-x-2">
-                            <a href="${job.url}" target="_blank" 
-                               class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            <button onclick="removeJobFromPlaylist('${playlistId}', '${job.url}')"
-                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <a href="${job.url}" target="_blank" class="btn flex items-center"><i class="fas fa-external-link-alt mr-1"></i>View</a>
+                            <button onclick="removeJobFromPlaylist('${playlistId}', '${job.url}')" class="btn bg-red-600 hover:bg-red-700"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `).join('');
