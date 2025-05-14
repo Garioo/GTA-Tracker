@@ -357,6 +357,8 @@ const modals = {
     
     showCreatePlaylist: () => {
         elements.createPlaylistModal.classList.remove('hidden');
+        // Clear the input field
+        document.getElementById('playlistName').value = '';
     },
     
     hideCreatePlaylist: () => {
@@ -389,31 +391,30 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('createPlaylist')?.addEventListener('click', modals.showCreatePlaylist);
     
     // Create playlist modal
-    document.getElementById('createPlaylistForm')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('playlistName').value;
-        try {
-            await playlists.create(name);
-            modals.hideCreatePlaylist();
-        } catch (error) {
-            // Error already handled in create method
-        }
-    });
-    
-    document.getElementById('cancelCreate')?.addEventListener('click', modals.hideCreatePlaylist);
     document.getElementById('confirmCreate')?.addEventListener('click', async () => {
-        const name = document.getElementById('playlistName').value;
+        const nameInput = document.getElementById('playlistName');
+        const name = nameInput.value.trim();
+        
         if (!name) {
             utils.showError('Please enter a playlist name');
             return;
         }
+        
+        utils.showLoading();
         try {
-            await playlists.create(name);
+            const playlist = await API.playlists.create(name);
+            state.playlists.push(playlist);
+            playlists.render();
             modals.hideCreatePlaylist();
+            nameInput.value = ''; // Clear the input
         } catch (error) {
-            // Error already handled in create method
+            utils.showError('Failed to create playlist: ' + error.message);
+        } finally {
+            utils.hideLoading();
         }
     });
+    
+    document.getElementById('cancelCreate')?.addEventListener('click', modals.hideCreatePlaylist);
     
     // Add jobs modal
     document.getElementById('cancelAddJobs')?.addEventListener('click', modals.hideAddJobs);
