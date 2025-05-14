@@ -772,11 +772,16 @@
             const newUserSection = document.getElementById('newUserSection');
             const newUsernameInput = document.getElementById('newUsername');
             userDropdown.innerHTML = '<option value="">Loading...</option>';
+            let users = [];
             try {
                 const response = await fetchWithAuth(`${API_URL}/users`);
-                const users = await response.json();
-                userDropdown.innerHTML = '';
-                let hasUsers = false;
+                users = await response.json();
+            } catch (error) {
+                // Ignore error, will handle below
+            }
+            userDropdown.innerHTML = '';
+            let hasUsers = false;
+            if (Array.isArray(users) && users.length > 0) {
                 users.forEach(user => {
                     hasUsers = true;
                     const option = document.createElement('option');
@@ -784,22 +789,19 @@
                     option.textContent = user.username;
                     userDropdown.appendChild(option);
                 });
-                // Always add the 'Add new user...' option
-                const newOption = document.createElement('option');
-                newOption.value = '__new__';
-                newOption.textContent = 'Add new user...';
-                userDropdown.appendChild(newOption);
-                // If no users, select 'Add new user...' and show input
-                if (!hasUsers) {
-                    userDropdown.value = '__new__';
-                    newUserSection.classList.remove('hidden');
-                } else {
-                    newUserSection.classList.add('hidden');
-                }
-            } catch (error) {
-                userDropdown.innerHTML = '<option value="__new__">Add new user...</option>';
+            }
+            // Always add the 'Add new user...' option
+            const newOption = document.createElement('option');
+            newOption.value = '__new__';
+            newOption.textContent = 'Add new user...';
+            userDropdown.appendChild(newOption);
+
+            // If no users, select 'Add new user...' and show input
+            if (!hasUsers) {
                 userDropdown.value = '__new__';
                 newUserSection.classList.remove('hidden');
+            } else {
+                newUserSection.classList.add('hidden');
             }
             userDropdown.addEventListener('change', () => {
                 if (userDropdown.value === '__new__') {
