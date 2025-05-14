@@ -171,6 +171,7 @@
             background: var(--color-card-light);
             color: var(--color-text-light);
             border-bottom: 2px solid var(--color-muted);
+            font-size: 0.75rem;
         }
         body.theme-black .stats-table thead tr {
             background: var(--color-card-black);
@@ -179,21 +180,34 @@
         }
         .stats-table tbody tr {
             background: var(--color-card-light);
+            font-size: 0.75rem;
         }
         body.theme-black .stats-table tbody tr {
             background: var(--color-card-black);
+        }
+        .stats-table th, .stats-table td {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
         }
         .stats-table input[type='number'],
         .stats-table input[type='text'] {
             background: var(--color-card-light);
             color: var(--color-text-light);
             border: 1px solid var(--color-muted);
+            font-size: 0.75rem;
+            padding: 0.125rem 0.25rem;
+            height: 1.5rem;
+            width: auto;
         }
         body.theme-black .stats-table input[type='number'],
         body.theme-black .stats-table input[type='text'] {
             background: var(--color-card-black);
             color: var(--color-text-black);
             border: 1px solid #222;
+        }
+        .stats-table input[type='checkbox'] {
+            width: 1rem;
+            height: 1rem;
         }
         .modal-title {
             color: var(--color-text-light);
@@ -253,7 +267,10 @@
                         <p id="playlistStats" class="font-semibold"></p>
                         <p id="playlistDates" class="text-sm"></p>
                     </div>
-                    <button id="addJobsToPlaylist" class="minimal-btn"><i class="fas fa-plus mr-2"></i>Add Jobs</button>
+                    <div class="flex space-x-2">
+                        <button id="addJobsToPlaylist" class="minimal-btn"><i class="fas fa-plus mr-2"></i>Add Jobs</button>
+                        <button id="managePlayersBtn" class="minimal-btn"><i class="fas fa-users mr-2"></i>Manage Players</button>
+                    </div>
                 </div>
                 <div id="playlistJobs" class="space-y-4">
                     <!-- Playlist jobs will be inserted here -->
@@ -327,12 +344,26 @@
             </form>
         </div>
     </div>
+    <!-- Manage Players Modal -->
+    <div id="managePlayersModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="minimal-card p-6 w-96 shadow-xl">
+            <h3 class="section-title text-xl mb-4">Manage Players</h3>
+            <form id="managePlayersForm" class="space-y-2 mb-4">
+                <div id="playersCheckboxList"></div>
+            </form>
+            <div class="flex justify-end space-x-2">
+                <button id="cancelManagePlayers" class="btn bg-gray-300">Cancel</button>
+                <button id="saveManagePlayers" class="btn">Save</button>
+            </div>
+        </div>
+    </div>
     <script>
     window.addEventListener('DOMContentLoaded', function() {
         const API_URL = 'https://trackers.studio/api';
         let currentPlaylistId = null;
         let selectedJobs = new Map();
         let currentUser = null;
+        let currentPlaylistPlayers = [];
         
         // UI Elements
         const jobsSection = document.getElementById('jobsSection');
@@ -360,6 +391,12 @@
         const cancelUserSelectBtn = document.getElementById('cancelUserSelect');
         const userSelectForm = document.getElementById('userSelectForm');
         const userSection = document.getElementById('userSection');
+        const managePlayersModal = document.getElementById('managePlayersModal');
+        const managePlayersBtn = document.getElementById('managePlayersBtn');
+        const cancelManagePlayersBtn = document.getElementById('cancelManagePlayers');
+        const saveManagePlayersBtn = document.getElementById('saveManagePlayers');
+        const playersCheckboxList = document.getElementById('playersCheckboxList');
+        const managePlayersForm = document.getElementById('managePlayersForm');
 
         // Theme toggle logic
         const themeOrder = ['theme-light', 'theme-black'];
@@ -603,6 +640,8 @@
                 // Render stats table for all jobs and users
                 renderStatsTable(playlist);
 
+                currentPlaylistPlayers = playlist.players || [];
+
                 playlistsSection.classList.add('hidden');
                 playlistDetailsSection.classList.remove('hidden');
             } catch (error) {
@@ -617,64 +656,55 @@
                 const jobs = playlist.jobs;
                 const stats = playlist.stats || [];
                 let html = `
-                <div class="mt-12 mb-8 minimal-card p-6 shadow-lg">
-                    <h3 class="font-bold text-2xl mb-2 flex items-center">
+                <div class="mt-6 mb-4 minimal-card p-2 shadow-lg">
+                    <h3 class="font-bold text-lg mb-1 flex items-center">
                         <i class="fas fa-trophy text-yellow-500 mr-2"></i>Player Stats
                     </h3>
-                    <p class="mb-4 text-gray-600">Enter each player's placement, lap time, and DNF status for every job. <span class="inline-block ml-2 text-blue-500" title="Placement: finishing position. Lap Time: total time in seconds. DNF: Did Not Finish."><i class="fas fa-info-circle"></i></span></p>
                 `;
                 if (users.length === 0 || jobs.length === 0) {
-                    html += `<div class="text-gray-500 italic mb-4">No users or jobs available to enter stats.</div></div>`;
+                    html += `<div class="text-gray-500 italic mb-2 text-xs">No users or jobs available to enter stats.</div></div>`;
                     document.getElementById('playlistJobs').insertAdjacentHTML('beforeend', html);
                     return;
                 }
                 jobs.forEach(job => {
-                    html += `<div class="mb-8">
-                        <h4 class="font-bold text-lg mb-2 text-blue-700 flex items-center"><i class="fas fa-flag-checkered mr-2"></i>${job.title}</h4>
+                    html += `<div class="mb-4">
+                        <h4 class="font-bold text-base mb-1 text-blue-700 flex items-center"><i class="fas fa-flag-checkered mr-2"></i>${job.title}</h4>
                         <div class="overflow-x-auto">
-                        <table class="stats-table min-w-full text-sm rounded-lg overflow-hidden border border-gray-200 mt-4">
+                        <table class="stats-table min-w-full text-xs rounded-lg overflow-hidden border border-gray-200 mt-2">
                             <thead>
                                 <tr>
-                                    <th class="px-4 py-2 text-left font-semibold">Player</th>
-                                    <th class="px-4 py-2 text-left font-semibold">Placement <i class="fas fa-question-circle text-xs text-gray-400" title="Finishing position"></i></th>
-                                    <th class="px-4 py-2 text-left font-semibold">Lap Time (s) <i class="fas fa-question-circle text-xs text-gray-400" title="Total time in seconds"></i></th>
-                                    <th class="px-4 py-2 text-center font-semibold">DNF <i class="fas fa-question-circle text-xs text-gray-400" title="Did Not Finish"></i></th>
+                                    <th class="px-2 py-1 text-left font-semibold">Player</th>
+                                    <th class="px-2 py-1 text-center font-semibold" title="Placement"><i class='fas fa-medal'></i></th>
+                                    <th class="px-2 py-1 text-center font-semibold" title="Lap Time"><i class='fas fa-stopwatch'></i></th>
+                                    <th class="px-2 py-1 text-center font-semibold" title="DNF"><i class='fas fa-flag'></i></th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
                     `;
-                    users.forEach((user, idx) => {
-                        const stat = stats.find(s => s.username === user.username && s.jobUrl === job.url) || {};
+                    const currentPlayers = currentPlaylistPlayers.filter(p => p === job.creator);
+                    currentPlayers.forEach((user, idx) => {
+                        const stat = stats.find(s => s.username === user && s.jobUrl === job.url) || {};
                         html += `<tr>
-                            <td class="px-4 py-2 font-medium">${user.username}</td>
-                            <td class="px-4 py-2">
-                                <div class="relative group">
-                                    <input type="number" min="1" class="stat-input border rounded w-20 px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" data-job="${job.url}" data-user="${user.username}" data-field="placement" value="${stat.placement || ''}">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400"><i class="fas fa-pencil-alt"></i></span>
-                                </div>
+                            <td class="px-2 py-1 font-medium">${user}</td>
+                            <td class="px-2 py-1 text-center">
+                                <input type="number" min="1" class="stat-input border rounded w-12 px-1 py-0.5 focus:ring-1 focus:ring-blue-400 focus:border-blue-400 transition text-xs" data-job="${job.url}" data-user="${user}" data-field="placement" value="${stat.placement || ''}">
                             </td>
-                            <td class="px-4 py-2">
-                                <div class="relative group">
-                                    <input type="number" min="0" step="0.01" class="stat-input border rounded w-28 px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" data-job="${job.url}" data-user="${user.username}" data-field="lapTime" value="${stat.lapTime || ''}">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400"><i class="fas fa-pencil-alt"></i></span>
-                                </div>
+                            <td class="px-2 py-1 text-center">
+                                <input type="number" min="0" step="0.01" class="stat-input border rounded w-16 px-1 py-0.5 focus:ring-1 focus:ring-blue-400 focus:border-blue-400 transition text-xs" data-job="${job.url}" data-user="${user}" data-field="lapTime" value="${stat.lapTime || ''}">
                             </td>
-                            <td class="px-4 py-2 text-center">
-                                <label class="inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="stat-input h-5 w-5 text-blue-600 rounded focus:ring-blue-500" data-job="${job.url}" data-user="${user.username}" data-field="dnf" ${stat.dnf ? 'checked' : ''}>
-                                    <span class="ml-2 text-gray-600 text-xs">Did Not Finish</span>
-                                </label>
+                            <td class="px-2 py-1 text-center">
+                                <input type="checkbox" class="stat-input h-4 w-4 text-blue-600 rounded focus:ring-blue-500" data-job="${job.url}" data-user="${user}" data-field="dnf" ${stat.dnf ? 'checked' : ''}>
                             </td>
                         </tr>`;
                     });
                     html += `</tbody></table></div></div>`;
                 });
                 html += `
-                    <div class="flex justify-end mt-6">
-                        <button id="saveStatsBtn" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-lg shadow hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all transform hover:scale-105 active:scale-95">
-                            <i class="fas fa-save mr-2"></i>Save All Stats
+                    <div class="flex justify-end mt-3">
+                        <button id="saveStatsBtn" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-lg shadow hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all transform hover:scale-105 active:scale-95 text-xs">
+                            <i class="fas fa-save mr-1"></i>Save All Stats
                         </button>
-                        <span id="statsSavedMsg" class="ml-4 text-green-600 font-semibold hidden transition-opacity duration-500"><i class='fas fa-check-circle'></i> Saved!</span>
+                        <span id="statsSavedMsg" class="ml-2 text-green-600 font-semibold hidden transition-opacity duration-500 text-xs"><i class='fas fa-check-circle'></i> Saved!</span>
                     </div>
                 </div>`;
                 document.getElementById('playlistJobs').insertAdjacentHTML('beforeend', html);
@@ -1000,6 +1030,34 @@
                 }
             });
         }
+
+        // Manage Players modal logic
+        if (managePlayersBtn) managePlayersBtn.addEventListener('click', async () => {
+            // Fetch all users
+            const users = await fetch(`${API_URL}/users`).then(r => r.json());
+            // Show checkboxes for all users
+            playersCheckboxList.innerHTML = users.map(user => `
+                <label class="flex items-center space-x-2 label">
+                    <input type="checkbox" value="${user.username}" ${currentPlaylistPlayers.includes(user.username) ? 'checked' : ''}>
+                    <span>${user.username}</span>
+                </label>
+            `).join('');
+            managePlayersModal.classList.remove('hidden');
+        });
+        if (cancelManagePlayersBtn) cancelManagePlayersBtn.addEventListener('click', () => {
+            managePlayersModal.classList.add('hidden');
+        });
+        if (saveManagePlayersBtn) saveManagePlayersBtn.addEventListener('click', async () => {
+            const checked = Array.from(playersCheckboxList.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+            await fetch(`${API_URL}/playlists/${currentPlaylistId}/players`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ players: checked })
+            });
+            currentPlaylistPlayers = checked;
+            managePlayersModal.classList.add('hidden');
+            viewPlaylist(currentPlaylistId);
+        });
 
         // Initial state check
         checkSavedState();

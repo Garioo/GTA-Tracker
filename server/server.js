@@ -68,6 +68,7 @@ const playlistSchema = new mongoose.Schema({
   name: String,
   jobs: [jobSchema],
   stats: [playerStatSchema],
+  players: [String],
   scores: {},
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
@@ -130,7 +131,7 @@ app.delete('/api/jobs/:url', async (req, res) => {
 app.post('/api/playlists', async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'Name is required' });
-  const playlist = await Playlist.create({ name, jobs: [], scores: {} });
+  const playlist = await Playlist.create({ name, jobs: [], stats: [], players: [] });
   res.json(playlist);
 });
 
@@ -228,6 +229,18 @@ app.delete('/api/users/:username', async (req, res) => {
   await Playlist.updateMany({}, { $pull: { stats: { username } } });
   if (result.deletedCount === 0) return res.status(404).json({ error: 'User not found' });
   res.json({ success: true });
+});
+
+// Update players for a playlist
+app.put('/api/playlists/:id/players', async (req, res) => {
+  const { players } = req.body;
+  if (!Array.isArray(players)) return res.status(400).json({ error: 'Players must be an array' });
+  const playlist = await Playlist.findById(req.params.id);
+  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+  playlist.players = players;
+  playlist.updatedAt = new Date();
+  await playlist.save();
+  res.json(playlist);
 });
 
 app.listen(port, () => {
