@@ -10,20 +10,12 @@ const JobCard = (job) => `
             </div>
             <div class="text-right">
                 <p class="text-sm">Rating: ${job.rating}</p>
-                <p class="text-sm text-muted">Last played: ${job.lastPlayed || 'Never'}</p>
             </div>
         </div>
-        <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
-            <div>
-                <p><span class="font-medium">Game Mode:</span> ${job.gameMode}</p>
-                <p><span class="font-medium">Route Type:</span> ${job.routeType}</p>
-                <p><span class="font-medium">Route Length:</span> ${job.routeLength}</p>
-            </div>
-            <div>
-                <p><span class="font-medium">Players:</span> ${job.players}</p>
-                <p><span class="font-medium">Teams:</span> ${job.teams}</p>
-                <p><span class="font-medium">Vehicle Classes:</span> ${job.vehicleClasses.join(', ')}</p>
-            </div>
+        <div class="mt-4 grid grid-cols-1 gap-2 text-sm">
+            <p><span class="font-medium">Game Mode:</span> ${job.gameMode}</p>
+            <p><span class="font-medium">Route Type:</span> ${job.routeType}</p>
+            <p><span class="font-medium">Route Length:</span> ${job.routeLength}</p>
         </div>
     </div>
 `;
