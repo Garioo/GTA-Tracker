@@ -71,12 +71,18 @@ const PlaylistDetails = (playlist) => `
                             <i class="fas fa-list mr-1"></i>Total Jobs
                         </div>
                         <div class="text-2xl font-bold text-blue-700">${playlist.jobs.length}</div>
+                        <div class="text-xs text-blue-500 mt-1">
+                            ${playlist.jobs.filter(job => job.gameMode === 'Race').length} Races
+                        </div>
                     </div>
                     <div class="bg-green-50 p-3 rounded-lg">
                         <div class="text-sm text-green-600 mb-1">
                             <i class="fas fa-users mr-1"></i>Total Players
                         </div>
                         <div class="text-2xl font-bold text-green-700">${playlist.players?.length || 0}</div>
+                        <div class="text-xs text-green-500 mt-1">
+                            ${playlist.stats?.filter(stat => stat.placement === 1).length || 0} Winners
+                        </div>
                     </div>
                 </div>
                 <div class="bg-purple-50 p-3 rounded-lg mb-4">
@@ -89,8 +95,38 @@ const PlaylistDetails = (playlist) => `
                             return total + points;
                         }, 0) || 0
                     }</div>
+                    <div class="text-xs text-purple-500 mt-1">
+                        ${playlist.stats?.length || 0} Race Results
+                    </div>
                 </div>
-                <div class="text-sm text-gray-500">
+                <div class="bg-gray-50 p-3 rounded-lg mb-4">
+                    <div class="text-sm text-gray-600 mb-2">
+                        <i class="fas fa-chart-line mr-1"></i>Top Performers
+                    </div>
+                    <div class="space-y-2">
+                        ${(() => {
+                            const playerPoints = {};
+                            playlist.stats?.forEach(stat => {
+                                if (!playerPoints[stat.username]) playerPoints[stat.username] = 0;
+                                const points = [15,12,10,8,7,6,5,4,3,2,1,0][stat.placement - 1] || 0;
+                                playerPoints[stat.username] += points;
+                            });
+                            return Object.entries(playerPoints)
+                                .sort(([,a], [,b]) => b - a)
+                                .slice(0, 3)
+                                .map(([player, points], index) => `
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <span class="text-xs font-medium text-gray-500 mr-2">#${index + 1}</span>
+                                            <span class="text-sm font-medium text-gray-700">${player}</span>
+                                        </div>
+                                        <span class="text-sm font-bold text-gray-900">${points} pts</span>
+                                    </div>
+                                `).join('') || '<div class="text-sm text-gray-500">No results yet</div>';
+                        })()}
+                    </div>
+                </div>
+                <div class="text-sm text-gray-500 flex items-center">
                     <i class="fas fa-calendar mr-1"></i>
                     Created: ${new Date(playlist.createdAt).toLocaleDateString()}
                 </div>
