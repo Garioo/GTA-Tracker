@@ -7,7 +7,9 @@ const port = 3001;
 
 // Enable CORS for the extension
 app.use(cors({
-    origin: '*'
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Parse JSON bodies
@@ -15,6 +17,42 @@ app.use(express.json());
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Basic health check
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
+// Test endpoints
+app.get('/api/test', (req, res) => {
+    res.json({ 
+        message: 'API is working!',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
+
+app.get('/api/test-db', async (req, res) => {
+    try {
+        const playlistCount = await Playlist.countDocuments();
+        const jobCount = await Job.countDocuments();
+        const userCount = await User.countDocuments();
+        
+        res.json({
+            status: 'ok',
+            timestamp: new Date().toISOString(),
+            database: mongoose.connection.db.databaseName,
+            collections: {
+                playlists: playlistCount,
+                jobs: jobCount,
+                users: userCount
+            }
+        });
+    } catch (error) {
+        console.error('Database test error:', error);
+        res.status(500).json({ error: 'Database test failed', details: error.message });
+    }
+});
 
 // MongoDB connection options
 const mongoOptions = {
@@ -310,28 +348,9 @@ app.put('/api/playlists/:id/players', async (req, res) => {
   res.json(playlist);
 });
 
-// Add a test endpoint to check database connection
-app.get('/api/test-db', async (req, res) => {
-    try {
-        const playlistCount = await Playlist.countDocuments();
-        const jobCount = await Job.countDocuments();
-        const userCount = await User.countDocuments();
-        
-        res.json({
-            status: 'ok',
-            database: mongoose.connection.db.databaseName,
-            collections: {
-                playlists: playlistCount,
-                jobs: jobCount,
-                users: userCount
-            }
-        });
-    } catch (error) {
-        console.error('Database test error:', error);
-        res.status(500).json({ error: 'Database test failed', details: error.message });
-    }
-});
-
-app.listen(port, '0.0.0.0', () => {
+// Update the server listen configuration
+const server = app.listen(port, '0.0.0.0', () => {
     console.log(`Server running at http://0.0.0.0:${port}`);
+    console.log('Environment:', process.env.NODE_ENV || 'development');
+    console.log('MongoDB connected:', mongoose.connection.readyState === 1 ? 'yes' : 'no');
 }); 
