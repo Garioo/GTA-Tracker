@@ -285,6 +285,7 @@ const playlists = {
             await API.playlists.delete(id);
             state.playlists = state.playlists.filter(p => p._id !== id);
             playlists.render();
+            navigation.showPlaylists(); // Navigate back to playlists view
         } catch (error) {
             utils.showError('Failed to delete playlist: ' + error.message);
         } finally {
@@ -372,11 +373,17 @@ const modals = {
         
         elements.managePlayersModal.classList.remove('hidden');
         const playersList = document.getElementById('playersCheckboxList');
-        // Get all unique players from stats
+        
+        // Get all unique players from stats and current players
         const allPlayers = new Set([
             ...(state.currentPlaylist.players || []),
             ...(state.currentPlaylist.stats || []).map(stat => stat.username)
         ]);
+        
+        if (allPlayers.size === 0) {
+            playersList.innerHTML = '<p class="text-gray-500 text-center py-2">No players available</p>';
+            return;
+        }
         
         playersList.innerHTML = Array.from(allPlayers).map(player => `
             <label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded">
@@ -451,9 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         utils.showLoading();
         try {
-            const playlist = await API.playlists.create(name);
-            state.playlists.push(playlist);
-            playlists.render();
+            await playlists.create(name);
             modals.hideCreatePlaylist();
             nameInput.value = ''; // Clear the input
         } catch (error) {
@@ -479,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
         utils.showLoading();
         try {
             for (const job of selectedJobs) {
-                await API.playlists.addJob(state.currentPlaylist._id, job);
+                await API.playlists.addJob(state.currentPlaylist._id, job.url);
             }
             await playlists.view(state.currentPlaylist._id);
             modals.hideAddJobs();
