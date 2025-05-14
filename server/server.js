@@ -276,6 +276,20 @@ app.put('/api/playlists/:id/players', async (req, res) => {
   res.json(playlist);
 });
 
+// Delete a playlist
+app.delete('/api/playlists/:id', async (req, res) => {
+  try {
+    const result = await Playlist.deleteOne({ _id: req.params.id });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+    res.json({ success: true, message: 'Playlist deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting playlist:', error);
+    res.status(500).json({ error: 'Failed to delete playlist' });
+  }
+});
+
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running at http://0.0.0.0:${port}`);
 }); 

@@ -18,7 +18,7 @@ const API = {
                     case 400:
                         throw new Error('Invalid request: Please check the data and try again');
                     case 404:
-                        throw new Error('Resource not found: The requested item does not exist');
+                        throw new Error('Playlist not found: It may have been deleted already');
                     case 500:
                         throw new Error('Server error: Please try again later');
                     default:
@@ -113,12 +113,11 @@ const API = {
                 method: 'DELETE'
             });
             
-            // Only treat as success if we get a 200 OK
-            if (response.status === 200) {
-                return { success: true, message: 'Playlist deleted successfully' };
+            // Handle the response
+            if (response.status === 404) {
+                throw new Error('Playlist not found');
             }
             
-            // For any other status, including 404, throw an error
             return API.handleResponse(response);
         },
 
