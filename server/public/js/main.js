@@ -324,6 +324,8 @@ const users = {
 const modals = {
     showUserSelect: () => {
         elements.userSelectModal.classList.remove('hidden');
+        // Ensure the form is reset
+        document.getElementById('userSelectForm').reset();
     },
     
     hideUserSelect: () => {
@@ -332,6 +334,9 @@ const modals = {
     
     showAddJobs: () => {
         elements.addJobsModal.classList.remove('hidden');
+        // Clear previous selections
+        state.selectedJobs.clear();
+        // Render available jobs
         jobs.renderCompact(document.getElementById('availableJobs'));
     },
     
@@ -341,11 +346,20 @@ const modals = {
     },
     
     showManagePlayers: () => {
+        if (!state.currentPlaylist) return;
+        
         elements.managePlayersModal.classList.remove('hidden');
         const playersList = document.getElementById('playersCheckboxList');
-        playersList.innerHTML = state.currentPlaylist.players.map(player => `
-            <label class="flex items-center space-x-2 label">
-                <input type="checkbox" value="${player}" checked>
+        // Get all unique players from stats
+        const allPlayers = new Set([
+            ...(state.currentPlaylist.players || []),
+            ...(state.currentPlaylist.stats || []).map(stat => stat.username)
+        ]);
+        
+        playersList.innerHTML = Array.from(allPlayers).map(player => `
+            <label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded">
+                <input type="checkbox" value="${player}" 
+                    ${(state.currentPlaylist.players || []).includes(player) ? 'checked' : ''}>
                 <span>${player}</span>
             </label>
         `).join('');
@@ -363,6 +377,19 @@ const modals = {
     
     hideCreatePlaylist: () => {
         elements.createPlaylistModal.classList.add('hidden');
+    },
+
+    showEditPlaylist: (id) => {
+        state.currentPlaylist = state.playlists.find(p => p._id === id);
+        if (state.currentPlaylist) {
+            const modal = document.getElementById('editPlaylistModal');
+            document.getElementById('editPlaylistName').value = state.currentPlaylist.name;
+            modal.classList.remove('hidden');
+        }
+    },
+
+    hideEditPlaylist: () => {
+        elements.editPlaylistModal.classList.add('hidden');
     }
 };
 
@@ -472,6 +499,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('userSelectForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('userDropdown').value;
+        if (!username) {
+            utils.showError('Please select a user');
+            return;
+        }
         await users.select(username);
         modals.hideUserSelect();
     });
@@ -479,14 +510,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancelUserSelect')?.addEventListener('click', modals.hideUserSelect);
     
     // Edit playlist modal
-    document.getElementById('cancelEdit')?.addEventListener('click', () => {
-        elements.editPlaylistModal.classList.add('hidden');
-    });
-    
+    document.getElementById('cancelEdit')?.addEventListener('click', modals.hideEditPlaylist);
     document.getElementById('confirmEdit')?.addEventListener('click', async () => {
         if (!state.currentPlaylist) return;
         
-        const newName = document.getElementById('editPlaylistName').value;
+        const newName = document.getElementById('editPlaylistName').value.trim();
         if (!newName) {
             utils.showError('Please enter a playlist name');
             return;
@@ -497,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await API.playlists.update(state.currentPlaylist._id, { name: newName });
             state.currentPlaylist.name = newName;
             playlists.renderDetails();
-            elements.editPlaylistModal.classList.add('hidden');
+            modals.hideEditPlaylist();
         } catch (error) {
             utils.showError('Failed to update playlist: ' + error.message);
         } finally {
@@ -508,14 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export functions for use in HTML
 window.viewPlaylist = playlists.view;
-window.editPlaylist = (id) => {
-    state.currentPlaylist = state.playlists.find(p => p._id === id);
-    if (state.currentPlaylist) {
-        const modal = document.getElementById('editPlaylistModal');
-        document.getElementById('editPlaylistName').value = state.currentPlaylist.name;
-        modal.classList.remove('hidden');
-    }
-};
+window.editPlaylist = (id) => modals.showEditPlaylist(id);
 window.deletePlaylist = async (id) => {
     if (!confirm('Are you sure you want to delete this playlist?')) return;
     
