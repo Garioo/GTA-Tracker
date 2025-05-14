@@ -110,8 +110,8 @@
             background: #1d4ed8;
         }
         .minimal-btn.active, .minimal-btn:active {
-            background: var(--color-accent);
-            color: #fff;
+            background: var(--color-accent) !important;
+            color: #fff !important;
             box-shadow: 0 2px 8px 0 rgba(37,99,235,0.08);
             font-weight: 700;
         }
@@ -146,6 +146,18 @@
         body.theme-black footer {
             background: var(--color-card-black);
             color: var(--color-text-black);
+        }
+        .stats-table thead tr {
+            background: var(--color-card-light);
+            border-bottom: 2px solid var(--color-muted);
+        }
+        body.theme-dark .stats-table thead tr {
+            background: var(--color-card-dark);
+            border-bottom: 2px solid #23232b;
+        }
+        body.theme-black .stats-table thead tr {
+            background: var(--color-card-black);
+            border-bottom: 2px solid #222;
         }
     </style>
 </head>
@@ -595,7 +607,7 @@
                 const jobs = playlist.jobs;
                 const stats = playlist.stats || [];
                 let html = `
-                <div class="mt-8 mb-8 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+                <div class="mt-12 mb-8 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
                     <h3 class="font-bold text-2xl mb-2 flex items-center">
                         <i class="fas fa-trophy text-yellow-500 mr-2"></i>Player Stats
                     </h3>
@@ -610,8 +622,8 @@
                     html += `<div class="mb-8">
                         <h4 class="font-bold text-lg mb-2 text-blue-700 flex items-center"><i class="fas fa-flag-checkered mr-2"></i>${job.title}</h4>
                         <div class="overflow-x-auto">
-                        <table class="min-w-full text-sm rounded-lg overflow-hidden border border-gray-200">
-                            <thead class="bg-blue-100 sticky top-0 z-10">
+                        <table class="stats-table min-w-full text-sm rounded-lg overflow-hidden border border-gray-200 mt-4">
+                            <thead>
                                 <tr>
                                     <th class="px-4 py-2 text-left font-semibold text-gray-700">Player</th>
                                     <th class="px-4 py-2 text-left font-semibold text-gray-700">Placement <i class="fas fa-question-circle text-xs text-gray-400" title="Finishing position"></i></th>
@@ -620,7 +632,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                `;
+                    `;
                     users.forEach((user, idx) => {
                         const stat = stats.find(s => s.username === user.username && s.jobUrl === job.url) || {};
                         html += `<tr class="${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors">
