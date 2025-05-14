@@ -116,8 +116,12 @@ const API = {
                 
                 // Handle 404 specifically for delete operations
                 if (response.status === 404) {
-                    console.log('Playlist not found - treating as successful deletion');
-                    return { success: true, message: 'Playlist not found - it may have been deleted already' };
+                    console.log('Playlist not found:', id);
+                    return { 
+                        success: false, 
+                        error: 'Playlist not found',
+                        message: 'The playlist does not exist'
+                    };
                 }
                 
                 return API.handleResponse(response);

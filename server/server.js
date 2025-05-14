@@ -30,6 +30,8 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Marius:y61C1M8iDn3
 mongoose.connect(MONGODB_URI, mongoOptions)
     .then(() => {
         console.log('Successfully connected to MongoDB Atlas.');
+        // Log the database name we're connected to
+        console.log('Connected to database:', mongoose.connection.db.databaseName);
     })
     .catch((error) => {
         console.error('Error connecting to MongoDB Atlas:', error);
@@ -306,6 +308,28 @@ app.put('/api/playlists/:id/players', async (req, res) => {
   playlist.updatedAt = new Date();
   await playlist.save();
   res.json(playlist);
+});
+
+// Add a test endpoint to check database connection
+app.get('/api/test-db', async (req, res) => {
+    try {
+        const playlistCount = await Playlist.countDocuments();
+        const jobCount = await Job.countDocuments();
+        const userCount = await User.countDocuments();
+        
+        res.json({
+            status: 'ok',
+            database: mongoose.connection.db.databaseName,
+            collections: {
+                playlists: playlistCount,
+                jobs: jobCount,
+                users: userCount
+            }
+        });
+    } catch (error) {
+        console.error('Database test error:', error);
+        res.status(500).json({ error: 'Database test failed', details: error.message });
+    }
 });
 
 app.listen(port, '0.0.0.0', () => {
