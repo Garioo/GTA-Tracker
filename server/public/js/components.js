@@ -46,6 +46,9 @@ const PlaylistCard = (playlist) => `
                 <button class="minimal-btn bg-green-500 text-white hover:bg-green-600" onclick="event.stopPropagation(); editPlaylist('${playlist._id}')">
                     <i class="fas fa-edit mr-2"></i>Edit
                 </button>
+                <button class="minimal-btn bg-red-500 text-white hover:bg-red-600" onclick="event.stopPropagation(); deletePlaylist('${playlist._id}')">
+                    <i class="fas fa-trash mr-2"></i>Delete
+                </button>
             </div>
         </div>
     </div>
@@ -180,20 +183,20 @@ const PlaylistDetails = (playlist) => `
 
 // Modal Components
 const CreatePlaylistModal = () => `
-    <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
             <h3 class="modal-title section-title text-2xl mb-4">Create New Playlist</h3>
             <input type="text" id="playlistName" placeholder="Playlist Name" class="input w-full mb-4">
             <div class="flex justify-end space-x-2">
-                <button id="cancelCreate" class="btn bg-gray-300">Cancel</button>
-                <button id="confirmCreate" class="btn">Create</button>
+                <button id="cancelCreate" class="btn bg-gray-300 hover:bg-gray-400">Cancel</button>
+                <button id="confirmCreate" class="btn bg-blue-500 text-white hover:bg-blue-600">Create</button>
             </div>
         </div>
     </div>
 `;
 
 const AddJobsModal = () => `
-    <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-3/4 max-h-[80vh] shadow-xl overflow-hidden flex flex-col">
             <h3 class="section-title text-xl mb-4">Add Jobs to Playlist</h3>
             <div class="flex-1 overflow-y-auto mb-4">
@@ -202,15 +205,15 @@ const AddJobsModal = () => `
                 </div>
             </div>
             <div class="flex justify-end space-x-2">
-                <button id="cancelAddJobs" class="btn bg-gray-300">Cancel</button>
-                <button id="confirmAddJobs" class="btn">Add Selected Jobs</button>
+                <button id="cancelAddJobs" class="btn bg-gray-300 hover:bg-gray-400">Cancel</button>
+                <button id="confirmAddJobs" class="btn bg-blue-500 text-white hover:bg-blue-600">Add Selected Jobs</button>
             </div>
         </div>
     </div>
 `;
 
 const UserSelectModal = () => `
-    <div id="userSelectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div id="userSelectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
             <h3 class="text-xl font-bold mb-4">Select User</h3>
             <form id="userSelectForm" class="space-y-4">
@@ -223,8 +226,8 @@ const UserSelectModal = () => `
                     <input type="text" id="newUsername" class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="button" id="cancelUserSelect" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Select</button>
+                    <button type="button" id="cancelUserSelect" class="btn bg-gray-300 hover:bg-gray-400">Cancel</button>
+                    <button type="submit" class="btn bg-blue-500 text-white hover:bg-blue-600">Select</button>
                 </div>
             </form>
         </div>
@@ -239,8 +242,8 @@ const ManagePlayersModal = () => `
                 <div id="playersCheckboxList"></div>
             </form>
             <div class="flex justify-end space-x-2">
-                <button id="cancelManagePlayers" class="btn bg-gray-300">Cancel</button>
-                <button id="saveManagePlayers" class="btn">Save</button>
+                <button id="cancelManagePlayers" class="btn bg-gray-300 hover:bg-gray-400">Cancel</button>
+                <button id="saveManagePlayers" class="btn bg-blue-500 text-white hover:bg-blue-600">Save</button>
             </div>
         </div>
     </div>
