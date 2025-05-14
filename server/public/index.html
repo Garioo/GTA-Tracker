@@ -775,7 +775,9 @@
                 });
                 const users = await response.json();
                 userDropdown.innerHTML = '';
+                let hasUsers = false;
                 users.forEach(user => {
+                    hasUsers = true;
                     const option = document.createElement('option');
                     option.value = user.username;
                     option.textContent = user.username;
@@ -786,8 +788,17 @@
                 newOption.value = '__new__';
                 newOption.textContent = 'Add new user...';
                 userDropdown.appendChild(newOption);
+                // If no users, select 'Add new user...' and show input
+                if (!hasUsers) {
+                    userDropdown.value = '__new__';
+                    newUserSection.classList.remove('hidden');
+                } else {
+                    newUserSection.classList.add('hidden');
+                }
             } catch (error) {
-                userDropdown.innerHTML = '<option value="">Error loading users</option>';
+                userDropdown.innerHTML = '<option value="__new__">Add new user...</option>';
+                userDropdown.value = '__new__';
+                newUserSection.classList.remove('hidden');
             }
             userDropdown.addEventListener('change', () => {
                 if (userDropdown.value === '__new__') {
