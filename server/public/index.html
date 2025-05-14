@@ -436,6 +436,7 @@
             try {
                 const response = await fetch(`${API_URL}/playlists`);
                 const playlists = await response.json();
+                console.log('Loaded playlists:', playlists); // Debug log
                 const playlistsList = document.getElementById('playlistsList');
                 
                 playlistsList.innerHTML = playlists.map(playlist => `
@@ -641,13 +642,13 @@
                         name
                     })
                 });
-
+                const data = await response.json();
+                console.log('Playlist creation response:', data); // Debug log
                 if (response.ok) {
                     createPlaylistModal.classList.add('hidden');
                     playlistNameInput.value = '';
                     loadPlaylists();
                 } else {
-                    const data = await response.json();
                     alert('Error creating playlist: ' + (data.error || 'Unknown error'));
                 }
             } catch (error) {
