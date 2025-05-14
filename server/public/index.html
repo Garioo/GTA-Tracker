@@ -645,215 +645,25 @@
         // Fast stat entry table for playlist jobs and users
         function renderStatsTable(playlist) {
             const playlistJobs = document.getElementById('playlistJobs');
-            const pointsTable = [15,12,10,8,7,6,5,4,3,2,1,0];
-            let html = '';
-            playlist.jobs.forEach(job => {
-                const isExpanded = expandedJobUrl === job.url;
-                let info = [];
-                if (job.creator) info.push(`<span><i class='fas fa-user mr-1'></i>${job.creator}</span>`);
-                if (job.description) info.push(`<span><i class='fas fa-align-left mr-1'></i>${job.description}</span>`);
-                if (job.rating) info.push(`<span><i class='fas fa-star mr-1'></i>${job.rating}</span>`);
-                if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
-                if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
-                if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                html += `<div class="minimal-card p-3 shadow flex flex-col transition-all duration-200 text-left focus:outline-none w-full md:w-1/2" data-job="${job.url}">
-                    <div class="flex items-center cursor-pointer job-header mb-2" data-job="${job.url}">
-                        <i class="fas fa-flag-checkered text-blue-700 mr-2"></i>
-                        <span class="font-bold text-base">${job.title}</span>
-                    </div>
-                    <div class='flex flex-row flex-wrap items-center gap-1 text-xs mb-3'>
-                        ${info.map(item => `<span class='truncate max-w-[90px]'>${item}</span>`).join('')}
-                    </div>`;
-                if (isExpanded) {
-                    html += `<div class='mt-2 space-y-2'>
-                        <div class='flex flex-col'>
-                            <div class="space-y-1">`;
-                    (currentPlaylistPlayers || []).forEach((user, idx) => {
-                        const stat = playlist.stats.find(s => s.username === user && s.jobUrl === job.url) || {};
-                        let placement = stat.placement || '';
-                        let isDNF = placement === 'DNF' || placement === 0;
-                        const statNotes = stat.statNotes || '';
-                        let fastestLap = stat.fastestLap;
-                        let slowestLap = stat.slowestLap;
-                        let lapDropdown = '';
-                        if (fastestLap === true) lapDropdown = 'Fastest';
-                        else if (slowestLap === true) lapDropdown = 'Slowest';
-                        else lapDropdown = '';
-                        let points = '';
-                        if (isDNF) {
-                            points = 0;
-                        } else if (placement && placement >= 1) {
-                            points = pointsTable[placement-1] !== undefined ? pointsTable[placement-1] : 0;
-                        }
-                        const placementOptions = Array.from({length: (currentPlaylistPlayers || []).length}, (_,i) => `<option value="${i+1}"${placement==i+1?' selected':''}>${i+1}</option>`).join('');
-                        html += `<div class="flex items-center space-x-1 text-xs">
-                            <span class="w-16 font-semibold">${user}</span>
-                            <select class="stat-input border rounded px-1 py-0.5 w-14 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">
-                                <option value=""></option>
-                                ${placementOptions}
-                                <option value="DNF"${isDNF?' selected':''}>DNF</option>
-                            </select>
-                            <span class="text-gray-400">P</span>
-                            <select class="stat-input border rounded w-14 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">
-                                <option value=""${lapDropdown===''?' selected':''}></option>
-                                <option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option>
-                                <option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option>
-                            </select>
-                            <span class="text-gray-400">F/L</span>
-                            <input type="text" class="stat-input border rounded w-14 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">
-                            <span class="ml-1 font-bold text-blue-600">${points}</span>
-                        </div>`;
-                    });
-                    html += `</div>
-                    </div>
-                    <div class="flex justify-end mt-2">
-                        <button class="btn save-stats-btn" data-job="${job.url}"><i class="fas fa-save mr-1"></i>Save All</button>
-                    </div>
-                </div>`;
-                }
-                html += `</div>`;
-            });
-            playlistJobs.innerHTML = html;
-            // Attach click handler for job-header after rendering
-            document.querySelectorAll('.job-header').forEach(header => {
-                header.onclick = (e) => {
-                    const card = header.closest('.minimal-card[data-job]');
-                    expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
-                    renderStatsTable(window.currentPlaylistObj);
-                };
-            });
-            // After rendering job cards, attach click handler for Save All buttons
-            document.querySelectorAll('.save-stats-btn').forEach(btn => {
-                btn.onclick = async (e) => {
-                    const jobUrl = btn.dataset.job;
-                    // Collect all stat inputs for this job
-                    const stats = [];
-                    document.querySelectorAll(`.stat-input[data-job='${jobUrl}']`).forEach(input => {
-                        const user = input.dataset.user;
-                        const field = input.dataset.field;
-                        let stat = stats.find(s => s.username === user);
-                        if (!stat) {
-                            stat = { username: user, jobUrl };
-                            stats.push(stat);
-                        }
-                        if (field === 'placement') stat.placement = input.value;
-                        if (field === 'lapType') {
-                            stat.fastestLap = input.value === 'Fastest';
-                            stat.slowestLap = input.value === 'Slowest';
-                        }
-                        if (field === 'statNotes') stat.statNotes = input.value;
-                    });
-                    // Send to backend
-                    await fetch(`${API_URL}/playlists/${currentPlaylistId}/stats`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ stats })
-                    });
-                    alert('Stats saved!');
-                };
-            });
-            // Debounce utility
-            function debounce(fn, delay) {
-                let timer = null;
-                return function(...args) {
-                    clearTimeout(timer);
-                    timer = setTimeout(() => fn.apply(this, args), delay);
-                };
-            }
-            // Attach autosave to all stat inputs
-            Array.from(document.querySelectorAll('.stat-input')).forEach(input => {
-                input.onchange = debounce(async (e) => {
-                    const jobUrl = input.dataset.job;
-                    const user = input.dataset.user;
-                    // Collect all fields for this player/job
-                    const placement = document.querySelector(`.stat-input[data-job='${jobUrl}'][data-user='${user}'][data-field='placement']`)?.value;
-                    const lapType = document.querySelector(`.stat-input[data-job='${jobUrl}'][data-user='${user}'][data-field='lapType']`)?.value;
-                    const statNotes = document.querySelector(`.stat-input[data-job='${jobUrl}'][data-user='${user}'][data-field='statNotes']`)?.value;
-                    const stat = {
-                        username: user,
-                        jobUrl,
-                        placement,
-                        fastestLap: lapType === 'Fastest',
-                        slowestLap: lapType === 'Slowest',
-                        statNotes
-                    };
-                    await fetch(`${API_URL}/playlists/${currentPlaylistId}/stats`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ stats: [stat] })
-                    });
-                    // Optionally show a subtle autosave indicator here
-                }, 300);
-            });
-            // Calculate playlist stats
-            const totalJobs = playlist.jobs.length;
-            const totalPlayers = (currentPlaylistPlayers || []).length;
-            let totalPoints = 0;
-            if (playlist.stats && playlist.stats.length) {
-                playlist.stats.forEach(stat => {
-                    if (stat.placement && stat.placement !== 'DNF' && stat.placement >= 1) {
-                        totalPoints += pointsTable[stat.placement-1] !== undefined ? pointsTable[stat.placement-1] : 0;
-                    }
-                });
-            }
-            // Calculate total points per player
-            const playerTotals = {};
-            (currentPlaylistPlayers || []).forEach(player => { playerTotals[player] = 0; });
-            if (playlist.stats && playlist.stats.length) {
-                playlist.stats.forEach(stat => {
-                    if (stat.username && playerTotals.hasOwnProperty(stat.username)) {
-                        let points = 0;
-                        if (stat.placement && stat.placement !== 'DNF' && stat.placement >= 1) {
-                            points = pointsTable[stat.placement-1] !== undefined ? pointsTable[stat.placement-1] : 0;
-                        }
-                        playerTotals[stat.username] += points;
-                    }
-                });
-            }
-            // Build player totals table
-            let playerTotalsTable = `<table class='w-full text-xs mb-3'><thead><tr><th class='text-left'>Player</th><th class='text-right'>Total</th></tr></thead><tbody>`;
-            Object.entries(playerTotals).forEach(([player, total]) => {
-                playerTotalsTable += `<tr><td>${player}</td><td class='text-right font-semibold'>${total}</td></tr>`;
-            });
-            playerTotalsTable += '</tbody></table>';
-            // Build race overview table
-            let raceOverviewTable = `<table class='w-full text-xs'><thead><tr><th>Race</th>`;
-            (currentPlaylistPlayers || []).forEach(player => {
-                raceOverviewTable += `<th>${player}</th>`;
-            });
-            raceOverviewTable += '</tr></thead><tbody>';
-            playlist.jobs.forEach(job => {
-                raceOverviewTable += `<tr><td class='font-semibold'>${job.title}</td>`;
-                (currentPlaylistPlayers || []).forEach(player => {
-                    const stat = (playlist.stats || []).find(s => s.username === player && s.jobUrl === job.url);
-                    let cell = '';
-                    if (stat) {
-                        if (stat.placement === 'DNF' || stat.placement === 0) cell = 'DNF';
-                        else if (stat.placement && stat.placement >= 1) cell = pointsTable[stat.placement-1] !== undefined ? pointsTable[stat.placement-1] : 0;
-                        else cell = '';
-                    }
-                    raceOverviewTable += `<td class='text-center'>${cell}</td>`;
-                });
-                raceOverviewTable += '</tr>';
-            });
-            raceOverviewTable += '</tbody></table>';
-            // Render jobs grid
-            playlistJobs.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 flex-1';
-            // Add or update the playlist stats box
+            const parent = playlistJobs.parentElement;
+            parent.className = 'flex flex-col md:flex-row gap-6 items-start';
+            // Render jobs grid as left column
+            playlistJobs.className = 'w-full md:w-1/2 grid grid-cols-1 gap-4';
+            // Render stats card as right column
             let statsBox = document.getElementById('playlistStatsBox');
             if (!statsBox) {
                 statsBox = document.createElement('div');
                 statsBox.id = 'playlistStatsBox';
-                statsBox.className = 'minimal-card p-4 h-fit md:w-64 w-full mt-4 md:mt-0';
-                playlistJobs.parentElement.appendChild(statsBox);
+                parent.appendChild(statsBox);
             }
+            statsBox.className = 'minimal-card p-4 h-fit w-full md:w-1/2';
             statsBox.innerHTML = `
                 <h3 class='font-bold text-lg mb-2'>Playlist Stats</h3>
-                <div class='text-sm mb-1'><i class='fas fa-list mr-1'></i>Total Jobs: <span class='font-semibold'>${totalJobs}</span></div>
-                <div class='text-sm mb-1'><i class='fas fa-users mr-1'></i>Total Players: <span class='font-semibold'>${totalPlayers}</span></div>
-                <div class='text-sm mb-3'><i class='fas fa-trophy mr-1'></i>Total Points: <span class='font-semibold'>${totalPoints}</span></div>
-                <div class='mb-3'>${playerTotalsTable}</div>
-                <div>${raceOverviewTable}</div>
+                <div class='text-sm mb-1'><i class='fas fa-list mr-1'></i>Total Jobs: <span class='font-semibold'>${playlist.jobs.length}</span></div>
+                <div class='text-sm mb-1'><i class='fas fa-users mr-1'></i>Total Players: <span class='font-semibold'>${(currentPlaylistPlayers || []).length}</span></div>
+                <div class='text-sm mb-3'><i class='fas fa-trophy mr-1'></i>Total Points: <span class='font-semibold'>${calculateTotalPoints(playlist)}</span></div>
+                <div class='mb-3'>${calculatePlayerTotalsTable(playlist)}</div>
+                <div>${calculateRaceOverviewTable(playlist)}</div>
             `;
         }
 
