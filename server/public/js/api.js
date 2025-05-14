@@ -1,6 +1,6 @@
 // API client for GTA Race Tracker
 const API = {
-    baseUrl: 'http://localhost:3001/api',
+    baseUrl: 'http://GTA-Tracker-Droplet:3001/api',
 
     // User endpoints
     users: {
