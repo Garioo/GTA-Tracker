@@ -97,6 +97,62 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        .btn {
+            background: var(--color-accent);
+            color: #fff;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+            box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        .label {
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+        body.theme-dark .label {
+            color: var(--color-text-dark);
+        }
+        body.theme-black .label {
+            color: var(--color-text-black);
+        }
+        .input {
+            background: var(--color-card-light);
+            color: var(--color-text-light);
+            border: 1px solid var(--color-muted);
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        body.theme-dark .input {
+            background: var(--color-card-dark);
+            color: var(--color-text-dark);
+            border: 1px solid #23232b;
+        }
+        body.theme-black .input {
+            background: var(--color-card-black);
+            color: var(--color-text-black);
+            border: 1px solid #222;
+        }
+        .section-title {
+            color: var(--color-text-light);
+            font-weight: 700;
+        }
+        body.theme-dark .section-title {
+            color: var(--color-text-dark);
+        }
+        body.theme-black .section-title {
+            color: var(--color-text-black);
+        }
+        .text-muted {
+            color: var(--color-muted);
+        }
+        body.theme-dark .text-muted, body.theme-black .text-muted {
+            color: #888;
+        }
         .minimal-btn {
             background: var(--color-accent);
             color: #fff;
@@ -189,6 +245,15 @@
             color: var(--color-text-black);
             border: 1px solid #222;
         }
+        .modal-title {
+            color: var(--color-text-light);
+        }
+        body.theme-dark .modal-title {
+            color: var(--color-text-dark);
+        }
+        body.theme-black .modal-title {
+            color: var(--color-text-black);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -257,14 +322,11 @@
     <!-- Create Playlist Modal -->
     <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="text-xl font-bold mb-4">Create New Playlist</h3>
-            <input type="text" id="playlistName" placeholder="Playlist Name" 
-                   class="w-full p-2 border rounded mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <h3 class="modal-title section-title text-2xl mb-4">Create New Playlist</h3>
+            <input type="text" id="playlistName" placeholder="Playlist Name" class="input w-full mb-4">
             <div class="flex justify-end space-x-2">
-                <button id="cancelCreate" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
-                <button id="confirmCreate" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
-                    Create
-                </button>
+                <button id="cancelCreate" class="btn bg-gray-300">Cancel</button>
+                <button id="confirmCreate" class="btn">Create</button>
             </div>
         </div>
     </div>
@@ -288,7 +350,7 @@
     <!-- Edit Playlist Modal -->
     <div id="editPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="text-xl font-bold mb-4">Edit Playlist</h3>
+            <h3 class="modal-title text-2xl font-bold mb-4">Edit Playlist</h3>
             <input type="text" id="editPlaylistName" placeholder="Playlist Name" 
                    class="w-full p-2 border rounded mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             <div class="flex justify-end space-x-2">
