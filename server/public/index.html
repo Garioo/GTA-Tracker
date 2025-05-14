@@ -143,7 +143,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen flex flex-col">
     <nav class="p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-extrabold flex items-center tracking-tight">
@@ -158,8 +158,7 @@
             </div>
         </div>
     </nav>
-
-    <main class="container mx-auto p-4">
+    <main class="container mx-auto p-4 flex-1">
         <!-- Jobs Section -->
         <section id="jobsSection" class="space-y-4 fade-in">
             <div class="flex justify-between items-center mb-4">
@@ -172,7 +171,6 @@
                 <!-- Jobs will be inserted here -->
             </div>
         </section>
-
         <!-- Playlists Section -->
         <section id="playlistsSection" class="hidden space-y-4 fade-in">
             <div class="flex justify-between items-center mb-4">
@@ -183,7 +181,6 @@
                 <!-- Playlists will be inserted here -->
             </div>
         </section>
-
         <!-- Playlist Details Section -->
         <section id="playlistDetailsSection" class="hidden space-y-4 fade-in">
             <div class="flex items-center mb-4">
@@ -204,13 +201,11 @@
             </div>
         </section>
     </main>
-
     <footer>
         <div class="container mx-auto">
             <span>&copy; <span id="yearSpan"></span> GTA Race Tracker &mdash; All rights reserved.</span>
         </div>
     </footer>
-
     <!-- Create Playlist Modal -->
     <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
@@ -225,7 +220,6 @@
             </div>
         </div>
     </div>
-
     <!-- Add Jobs to Playlist Modal -->
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg w-3/4 max-h-[80vh] shadow-xl overflow-hidden flex flex-col">
@@ -243,7 +237,6 @@
             </div>
         </div>
     </div>
-
     <!-- Edit Playlist Modal -->
     <div id="editPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
@@ -258,7 +251,6 @@
             </div>
         </div>
     </div>
-
     <!-- User Selection Modal -->
     <div id="userSelectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
@@ -283,8 +275,8 @@
             </form>
         </div>
     </div>
-
     <script>
+    window.addEventListener('DOMContentLoaded', function() {
         const API_URL = 'https://trackers.studio/api';
         let currentPlaylistId = null;
         let selectedJobs = new Map();
@@ -342,62 +334,58 @@
         document.getElementById('yearSpan').textContent = new Date().getFullYear();
 
         // Navigation
-        showJobsBtn.addEventListener('click', () => {
+        if (showJobsBtn) showJobsBtn.addEventListener('click', () => {
             jobsSection.classList.remove('hidden');
             playlistsSection.classList.add('hidden');
             playlistDetailsSection.classList.add('hidden');
             loadJobs();
-            document.getElementById('fabCreatePlaylist').style.display = 'none';
         });
-
-        showPlaylistsBtn.addEventListener('click', () => {
+        if (showPlaylistsBtn) showPlaylistsBtn.addEventListener('click', () => {
             jobsSection.classList.add('hidden');
             playlistsSection.classList.remove('hidden');
             playlistDetailsSection.classList.add('hidden');
             loadPlaylists();
-            document.getElementById('fabCreatePlaylist').style.display = 'block';
         });
-
-        backToPlaylistsBtn.addEventListener('click', () => {
+        if (backToPlaylistsBtn) backToPlaylistsBtn.addEventListener('click', () => {
             playlistDetailsSection.classList.add('hidden');
             playlistsSection.classList.remove('hidden');
         });
 
         // Modal handling
-        createPlaylistBtn.addEventListener('click', () => {
+        if (createPlaylistBtn) createPlaylistBtn.addEventListener('click', () => {
             createPlaylistModal.classList.remove('hidden');
         });
 
-        cancelCreateBtn.addEventListener('click', () => {
+        if (cancelCreateBtn) cancelCreateBtn.addEventListener('click', () => {
             createPlaylistModal.classList.add('hidden');
             playlistNameInput.value = '';
         });
 
-        addJobsToPlaylistBtn.addEventListener('click', () => {
+        if (addJobsToPlaylistBtn) addJobsToPlaylistBtn.addEventListener('click', () => {
             addJobsModal.classList.remove('hidden');
             loadAvailableJobs();
         });
 
-        cancelAddJobsBtn.addEventListener('click', () => {
+        if (cancelAddJobsBtn) cancelAddJobsBtn.addEventListener('click', () => {
             addJobsModal.classList.add('hidden');
             selectedJobs.clear();
         });
 
-        refreshJobsBtn.addEventListener('click', loadJobs);
+        if (refreshJobsBtn) refreshJobsBtn.addEventListener('click', loadJobs);
 
         // Show/hide modals
-        showUserSelectBtn.addEventListener('click', () => {
+        if (showUserSelectBtn) showUserSelectBtn.addEventListener('click', () => {
             userSelectModal.classList.remove('hidden');
             populateUserDropdown();
         });
 
-        cancelUserSelectBtn.addEventListener('click', () => {
+        if (cancelUserSelectBtn) cancelUserSelectBtn.addEventListener('click', () => {
             userSelectModal.classList.add('hidden');
             userSelectForm.reset();
         });
 
         // Handle user selection
-        userSelectForm.addEventListener('submit', async (e) => {
+        if (userSelectForm) userSelectForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const userDropdown = document.getElementById('userDropdown');
             const newUsernameInput = document.getElementById('newUsername');
@@ -981,6 +969,7 @@
 
         // Initial state check
         checkSavedState();
+    });
     </script>
 </body>
 </html> 
