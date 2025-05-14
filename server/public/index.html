@@ -635,35 +635,35 @@
                     if (job.checkpoints) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.checkpoints} CP</span>`);
                     if (job.km) info.push(`<span><i class='fas fa-road mr-1'></i>${job.km} km</span>`);
                     if (job.notes) info.push(`<span><i class='fas fa-sticky-note mr-1'></i>${job.notes}</span>`);
-                    let html = `<div class='minimal-card p-2 mb-2 text-xs flex flex-wrap gap-2'>${info.join('')}</div>`;
-                    if (isExpanded) {
-                        html += `<div class=\"space-y-2 mt-2\">`;
-                        (currentPlaylistPlayers || []).forEach((user, idx) => {
-                            const stat = playlist.stats.find(s => s.username === user && s.jobUrl === job.url) || {};
-                            let placement = stat.placement || '';
-                            let isDNF = placement === 'DNF' || placement === 0;
-                            const statNotes = stat.statNotes || '';
-                            // Fastest/slowest lap dropdown
-                            let fastestLap = stat.fastestLap;
-                            let slowestLap = stat.slowestLap;
-                            let lapDropdown = '';
-                            if (fastestLap === true) lapDropdown = 'Fastest';
-                            else if (slowestLap === true) lapDropdown = 'Slowest';
-                            else lapDropdown = '';
-                            // Points calculation
-                            let points = '';
-                            if (isDNF) {
-                                points = 0;
-                            } else if (placement && placement >= 1) {
-                                points = pointsTable[placement-1] !== undefined ? pointsTable[placement-1] : 0;
-                            }
-                            // Placement options only up to number of players
-                            const placementOptions = Array.from({length: (currentPlaylistPlayers || []).length}, (_,i) => `<option value="${i+1}"${placement==i+1?' selected':''}>${i+1}</option>`).join('');
-                            html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
-                        });
-                        html += `</div>`;
-                    }
-                    html += `</button>`;
+                    let html = `<div class='flex flex-col md:flex-row gap-2 mt-2'>
+                        <div class='flex-1'>
+                            <div class=\"space-y-2\">`;
+                    (currentPlaylistPlayers || []).forEach((user, idx) => {
+                        const stat = playlist.stats.find(s => s.username === user && s.jobUrl === job.url) || {};
+                        let placement = stat.placement || '';
+                        let isDNF = placement === 'DNF' || placement === 0;
+                        const statNotes = stat.statNotes || '';
+                        // Fastest/slowest lap dropdown
+                        let fastestLap = stat.fastestLap;
+                        let slowestLap = stat.slowestLap;
+                        let lapDropdown = '';
+                        if (fastestLap === true) lapDropdown = 'Fastest';
+                        else if (slowestLap === true) lapDropdown = 'Slowest';
+                        else lapDropdown = '';
+                        // Points calculation
+                        let points = '';
+                        if (isDNF) {
+                            points = 0;
+                        } else if (placement && placement >= 1) {
+                            points = pointsTable[placement-1] !== undefined ? pointsTable[placement-1] : 0;
+                        }
+                        // Placement options only up to number of players
+                        const placementOptions = Array.from({length: (currentPlaylistPlayers || []).length}, (_,i) => `<option value="${i+1}"${placement==i+1?' selected':''}>${i+1}</option>`).join('');
+                        html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
+                    });
+                    html += `</div></div>
+                        <div class='minimal-card p-2 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-col gap-1 h-fit'>${info.join('')}</div>
+                    </div>`;
                     return html;
                 }).join('');
 
@@ -712,8 +712,9 @@
                         if (job.checkpoints) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.checkpoints} CP</span>`);
                         if (job.km) info.push(`<span><i class='fas fa-road mr-1'></i>${job.km} km</span>`);
                         if (job.notes) info.push(`<span><i class='fas fa-sticky-note mr-1'></i>${job.notes}</span>`);
-                        html += `<div class='minimal-card p-2 mb-2 text-xs flex flex-wrap gap-2'>${info.join('')}</div>`;
-                        html += `<div class=\"space-y-2 mt-2\">`;
+                        html += `<div class='flex flex-col md:flex-row gap-2 mt-2'>
+                            <div class='flex-1'>
+                                <div class=\"space-y-2\">`;
                         (currentPlaylistPlayers || []).forEach((user, idx) => {
                             const stat = stats.find(s => s.username === user && s.jobUrl === job.url) || {};
                             let placement = stat.placement || '';
@@ -737,7 +738,9 @@
                             const placementOptions = Array.from({length: (currentPlaylistPlayers || []).length}, (_,i) => `<option value="${i+1}"${placement==i+1?' selected':''}>${i+1}</option>`).join('');
                             html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
                         });
-                        html += `</div>`;
+                        html += `</div></div>
+                            <div class='minimal-card p-2 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-col gap-1 h-fit'>${info.join('')}</div>
+                        </div>`;
                     }
                     html += `</button>`;
                 });
