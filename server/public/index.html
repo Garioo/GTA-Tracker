@@ -436,6 +436,13 @@
             try {
                 const response = await fetch(`${API_URL}/playlists`);
                 const playlists = await response.json();
+                if (playlists.error === 'Invalid password') {
+                    // Clear saved password and force prompt
+                    localStorage.removeItem('websitePassword');
+                    websitePassword = null;
+                    passwordModal.classList.remove('hidden');
+                    throw new Error('Invalid password');
+                }
                 console.log('Loaded playlists:', playlists); // Debug log
                 const playlistsList = document.getElementById('playlistsList');
                 
