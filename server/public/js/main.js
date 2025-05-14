@@ -60,15 +60,27 @@ const utils = {
     showError: (message) => {
         state.error = message;
         console.error('Error:', message);
-        // Show error in UI
+        
+        // Create error notification
         const errorDiv = document.createElement('div');
         errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50';
         errorDiv.textContent = message;
+        
+        // Add close button
+        const closeButton = document.createElement('button');
+        closeButton.className = 'ml-2 text-white hover:text-gray-200';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => errorDiv.remove();
+        errorDiv.appendChild(closeButton);
+        
+        // Add to document
         document.body.appendChild(errorDiv);
         
         // Remove error after 5 seconds
         setTimeout(() => {
-            errorDiv.remove();
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
         }, 5000);
     },
     
@@ -302,8 +314,8 @@ const playlists = {
             navigation.showPlaylists();
         } catch (error) {
             console.error('Delete playlist error:', error);
-            if (error.message.includes('404')) {
-                // If the playlist is not found, it might have been deleted already
+            if (error.message.includes('404') || error.message.includes('not found')) {
+                // If the playlist is not found, remove it from the local state
                 state.playlists = state.playlists.filter(p => p._id !== id);
                 playlists.render();
                 navigation.showPlaylists();
@@ -486,6 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modals.hideCreatePlaylist();
             nameInput.value = ''; // Clear the input
         } catch (error) {
+            console.error('Create playlist error:', error);
             utils.showError('Failed to create playlist: ' + error.message);
         } finally {
             utils.hideLoading();
@@ -497,7 +510,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add jobs modal
     document.getElementById('cancelAddJobs')?.addEventListener('click', modals.hideAddJobs);
     document.getElementById('confirmAddJobs')?.addEventListener('click', async () => {
-        if (!state.currentPlaylist) return;
+        if (!state.currentPlaylist) {
+            utils.showError('No playlist selected');
+            return;
+        }
         
         const selectedJobs = Array.from(state.selectedJobs.values());
         if (selectedJobs.length === 0) {
@@ -510,7 +526,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Adding jobs to playlist:', selectedJobs);
             for (const job of selectedJobs) {
                 console.log('Adding job:', job);
-                await API.playlists.addJob(state.currentPlaylist._id, job);
+                try {
+                    await API.playlists.addJob(state.currentPlaylist._id, job);
+                } catch (error) {
+                    if (error.message.includes('404') || error.message.includes('not found')) {
+                        utils.showError('Playlist not found. Please refresh the page and try again.');
+                        return;
+                    }
+                    throw error;
+                }
             }
             console.log('Jobs added successfully');
             await playlists.view(state.currentPlaylist._id);
