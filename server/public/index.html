@@ -109,6 +109,12 @@
         .minimal-btn:hover {
             background: #1d4ed8;
         }
+        .minimal-btn.active, .minimal-btn:active {
+            background: var(--color-accent);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(37,99,235,0.08);
+            font-weight: 700;
+        }
         .dark-toggle {
             background: none;
             border: none;
@@ -334,17 +340,25 @@
         document.getElementById('yearSpan').textContent = new Date().getFullYear();
 
         // Navigation
+        function setActiveNav(section) {
+            if (showJobsBtn) showJobsBtn.classList.remove('active');
+            if (showPlaylistsBtn) showPlaylistsBtn.classList.remove('active');
+            if (section === 'jobs' && showJobsBtn) showJobsBtn.classList.add('active');
+            if (section === 'playlists' && showPlaylistsBtn) showPlaylistsBtn.classList.add('active');
+        }
         if (showJobsBtn) showJobsBtn.addEventListener('click', () => {
             jobsSection.classList.remove('hidden');
             playlistsSection.classList.add('hidden');
             playlistDetailsSection.classList.add('hidden');
             loadJobs();
+            setActiveNav('jobs');
         });
         if (showPlaylistsBtn) showPlaylistsBtn.addEventListener('click', () => {
             jobsSection.classList.add('hidden');
             playlistsSection.classList.remove('hidden');
             playlistDetailsSection.classList.add('hidden');
             loadPlaylists();
+            setActiveNav('playlists');
         });
         if (backToPlaylistsBtn) backToPlaylistsBtn.addEventListener('click', () => {
             playlistDetailsSection.classList.add('hidden');
@@ -969,6 +983,9 @@
 
         // Initial state check
         checkSavedState();
+
+        // On initial load, set the default active button:
+        setActiveNav('jobs');
     });
     </script>
 </body>
