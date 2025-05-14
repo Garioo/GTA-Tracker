@@ -639,12 +639,9 @@
                     if (job.lastUpdated) info.push(`<span><i class='fas fa-clock mr-1'></i>${job.lastUpdated}</span>`);
                     if (job.lastPlayed) info.push(`<span><i class='fas fa-history mr-1'></i>${job.lastPlayed}</span>`);
                     if (job.players) info.push(`<span><i class='fas fa-users mr-1'></i>${job.players}</span>`);
-                    if (job.teams) info.push(`<span><i class='fas fa-people-group mr-1'></i>${job.teams} teams</span>`);
                     if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
                     if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
                     if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                    if (job.vehicleClasses && job.vehicleClasses.length) info.push(`<span><i class='fas fa-car mr-1'></i>${job.vehicleClasses.join(', ')}</span>`);
-                    if (job.locations && job.locations.length) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.locations.join(', ')}</span>`);
                     let html = `<div class='flex flex-col md:flex-row gap-2 mt-2'>
                         <div class='flex-1'>
                             <div class=\"space-y-2\">`;
@@ -724,12 +721,9 @@
                         if (job.lastUpdated) info.push(`<span><i class='fas fa-clock mr-1'></i>${job.lastUpdated}</span>`);
                         if (job.lastPlayed) info.push(`<span><i class='fas fa-history mr-1'></i>${job.lastPlayed}</span>`);
                         if (job.players) info.push(`<span><i class='fas fa-users mr-1'></i>${job.players}</span>`);
-                        if (job.teams) info.push(`<span><i class='fas fa-people-group mr-1'></i>${job.teams} teams</span>`);
                         if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
                         if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
                         if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                        if (job.vehicleClasses && job.vehicleClasses.length) info.push(`<span><i class='fas fa-car mr-1'></i>${job.vehicleClasses.join(', ')}</span>`);
-                        if (job.locations && job.locations.length) info.push(`<span><i class='fas fa-map-marker-alt mr-1'></i>${job.locations.join(', ')}</span>`);
                         html += `<div class='flex flex-col md:flex-row gap-2 mt-2'>
                             <div class='flex-1'>
                                 <div class=\"space-y-2\">`;
