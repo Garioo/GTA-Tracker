@@ -1,0 +1,425 @@
+// Main application logic for GTA Race Tracker
+
+// DOM Elements
+const elements = {
+    // Navigation
+    showJobs: document.getElementById('showJobs'),
+    showPlaylists: document.getElementById('showPlaylists'),
+    themeToggle: document.getElementById('themeToggle'),
+    
+    // Sections
+    jobsSection: document.getElementById('jobsSection'),
+    playlistsSection: document.getElementById('playlistsSection'),
+    playlistDetailsSection: document.getElementById('playlistDetailsSection'),
+    
+    // Lists
+    jobsList: document.getElementById('jobsList'),
+    playlistsList: document.getElementById('playlistsList'),
+    playlistJobs: document.getElementById('playlistJobs'),
+    
+    // User
+    userSection: document.getElementById('userSection'),
+    
+    // Footer
+    yearSpan: document.getElementById('yearSpan'),
+    
+    // Modals
+    createPlaylistModal: document.getElementById('createPlaylistModal'),
+    addJobsModal: document.getElementById('addJobsModal'),
+    editPlaylistModal: document.getElementById('editPlaylistModal'),
+    userSelectModal: document.getElementById('userSelectModal'),
+    managePlayersModal: document.getElementById('managePlayersModal'),
+    
+    // Loading States
+    loadingOverlay: document.getElementById('loadingOverlay')
+};
+
+// State management
+const state = {
+    currentUser: null,
+    currentPlaylist: null,
+    jobs: [],
+    playlists: [],
+    selectedJobs: new Map(),
+    isLoading: false,
+    error: null
+};
+
+// Utility functions
+const utils = {
+    showLoading: () => {
+        state.isLoading = true;
+        elements.loadingOverlay?.classList.remove('hidden');
+    },
+    
+    hideLoading: () => {
+        state.isLoading = false;
+        elements.loadingOverlay?.classList.add('hidden');
+    },
+    
+    showError: (message) => {
+        state.error = message;
+        // TODO: Implement error notification UI
+        console.error(message);
+    },
+    
+    debounce: (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+};
+
+// Theme handling
+const theme = {
+    set: (isDark) => {
+        document.body.classList.toggle('theme-black', isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        // Update theme toggle icon
+        elements.themeToggle.innerHTML = isDark 
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+    },
+    
+    init: () => {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme.set(savedTheme === 'dark' || (!savedTheme && prefersDark));
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                theme.set(e.matches);
+            }
+        });
+    },
+    
+    toggle: () => theme.set(!document.body.classList.contains('theme-black'))
+};
+
+// Navigation
+const navigation = {
+    showSection: (section) => {
+        elements.jobsSection.classList.add('hidden');
+        elements.playlistsSection.classList.add('hidden');
+        elements.playlistDetailsSection.classList.add('hidden');
+        section.classList.remove('hidden');
+        
+        // Update active nav state
+        elements.showJobs.classList.toggle('active', section === elements.jobsSection);
+        elements.showPlaylists.classList.toggle('active', section === elements.playlistsSection);
+    },
+    
+    showJobs: () => navigation.showSection(elements.jobsSection),
+    showPlaylists: () => navigation.showSection(elements.playlistsSection),
+    showPlaylistDetails: () => navigation.showSection(elements.playlistDetailsSection)
+};
+
+// Jobs handling
+const jobs = {
+    load: async () => {
+        utils.showLoading();
+        try {
+            state.jobs = await API.jobs.getAll();
+            jobs.render();
+        } catch (error) {
+            utils.showError('Failed to load jobs: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    },
+    
+    render: () => {
+        if (!state.jobs.length) {
+            elements.jobsList.innerHTML = `
+                <div class="text-center p-4">
+                    <p class="text-muted">No jobs available</p>
+                </div>
+            `;
+            return;
+        }
+        
+        elements.jobsList.innerHTML = state.jobs.map(job => Components.JobCard(job)).join('');
+    },
+    
+    renderCompact: (container) => {
+        if (!state.jobs.length) {
+            container.innerHTML = `
+                <div class="text-center p-4">
+                    <p class="text-muted">No jobs available</p>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = state.jobs.map(job => Components.JobCardCompact(job)).join('');
+    },
+    
+    search: utils.debounce((query) => {
+        const filtered = state.jobs.filter(job => 
+            job.title.toLowerCase().includes(query.toLowerCase()) ||
+            job.creator.toLowerCase().includes(query.toLowerCase())
+        );
+        elements.jobsList.innerHTML = filtered.map(job => Components.JobCard(job)).join('');
+    }, 300)
+};
+
+// Playlists handling
+const playlists = {
+    load: async () => {
+        utils.showLoading();
+        try {
+            state.playlists = await API.playlists.getAll();
+            playlists.render();
+        } catch (error) {
+            utils.showError('Failed to load playlists: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    },
+    
+    render: () => {
+        if (!state.playlists.length) {
+            elements.playlistsList.innerHTML = `
+                <div class="text-center p-4">
+                    <p class="text-muted">No playlists available</p>
+                    <button class="btn mt-4" onclick="modals.showCreatePlaylist()">
+                        <i class="fas fa-plus mr-2"></i>Create Playlist
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        elements.playlistsList.innerHTML = state.playlists.map(playlist => 
+            Components.PlaylistCard(playlist)
+        ).join('');
+    },
+    
+    view: async (id) => {
+        utils.showLoading();
+        try {
+            state.currentPlaylist = await API.playlists.getById(id);
+            playlists.renderDetails();
+            navigation.showPlaylistDetails();
+        } catch (error) {
+            utils.showError('Failed to load playlist: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    },
+    
+    renderDetails: () => {
+        if (!state.currentPlaylist) return;
+        
+        const container = elements.playlistDetailsSection;
+        container.innerHTML = Components.PlaylistDetails(state.currentPlaylist);
+        
+        // Add stats table if there are players
+        if (state.currentPlaylist.players?.length) {
+            const statsContainer = document.createElement('div');
+            statsContainer.innerHTML = Components.StatsTable(
+                state.currentPlaylist,
+                state.currentPlaylist.players
+            );
+            container.appendChild(statsContainer);
+        }
+        
+        // Add event listeners
+        document.getElementById('backToPlaylists').addEventListener('click', navigation.showPlaylists);
+        document.getElementById('addJobsToPlaylist').addEventListener('click', modals.showAddJobs);
+        document.getElementById('managePlayersBtn').addEventListener('click', modals.showManagePlayers);
+    },
+    
+    removeJob: async (jobUrl) => {
+        if (!state.currentPlaylist) return;
+        
+        if (!confirm('Are you sure you want to remove this job from the playlist?')) {
+            return;
+        }
+        
+        utils.showLoading();
+        try {
+            await API.playlists.removeJob(state.currentPlaylist._id, jobUrl);
+            await playlists.view(state.currentPlaylist._id);
+        } catch (error) {
+            utils.showError('Failed to remove job: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    },
+    
+    create: async (name) => {
+        utils.showLoading();
+        try {
+            const playlist = await API.playlists.create(name);
+            state.playlists.push(playlist);
+            playlists.render();
+            return playlist;
+        } catch (error) {
+            utils.showError('Failed to create playlist: ' + error.message);
+            throw error;
+        } finally {
+            utils.hideLoading();
+        }
+    }
+};
+
+// User handling
+const users = {
+    load: async () => {
+        utils.showLoading();
+        try {
+            const users = await API.users.getAll();
+            users.renderDropdown(users);
+        } catch (error) {
+            utils.showError('Failed to load users: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    },
+    
+    renderDropdown: (users) => {
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.innerHTML = users.map(user => `
+            <option value="${user.username}">${user.username}</option>
+        `).join('');
+    },
+    
+    select: async (username) => {
+        utils.showLoading();
+        try {
+            state.currentUser = await API.users.create(username);
+            users.renderSection();
+        } catch (error) {
+            utils.showError('Failed to select user: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+    },
+    
+    renderSection: () => {
+        elements.userSection.innerHTML = state.currentUser
+            ? `
+                <span class="mr-2">${state.currentUser.username}</span>
+                <button class="minimal-btn" onclick="modals.showUserSelect()">
+                    <i class="fas fa-user-edit mr-2"></i>Change
+                </button>
+            `
+            : `
+                <button class="minimal-btn" onclick="modals.showUserSelect()">
+                    <i class="fas fa-user mr-2"></i>Select User
+                </button>
+            `;
+    }
+};
+
+// Modal handling
+const modals = {
+    showUserSelect: () => {
+        elements.userSelectModal.classList.remove('hidden');
+    },
+    
+    hideUserSelect: () => {
+        elements.userSelectModal.classList.add('hidden');
+    },
+    
+    showAddJobs: () => {
+        elements.addJobsModal.classList.remove('hidden');
+        jobs.renderCompact(document.getElementById('availableJobs'));
+    },
+    
+    hideAddJobs: () => {
+        elements.addJobsModal.classList.add('hidden');
+        state.selectedJobs.clear();
+    },
+    
+    showManagePlayers: () => {
+        elements.managePlayersModal.classList.remove('hidden');
+        const playersList = document.getElementById('playersCheckboxList');
+        playersList.innerHTML = state.currentPlaylist.players.map(player => `
+            <label class="flex items-center space-x-2 label">
+                <input type="checkbox" value="${player}" checked>
+                <span>${player}</span>
+            </label>
+        `).join('');
+    },
+    
+    hideManagePlayers: () => {
+        elements.managePlayersModal.classList.add('hidden');
+    },
+    
+    showCreatePlaylist: () => {
+        elements.createPlaylistModal.classList.remove('hidden');
+    },
+    
+    hideCreatePlaylist: () => {
+        elements.createPlaylistModal.classList.add('hidden');
+    }
+};
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize theme
+    theme.init();
+    
+    // Set current year in footer
+    elements.yearSpan.textContent = new Date().getFullYear();
+    
+    // Load initial data
+    jobs.load();
+    playlists.load();
+    users.load();
+    
+    // Navigation
+    elements.showJobs.addEventListener('click', navigation.showJobs);
+    elements.showPlaylists.addEventListener('click', navigation.showPlaylists);
+    elements.themeToggle.addEventListener('click', theme.toggle);
+    
+    // User selection
+    document.getElementById('userSelectForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('userDropdown').value;
+        await users.select(username);
+        modals.hideUserSelect();
+    });
+    
+    document.getElementById('cancelUserSelect').addEventListener('click', modals.hideUserSelect);
+    
+    // Create playlist
+    document.getElementById('createPlaylistForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('playlistName').value;
+        try {
+            await playlists.create(name);
+            modals.hideCreatePlaylist();
+        } catch (error) {
+            // Error already handled in create method
+        }
+    });
+    
+    document.getElementById('cancelCreate')?.addEventListener('click', modals.hideCreatePlaylist);
+    
+    // Job search
+    document.getElementById('jobSearch')?.addEventListener('input', (e) => {
+        jobs.search(e.target.value);
+    });
+});
+
+// Export functions for use in HTML
+window.viewPlaylist = playlists.view;
+window.removeJobFromPlaylist = playlists.removeJob;
+window.showUserSelectModal = modals.showUserSelect;
+window.toggleJobSelection = (checkbox, job) => {
+    if (checkbox.checked) {
+        state.selectedJobs.set(job.url, job);
+    } else {
+        state.selectedJobs.delete(job.url);
+    }
+}; 

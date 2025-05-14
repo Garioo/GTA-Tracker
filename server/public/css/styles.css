@@ -1,0 +1,225 @@
+:root {
+    --color-bg-light: #f8fafc;
+    --color-bg-black: #000;
+    --color-card-light: #fff;
+    --color-card-black: #111;
+    --color-text-light: #232946;
+    --color-text-black: #fff;
+    --color-accent: #2563eb;
+    --color-muted: #e5e7eb;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--color-bg-light);
+    color: var(--color-text-light);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+}
+
+body.theme-black {
+    background: var(--color-bg-black);
+    color: var(--color-text-black);
+}
+
+nav {
+    background: var(--color-card-light);
+    color: var(--color-text-light);
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+    transition: background 0.3s, color 0.3s;
+}
+
+body.theme-black nav {
+    background: var(--color-card-black);
+    color: var(--color-text-black);
+}
+
+.minimal-card {
+    background: var(--color-card-light) !important;
+    color: var(--color-text-light) !important;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+    border: 1px solid var(--color-muted);
+    transition: background 0.3s, color 0.3s;
+}
+
+body.theme-black .minimal-card {
+    background: var(--color-card-black) !important;
+    color: var(--color-text-black) !important;
+    border: 1px solid #222;
+}
+
+.job-card {
+    background: var(--color-card-light);
+    color: var(--color-text-light);
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+    border: 1px solid var(--color-muted);
+    transition: background 0.3s, color 0.3s;
+}
+
+body.theme-black .job-card {
+    background: var(--color-card-black);
+    color: var(--color-text-black);
+    border: 1px solid #222;
+}
+
+.job-card:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.btn {
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+}
+
+.label {
+    color: var(--color-text-light);
+    font-weight: 500;
+}
+
+body.theme-black .label {
+    color: var(--color-text-black);
+}
+
+.input {
+    background: var(--color-card-light);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-muted);
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+body.theme-black .input {
+    background: var(--color-card-black);
+    color: var(--color-text-black);
+    border: 1px solid #222;
+}
+
+.section-title {
+    color: var(--color-text-light);
+    font-weight: 700;
+}
+
+body.theme-black .section-title {
+    color: var(--color-text-black);
+}
+
+.text-muted {
+    color: var(--color-muted);
+}
+
+body.theme-black .text-muted {
+    color: #888;
+}
+
+.minimal-btn {
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+    transition: background 0.2s, color 0.2s;
+}
+
+.minimal-btn:hover {
+    background: #1d4ed8;
+}
+
+.minimal-btn.active, .minimal-btn:active {
+    background: var(--color-accent) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px 0 rgba(37,99,235,0.08);
+    font-weight: 700;
+}
+
+.dark-toggle {
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    font-size: 1.3rem;
+    margin-left: 1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.dark-toggle:hover {
+    color: #111;
+}
+
+footer {
+    background: var(--color-card-light);
+    color: var(--color-text-light);
+    text-align: center;
+    padding: 1.5rem 0 0.5rem 0;
+    font-size: 1rem;
+    opacity: 0.95;
+    margin-top: 2rem;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+    transition: background 0.3s, color 0.3s;
+}
+
+body.theme-black footer {
+    background: var(--color-card-black);
+    color: var(--color-text-black);
+}
+
+.stats-table thead tr {
+    background: var(--color-card-light);
+    color: var(--color-text-light);
+    border-bottom: 2px solid var(--color-muted);
+    font-size: 0.75rem;
+}
+
+body.theme-black .stats-table thead tr {
+    background: var(--color-card-black);
+    color: var(--color-text-black);
+    border-bottom: 2px solid #222;
+}
+
+.stats-table tbody tr {
+    background: var(--color-card-light);
+    font-size: 0.75rem;
+}
+
+body.theme-black .stats-table tbody tr {
+    background: var(--color-card-black);
+}
+
+.stats-table th, .stats-table td {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.stats-table input[type='number'],
+.stats-table input[type='text'] {
+    background: var(--color-card-light);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-muted);
+    font-size: 0.75rem;
+    padding: 0.125rem 0.25rem;
+    height: 1.5rem;
+    width: auto;
+} 
