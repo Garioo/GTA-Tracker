@@ -59,7 +59,7 @@ const PlaylistDetails = (playlist) => `
         <h2 id="playlistDetailsTitle" class="text-2xl font-bold">${playlist.name}</h2>
     </div>
     <div class="flex gap-4">
-        <div class="w-1/3">
+        <div class="w-1/2">
             <div class="minimal-card p-4">
                 <h3 class="font-bold text-lg mb-2">Playlist Stats</h3>
                 <div class="text-sm mb-1">
@@ -80,21 +80,13 @@ const PlaylistDetails = (playlist) => `
         </div>
         <div class="w-1/2">
             <div class="minimal-card p-4">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <p id="playlistStats" class="font-semibold">${playlist.jobs.length} jobs</p>
-                        <p id="playlistDates" class="text-sm">
-                            Created: ${new Date(playlist.createdAt).toLocaleDateString()}
-                        </p>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button id="addJobsToPlaylist" class="minimal-btn">
-                            <i class="fas fa-plus mr-2"></i>Add Jobs
-                        </button>
-                        <button id="managePlayersBtn" class="minimal-btn">
-                            <i class="fas fa-users mr-2"></i>Manage Players
-                        </button>
-                    </div>
+                <div class="flex justify-end space-x-2 mb-4">
+                    <button id="addJobsToPlaylist" class="minimal-btn">
+                        <i class="fas fa-plus mr-2"></i>Add Jobs
+                    </button>
+                    <button id="managePlayersBtn" class="minimal-btn">
+                        <i class="fas fa-users mr-2"></i>Manage Players
+                    </button>
                 </div>
                 <div id="playlistJobs" class="grid grid-cols-1 gap-2">
                     ${playlist.jobs.map(job => `
