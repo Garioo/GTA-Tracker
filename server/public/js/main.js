@@ -248,11 +248,14 @@ const playlists = {
     create: async (name) => {
         utils.showLoading();
         try {
+            console.log('Creating playlist:', name);
             const playlist = await API.playlists.create(name);
+            console.log('Playlist created:', playlist);
             state.playlists.push(playlist);
             playlists.render();
             return playlist;
         } catch (error) {
+            console.error('Create playlist error:', error);
             utils.showError('Failed to create playlist: ' + error.message);
             throw error;
         } finally {
@@ -282,11 +285,14 @@ const playlists = {
         
         utils.showLoading();
         try {
+            console.log('Deleting playlist:', id);
             await API.playlists.delete(id);
+            console.log('Playlist deleted successfully');
             state.playlists = state.playlists.filter(p => p._id !== id);
             playlists.render();
-            navigation.showPlaylists(); // Navigate back to playlists view
+            navigation.showPlaylists();
         } catch (error) {
+            console.error('Delete playlist error:', error);
             utils.showError('Failed to delete playlist: ' + error.message);
         } finally {
             utils.hideLoading();
@@ -483,12 +489,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         utils.showLoading();
         try {
+            console.log('Adding jobs to playlist:', selectedJobs);
             for (const job of selectedJobs) {
+                console.log('Adding job:', job.url);
                 await API.playlists.addJob(state.currentPlaylist._id, job.url);
             }
+            console.log('Jobs added successfully');
             await playlists.view(state.currentPlaylist._id);
             modals.hideAddJobs();
         } catch (error) {
+            console.error('Add jobs error:', error);
             utils.showError('Failed to add jobs: ' + error.message);
         } finally {
             utils.hideLoading();

@@ -62,16 +62,25 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name })
             });
+            if (!response.ok) {
+                throw new Error(`Failed to create playlist: ${response.statusText}`);
+            }
             return response.json();
         },
 
         async getAll() {
             const response = await fetch(`${API.baseUrl}/playlists`);
+            if (!response.ok) {
+                throw new Error(`Failed to get playlists: ${response.statusText}`);
+            }
             return response.json();
         },
 
         async getById(id) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}`);
+            if (!response.ok) {
+                throw new Error(`Failed to get playlist: ${response.statusText}`);
+            }
             return response.json();
         },
 
@@ -81,6 +90,9 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
+            if (!response.ok) {
+                throw new Error(`Failed to update playlist: ${response.statusText}`);
+            }
             return response.json();
         },
 
@@ -88,15 +100,21 @@ const API = {
             const response = await fetch(`${API.baseUrl}/playlists/${id}`, {
                 method: 'DELETE'
             });
+            if (!response.ok) {
+                throw new Error(`Failed to delete playlist: ${response.statusText}`);
+            }
             return response.json();
         },
 
-        async addJob(id, job) {
+        async addJob(id, jobUrl) {
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ job })
+                body: JSON.stringify({ jobUrl })
             });
+            if (!response.ok) {
+                throw new Error(`Failed to add job: ${response.statusText}`);
+            }
             return response.json();
         },
 
@@ -104,6 +122,9 @@ const API = {
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs/${encodeURIComponent(jobUrl)}`, {
                 method: 'DELETE'
             });
+            if (!response.ok) {
+                throw new Error(`Failed to remove job: ${response.statusText}`);
+            }
             return response.json();
         },
 
