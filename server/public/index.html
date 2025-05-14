@@ -718,7 +718,7 @@
                         const card = header.closest('.minimal-card[data-job]');
                         expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
                         console.log('Clicked job header:', card.dataset.job, 'ExpandedJobUrl now:', expandedJobUrl);
-                        renderStatsTable(playlist);
+                        renderStatsTable(window.currentPlaylistObj);
                     };
                 });
 
