@@ -674,6 +674,16 @@
                     return html;
                 }).join('');
 
+                // Attach click handler for job-header after rendering
+                document.querySelectorAll('.job-header').forEach(header => {
+                    header.onclick = (e) => {
+                        const card = header.closest('.minimal-card[data-job]');
+                        expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
+                        console.log('Clicked job header:', card.dataset.job, 'ExpandedJobUrl now:', expandedJobUrl);
+                        viewPlaylist(currentPlaylistId);
+                    };
+                });
+
                 // Render stats table for all jobs and users
                 renderStatsTable(playlist);
 
@@ -765,7 +775,7 @@
                         const card = header.closest('.minimal-card[data-job]');
                         expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
                         console.log('Clicked job header:', card.dataset.job, 'ExpandedJobUrl now:', expandedJobUrl);
-                        renderStatsTable(playlist);
+                        viewPlaylist(currentPlaylistId);
                     };
                 });
 
