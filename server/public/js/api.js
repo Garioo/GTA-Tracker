@@ -1,6 +1,6 @@
 // API client for GTA Race Tracker
 const API = {
-    baseUrl: 'http://GTA-Tracker-Droplet:3001/api',
+    baseUrl: 'http://164.92.123.123:3001/api',
 
     // User endpoints
     users: {
@@ -31,8 +31,19 @@ const API = {
         },
 
         async getAll() {
-            const response = await fetch(`${API.baseUrl}/jobs`);
-            return response.json();
+            try {
+                console.log('Fetching jobs from:', `${API.baseUrl}/jobs`);
+                const response = await fetch(`${API.baseUrl}/jobs`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Received jobs:', data);
+                return data;
+            } catch (error) {
+                console.error('Error fetching jobs:', error);
+                throw error;
+            }
         },
 
         async delete(url) {
