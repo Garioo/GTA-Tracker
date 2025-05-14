@@ -403,16 +403,25 @@
             }
         }
 
-        // Modify fetch calls to include website password
+        // Global fetch wrapper to handle 401 errors and force password prompt
         async function fetchWithAuth(url, options = {}) {
             if (!websitePassword) {
+                passwordModal.classList.remove('hidden');
                 throw new Error('Website password is required');
             }
             options.headers = {
                 ...options.headers,
                 'x-website-password': websitePassword
             };
-            return fetch(url, options);
+            const response = await fetch(url, options);
+            if (response.status === 401) {
+                // Clear password and force prompt
+                localStorage.removeItem('websitePassword');
+                websitePassword = null;
+                passwordModal.classList.remove('hidden');
+                throw new Error('Invalid password');
+            }
+            return response;
         }
 
         // Load and display jobs
@@ -446,15 +455,8 @@
         // Load and display playlists
         async function loadPlaylists() {
             try {
-                const response = await fetch(`${API_URL}/playlists`);
+                const response = await fetchWithAuth(`${API_URL}/playlists`);
                 const playlists = await response.json();
-                if (playlists.error === 'Invalid password') {
-                    // Clear saved password and force prompt
-                    localStorage.removeItem('websitePassword');
-                    websitePassword = null;
-                    passwordModal.classList.remove('hidden');
-                    throw new Error('Invalid password');
-                }
                 console.log('Loaded playlists:', playlists); // Debug log
                 const playlistsList = document.getElementById('playlistsList');
                 
@@ -768,11 +770,10 @@
         async function populateUserDropdown() {
             const userDropdown = document.getElementById('userDropdown');
             const newUserSection = document.getElementById('newUserSection');
+            const newUsernameInput = document.getElementById('newUsername');
             userDropdown.innerHTML = '<option value="">Loading...</option>';
             try {
-                const response = await fetch(`${API_URL}/users`, {
-                    headers: { 'x-website-password': websitePassword }
-                });
+                const response = await fetchWithAuth(`${API_URL}/users`);
                 const users = await response.json();
                 userDropdown.innerHTML = '';
                 let hasUsers = false;
@@ -783,7 +784,7 @@
                     option.textContent = user.username;
                     userDropdown.appendChild(option);
                 });
-                // Option to add new user
+                // Always add the 'Add new user...' option
                 const newOption = document.createElement('option');
                 newOption.value = '__new__';
                 newOption.textContent = 'Add new user...';
@@ -803,8 +804,10 @@
             userDropdown.addEventListener('change', () => {
                 if (userDropdown.value === '__new__') {
                     newUserSection.classList.remove('hidden');
+                    newUsernameInput.value = '';
                 } else {
                     newUserSection.classList.add('hidden');
+                    newUsernameInput.value = '';
                 }
             });
         }
