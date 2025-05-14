@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>GTA Job Info</title>
+    <script src="popup.js" defer></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 10px;
+            width: 300px;
+        }
+
+        span {
+            font-weight: bold;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .saved-jobs {
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .saved-job {
+            padding: 5px;
+            margin: 5px 0;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .saved-job a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+
+        .saved-job a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>GTA Job Info</h2>
+    <div id="output"></div>
+    <p>Title: <span id="title"></span></p>
+    <p>Creator: <span id="creator"></span></p>
+    <p>Description: <span id="description"></span></p>
+    <p>Rating: <span id="rating"></span></p>
+    <p>Creation Date: <span id="creationDate"></span></p>
+    <p>Last Updated: <span id="lastUpdated"></span></p>
+    <p>Last Played: <span id="lastPlayed"></span></p>
+    <p>Players: <span id="players"></span></p>
+    <p>Teams: <span id="teams"></span></p>
+    <p>Game Mode: <span id="gameMode"></span></p>
+    <p>Route Type: <span id="routeType"></span></p>
+    <p>Route Length: <span id="routeLength"></span></p>
+    <p>Vehicle Classes: <span id="vehicleClasses"></span></p>
+    <p>Location: <span id="locations"></span></p>
+    
+    <button id="saveButton" class="button" disabled>Save Job</button>
+    
+    <div class="saved-jobs">
+        <h3>Saved Jobs</h3>
+        <div id="savedJobsList"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿{
+    "manifest_version": 3,
+    "name": "GTA Job Info Extractor",
+    "version": "1.0",
+    "description": "Extracts GTA job info from Rockstar Social Club pages.",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage",
+        "tabs"
+    ],
+    "host_permissions": [
+        "https://socialclub.rockstargames.com/job/gtav/*",
+        "http://localhost:3001/*"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://socialclub.rockstargames.com/job/gtav/*"],
+            "js": ["content.js"],
+            "run_at": "document_end"
+        }
+    ]
+}

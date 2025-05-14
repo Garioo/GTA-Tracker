@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA Race Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .job-card {
+            transition: all 0.2s;
+        }
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .draggable-job {
+            cursor: move;
+            user-select: none;
+        }
+        .draggable-job.dragging {
+            opacity: 0.5;
+            background-color: #f3f4f6;
+        }
+        .drag-handle {
+            cursor: move;
+            color: #6b7280;
+            padding: 0.5rem;
+        }
+        .drag-handle:hover {
+            color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-gray-800 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center">
+                <i class="fas fa-car-side mr-2"></i>
+                GTA Race Tracker
+            </h1>
+            <div class="space-x-4">
+                <button id="showJobs" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-list mr-2"></i>Jobs
+                </button>
+                <button id="showPlaylists" class="px-4 py-2 bg-green-600 rounded hover:bg-green-700 transition-colors">
+                    <i class="fas fa-music mr-2"></i>Playlists
+                </button>
+                <div id="userSection" class="inline-block">
+                    <button id="showUserSelect" class="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-user mr-2"></i>Select User
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4">
+        <!-- Jobs Section -->
+        <section id="jobsSection" class="space-y-4 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Saved Jobs</h2>
+                <div class="flex space-x-2">
+                    <button id="refreshJobs" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                </div>
+            </div>
+            <div id="jobsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Jobs will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Playlists Section -->
+        <section id="playlistsSection" class="hidden space-y-4 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Playlists</h2>
+                <button id="createPlaylist" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Create New Playlist
+                </button>
+            </div>
+            <div id="playlistsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Playlists will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Playlist Details Section -->
+        <section id="playlistDetailsSection" class="hidden space-y-4 fade-in">
+            <div class="flex items-center mb-4">
+                <button id="backToPlaylists" class="mr-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
+                <h2 id="playlistDetailsTitle" class="text-2xl font-bold"></h2>
+            </div>
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p id="playlistStats" class="text-gray-600"></p>
+                        <p id="playlistDates" class="text-sm text-gray-500"></p>
+                    </div>
+                    <button id="addJobsToPlaylist" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Jobs
+                    </button>
+                </div>
+                <div id="playlistJobs" class="space-y-4">
+                    <!-- Playlist jobs will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Create Playlist Modal -->
+    <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
+            <h3 class="text-xl font-bold mb-4">Create New Playlist</h3>
+            <input type="text" id="playlistName" placeholder="Playlist Name" 
+                   class="w-full p-2 border rounded mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <div class="flex justify-end space-x-2">
+                <button id="cancelCreate" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
+                <button id="confirmCreate" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Jobs to Playlist Modal -->
+    <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-3/4 max-h-[80vh] shadow-xl overflow-hidden flex flex-col">
+            <h3 class="text-xl font-bold mb-4">Add Jobs to Playlist</h3>
+            <div class="flex-1 overflow-y-auto mb-4">
+                <div id="availableJobs" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Available jobs will be inserted here -->
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button id="cancelAddJobs" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
+                <button id="confirmAddJobs" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                    Add Selected Jobs
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Playlist Modal -->
+    <div id="editPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
+            <h3 class="text-xl font-bold mb-4">Edit Playlist</h3>
+            <input type="text" id="editPlaylistName" placeholder="Playlist Name" 
+                   class="w-full p-2 border rounded mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <div class="flex justify-end space-x-2">
+                <button id="cancelEdit" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
+                <button id="confirmEdit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Selection Modal -->
+    <div id="userSelectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
+            <h3 class="text-xl font-bold mb-4">Select User</h3>
+            <form id="userSelectForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="username" required
+                           class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="cancelUserSelect" 
+                            class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">Cancel</button>
+                    <button type="submit" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                        Select
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Website Password Modal -->
+    <div id="passwordModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-96 shadow-xl">
+            <h3 class="text-xl font-bold mb-4">Enter Website Password</h3>
+            <form id="passwordForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="websitePassword" required
+                           class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="submit" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                        Enter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3001/api';
+        let currentPlaylistId = null;
+        let selectedJobs = new Map();
+        let currentUser = null;
+        let websitePassword = null;
+        
+        // UI Elements
+        const jobsSection = document.getElementById('jobsSection');
+        const playlistsSection = document.getElementById('playlistsSection');
+        const playlistDetailsSection = document.getElementById('playlistDetailsSection');
+        const showJobsBtn = document.getElementById('showJobs');
+        const showPlaylistsBtn = document.getElementById('showPlaylists');
+        const createPlaylistBtn = document.getElementById('createPlaylist');
+        const createPlaylistModal = document.getElementById('createPlaylistModal');
+        const cancelCreateBtn = document.getElementById('cancelCreate');
+        const confirmCreateBtn = document.getElementById('confirmCreate');
+        const playlistNameInput = document.getElementById('playlistName');
+        const backToPlaylistsBtn = document.getElementById('backToPlaylists');
+        const addJobsToPlaylistBtn = document.getElementById('addJobsToPlaylist');
+        const addJobsModal = document.getElementById('addJobsModal');
+        const cancelAddJobsBtn = document.getElementById('cancelAddJobs');
+        const confirmAddJobsBtn = document.getElementById('confirmAddJobs');
+        const refreshJobsBtn = document.getElementById('refreshJobs');
+        const editPlaylistModal = document.getElementById('editPlaylistModal');
+        const cancelEditBtn = document.getElementById('cancelEdit');
+        const confirmEditBtn = document.getElementById('confirmEdit');
+        const editPlaylistNameInput = document.getElementById('editPlaylistName');
+        const userSelectModal = document.getElementById('userSelectModal');
+        const showUserSelectBtn = document.getElementById('showUserSelect');
+        const cancelUserSelectBtn = document.getElementById('cancelUserSelect');
+        const userSelectForm = document.getElementById('userSelectForm');
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordForm = document.getElementById('passwordForm');
+        const userSection = document.getElementById('userSection');
+
+        // Navigation
+        showJobsBtn.addEventListener('click', () => {
+            jobsSection.classList.remove('hidden');
+            playlistsSection.classList.add('hidden');
+            playlistDetailsSection.classList.add('hidden');
+            loadJobs();
+        });
+
+        showPlaylistsBtn.addEventListener('click', () => {
+            jobsSection.classList.add('hidden');
+            playlistsSection.classList.remove('hidden');
+            playlistDetailsSection.classList.add('hidden');
+            loadPlaylists();
+        });
+
+        backToPlaylistsBtn.addEventListener('click', () => {
+            playlistDetailsSection.classList.add('hidden');
+            playlistsSection.classList.remove('hidden');
+        });
+
+        // Modal handling
+        createPlaylistBtn.addEventListener('click', () => {
+            createPlaylistModal.classList.remove('hidden');
+        });
+
+        cancelCreateBtn.addEventListener('click', () => {
+            createPlaylistModal.classList.add('hidden');
+            playlistNameInput.value = '';
+        });
+
+        addJobsToPlaylistBtn.addEventListener('click', () => {
+            addJobsModal.classList.remove('hidden');
+            loadAvailableJobs();
+        });
+
+        cancelAddJobsBtn.addEventListener('click', () => {
+            addJobsModal.classList.add('hidden');
+            selectedJobs.clear();
+        });
+
+        refreshJobsBtn.addEventListener('click', loadJobs);
+
+        // Show/hide modals
+        showUserSelectBtn.addEventListener('click', () => {
+            if (!websitePassword) {
+                passwordModal.classList.remove('hidden');
+            } else {
+                userSelectModal.classList.remove('hidden');
+            }
+        });
+
+        cancelUserSelectBtn.addEventListener('click', () => {
+            userSelectModal.classList.add('hidden');
+            userSelectForm.reset();
+        });
+
+        // Handle website password
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('websitePassword').value;
+            websitePassword = password;
+            localStorage.setItem('websitePassword', password);
+            passwordModal.classList.add('hidden');
+            userSelectModal.classList.remove('hidden');
+        });
+
+        // Handle user selection
+        userSelectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-website-password': websitePassword
+                    },
+                    body: JSON.stringify({ username })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    currentUser = data;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    updateUserUI();
+                    userSelectModal.classList.add('hidden');
+                    userSelectForm.reset();
+                    loadPlaylists();
+                } else {
+                    alert(data.error || 'Error selecting user');
+                }
+            } catch (error) {
+                console.error('User selection error:', error);
+                alert('Error selecting user');
+            }
+        });
+
+        // Update user UI
+        function updateUserUI() {
+            if (currentUser) {
+                userSection.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="text-white">
+                            <i class="fas fa-user mr-2"></i>${currentUser.username}
+                        </span>
+                        <button id="changeUser" class="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-exchange-alt mr-2"></i>Change
+                        </button>
+                    </div>
+                `;
+                document.getElementById('changeUser').addEventListener('click', () => {
+                    userSelectModal.classList.remove('hidden');
+                });
+            } else {
+                userSection.innerHTML = `
+                    <button id="showUserSelect" class="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-user mr-2"></i>Select User
+                    </button>
+                `;
+                document.getElementById('showUserSelect').addEventListener('click', () => {
+                    if (!websitePassword) {
+                        passwordModal.classList.remove('hidden');
+                    } else {
+                        userSelectModal.classList.remove('hidden');
+                    }
+                });
+            }
+        }
+
+        // Check for saved password and user
+        function checkSavedState() {
+            const savedPassword = localStorage.getItem('websitePassword');
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedPassword) {
+                websitePassword = savedPassword;
+                console.log('Loaded saved password');
+            } else {
+                // If no password is saved, show the password modal
+                passwordModal.classList.remove('hidden');
+            }
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUserUI();
+            }
+        }
+
+        // Modify fetch calls to include website password
+        async function fetchWithAuth(url, options = {}) {
+            if (!websitePassword) {
+                throw new Error('Website password is required');
+            }
+            options.headers = {
+                ...options.headers,
+                'x-website-password': websitePassword
+            };
+            return fetch(url, options);
+        }
+
+        // Load and display jobs
+        async function loadJobs() {
+            try {
+                const response = await fetch(`${API_URL}/jobs`);
+                const jobs = await response.json();
+                const jobsList = document.getElementById('jobsList');
+                
+                jobsList.innerHTML = jobs.map(job => `
+                    <div class="job-card bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2">${job.title}</h3>
+                        <p class="text-gray-600 mb-2">by ${job.creator}</p>
+                        <div class="text-sm text-gray-500">
+                            <p><i class="fas fa-star mr-1"></i>Rating: ${job.rating || 'N/A'}</p>
+                            <p><i class="fas fa-users mr-1"></i>Players: ${job.players || 'N/A'}</p>
+                        </div>
+                        <div class="mt-4 flex space-x-2">
+                            <a href="${job.url}" target="_blank" 
+                               class="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center">
+                                <i class="fas fa-external-link-alt mr-1"></i>View Job
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading jobs:', error);
+            }
+        }
+
+        // Load and display playlists
+        async function loadPlaylists() {
+            try {
+                const response = await fetch(`${API_URL}/playlists`);
+                const playlists = await response.json();
+                const playlistsList = document.getElementById('playlistsList');
+                
+                playlistsList.innerHTML = playlists.map(playlist => `
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2">${playlist.name}</h3>
+                        <p class="text-gray-600 mb-2">
+                            <i class="fas fa-list mr-1"></i>${playlist.jobs.length} jobs
+                        </p>
+                        <div class="text-sm text-gray-500">
+                            <p><i class="fas fa-calendar-plus mr-1"></i>Created: ${new Date(playlist.createdAt).toLocaleDateString()}</p>
+                            <p><i class="fas fa-clock mr-1"></i>Updated: ${new Date(playlist.updatedAt).toLocaleDateString()}</p>
+                        </div>
+                        <button onclick="viewPlaylist('${playlist.id}')" 
+                                class="mt-4 w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                            <i class="fas fa-eye mr-1"></i>View Playlist
+                        </button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading playlists:', error);
+            }
+        }
+
+        // View playlist details
+        window.viewPlaylist = async (playlistId) => {
+            currentPlaylistId = playlistId;
+            try {
+                const response = await fetch(`${API_URL}/playlists/${playlistId}`);
+                const playlist = await response.json();
+                
+                document.getElementById('playlistDetailsTitle').innerHTML = `
+                    ${playlist.name}
+                    <button onclick="openEditPlaylistModal('${playlist.id}', '${playlist.name}')" 
+                            class="ml-2 px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                `;
+                document.getElementById('playlistStats').textContent = `${playlist.jobs.length} jobs`;
+                document.getElementById('playlistDates').textContent = 
+                    `Created: ${new Date(playlist.createdAt).toLocaleDateString()} | ` +
+                    `Updated: ${new Date(playlist.updatedAt).toLocaleDateString()}`;
+                
+                const playlistJobs = document.getElementById('playlistJobs');
+                playlistJobs.innerHTML = playlist.jobs.map((job, index) => `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded draggable-job" 
+                         draggable="true" 
+                         data-index="${index}"
+                         ondragstart="handleDragStart(event)"
+                         ondragover="handleDragOver(event)"
+                         ondrop="handleDrop(event)"
+                         ondragend="handleDragEnd(event)">
+                        <div class="flex items-center flex-1">
+                            <div class="drag-handle">
+                                <i class="fas fa-grip-vertical"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">${job.title}</h4>
+                                <p class="text-sm text-gray-600">by ${job.creator}</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="${job.url}" target="_blank" 
+                               class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            <button onclick="removeJobFromPlaylist('${playlistId}', '${job.url}')"
+                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                playlistsSection.classList.add('hidden');
+                playlistDetailsSection.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error loading playlist details:', error);
+            }
+        };
+
+        // Remove job from playlist
+        window.removeJobFromPlaylist = async (playlistId, jobUrl) => {
+            if (!confirm('Are you sure you want to remove this job from the playlist?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/playlists/${playlistId}/jobs/${encodeURIComponent(jobUrl)}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    viewPlaylist(playlistId);
+                }
+            } catch (error) {
+                console.error('Error removing job from playlist:', error);
+            }
+        };
+
+        // Load available jobs for adding to playlist
+        async function loadAvailableJobs() {
+            try {
+                console.log('Loading available jobs...');
+                const response = await fetch(`${API_URL}/jobs`);
+                const jobs = await response.json();
+                console.log('Loaded jobs:', jobs);
+                
+                const availableJobs = document.getElementById('availableJobs');
+                if (!availableJobs) {
+                    console.error('Could not find availableJobs element');
+                    return;
+                }
+                
+                if (jobs.length === 0) {
+                    availableJobs.innerHTML = '<p class="text-gray-500">No jobs available to add</p>';
+                    return;
+                }
+                
+                availableJobs.innerHTML = jobs.map(job => `
+                    <div class="flex items-center p-3 bg-white rounded shadow">
+                        <input type="checkbox" 
+                               class="mr-3 h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+                               onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/"/g, '&quot;')})">
+                        <div class="flex-1">
+                            <h4 class="font-bold">${job.title}</h4>
+                            <p class="text-sm text-gray-600">by ${job.creator}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+                console.log('Rendered job list');
+            } catch (error) {
+                console.error('Error loading available jobs:', error);
+                alert('Error loading jobs: ' + error.message);
+            }
+        }
+
+        // Toggle job selection
+        window.toggleJobSelection = (checkbox, job) => {
+            console.log('Toggling job:', job);
+            console.log('Checkbox checked:', checkbox.checked);
+            
+            if (checkbox.checked) {
+                selectedJobs.set(job.url, job);
+            } else {
+                selectedJobs.delete(job.url);
+            }
+            
+            console.log('Current selected jobs:', Array.from(selectedJobs.values()));
+            console.log('Number of selected jobs:', selectedJobs.size);
+        };
+
+        // Add selected jobs to playlist
+        confirmAddJobsBtn.addEventListener('click', async () => {
+            console.log('Add jobs button clicked');
+            console.log('Selected jobs size:', selectedJobs.size);
+            console.log('Selected jobs:', Array.from(selectedJobs.values()));
+            
+            if (selectedJobs.size === 0) {
+                alert('Please select at least one job to add');
+                return;
+            }
+            
+            const jobsToAdd = Array.from(selectedJobs.values());
+            console.log('Adding jobs:', jobsToAdd);
+            
+            try {
+                const response = await fetchWithAuth(`${API_URL}/playlists/${currentPlaylistId}/jobs`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ jobs: jobsToAdd })
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (response.ok) {
+                    addJobsModal.classList.add('hidden');
+                    selectedJobs.clear();
+                    viewPlaylist(currentPlaylistId);
+                } else {
+                    alert('Error adding jobs: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error adding jobs to playlist:', error);
+                alert('Error adding jobs: ' + error.message);
+            }
+        });
+
+        // Create new playlist
+        confirmCreateBtn.addEventListener('click', async () => {
+            const name = playlistNameInput.value.trim();
+            if (!name) return;
+
+            try {
+                const response = await fetchWithAuth(`${API_URL}/playlists`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        name,
+                        userId: currentUser?.id 
+                    })
+                });
+
+                if (response.ok) {
+                    createPlaylistModal.classList.add('hidden');
+                    playlistNameInput.value = '';
+                    loadPlaylists();
+                } else {
+                    const data = await response.json();
+                    alert('Error creating playlist: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error creating playlist:', error);
+                alert('Error creating playlist: ' + error.message);
+            }
+        });
+
+        // Edit playlist functionality
+        window.openEditPlaylistModal = (playlistId, currentName) => {
+            currentPlaylistId = playlistId;
+            editPlaylistNameInput.value = currentName;
+            editPlaylistModal.classList.remove('hidden');
+        };
+
+        cancelEditBtn.addEventListener('click', () => {
+            editPlaylistModal.classList.add('hidden');
+            editPlaylistNameInput.value = '';
+        });
+
+        confirmEditBtn.addEventListener('click', async () => {
+            const newName = editPlaylistNameInput.value.trim();
+            if (!newName) return;
+
+            try {
+                const response = await fetchWithAuth(`${API_URL}/playlists/${currentPlaylistId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: newName })
+                });
+
+                if (response.ok) {
+                    editPlaylistModal.classList.add('hidden');
+                    editPlaylistNameInput.value = '';
+                    viewPlaylist(currentPlaylistId);
+                    loadPlaylists(); // Refresh the playlists list
+                } else {
+                    const data = await response.json();
+                    alert('Error updating playlist: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error updating playlist:', error);
+                alert('Error updating playlist: ' + error.message);
+            }
+        });
+
+        // Drag and drop functionality
+        let draggedItem = null;
+
+        window.handleDragStart = (e) => {
+            draggedItem = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', e.target.dataset.index);
+        };
+
+        window.handleDragOver = (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        };
+
+        window.handleDrop = async (e) => {
+            e.preventDefault();
+            const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+            const toIndex = parseInt(e.target.closest('.draggable-job').dataset.index);
+            
+            if (fromIndex === toIndex) return;
+
+            try {
+                const response = await fetch(`${API_URL}/playlists/${currentPlaylistId}/reorder`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fromIndex, toIndex })
+                });
+
+                if (response.ok) {
+                    viewPlaylist(currentPlaylistId);
+                } else {
+                    const data = await response.json();
+                    alert('Error reordering jobs: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error reordering jobs:', error);
+                alert('Error reordering jobs: ' + error.message);
+            }
+        };
+
+        window.handleDragEnd = (e) => {
+            e.target.classList.remove('dragging');
+            draggedItem = null;
+        };
+
+        // Initial state check
+        checkSavedState();
+    </script>
+</body>
+</html> 
