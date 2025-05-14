@@ -317,7 +317,7 @@ const playlists = {
                 navigation.showPlaylists();
                 
                 // Show appropriate message
-                if (result.message.includes('already')) {
+                if (result.message && result.message.includes('already')) {
                     utils.showError('Playlist was already deleted');
                 }
             } else {
