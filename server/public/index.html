@@ -241,7 +241,7 @@
                     <button id="refreshJobs" class="minimal-btn"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
                 </div>
             </div>
-            <div id="jobsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="jobsList" class="grid grid-cols-1 gap-6">
                 <!-- Jobs will be inserted here -->
             </div>
         </section>
@@ -251,7 +251,7 @@
                 <h2 class="text-2xl font-bold">Playlists</h2>
                 <button id="createPlaylist" class="minimal-btn"><i class="fas fa-plus mr-2"></i>Create New Playlist</button>
             </div>
-            <div id="playlistsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="playlistsList" class="grid grid-cols-1 gap-6">
                 <!-- Playlists will be inserted here -->
             </div>
         </section>
@@ -299,7 +299,7 @@
         <div class="minimal-card p-6 w-3/4 max-h-[80vh] shadow-xl overflow-hidden flex flex-col">
             <h3 class="section-title text-xl mb-4">Add Jobs to Playlist</h3>
             <div class="flex-1 overflow-y-auto mb-4">
-                <div id="availableJobs" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="availableJobs" class="grid grid-cols-1 gap-4">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
@@ -663,7 +663,7 @@
                         </h3>
                         <button id="saveAllStatsBtn" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded shadow text-xs ml-2"><i class="fas fa-save mr-1"></i>Save All</button>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">`;
+                    <div class="grid grid-cols-1 gap-4">`;
                 if (users.length === 0 || jobs.length === 0) {
                     html += `<div class="text-gray-500 italic mb-2 text-xs">No users or jobs available to enter stats.</div></div>`;
                     document.getElementById('playlistJobs').innerHTML = html;
