@@ -628,63 +628,6 @@
                     `Created: ${new Date(playlist.createdAt).toLocaleDateString()} | ` +
                     `Updated: ${new Date(playlist.updatedAt).toLocaleDateString()}`;
                 
-                const playlistJobs = document.getElementById('playlistJobs');
-                playlistJobs.innerHTML = playlist.jobs.map(job => {
-                    const isExpanded = expandedJobUrl === job.url;
-                    let info = [];
-                    if (job.creator) info.push(`<span><i class='fas fa-user mr-1'></i>${job.creator}</span>`);
-                    if (job.description) info.push(`<span><i class='fas fa-align-left mr-1'></i>${job.description}</span>`);
-                    if (job.rating) info.push(`<span><i class='fas fa-star mr-1'></i>${job.rating}</span>`);
-                    if (job.creationDate) info.push(`<span><i class='fas fa-calendar-plus mr-1'></i>${job.creationDate}</span>`);
-                    if (job.lastUpdated) info.push(`<span><i class='fas fa-clock mr-1'></i>${job.lastUpdated}</span>`);
-                    if (job.lastPlayed) info.push(`<span><i class='fas fa-history mr-1'></i>${job.lastPlayed}</span>`);
-                    if (job.players) info.push(`<span><i class='fas fa-users mr-1'></i>${job.players}</span>`);
-                    if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
-                    if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
-                    if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                    let html = `<div class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left focus:outline-none" data-job="${job.url}">\n<div class="flex items-center cursor-pointer job-header" data-job="${job.url}">\n<i class="fas fa-flag-checkered text-blue-700 mr-2"></i>\n<span class="font-bold text-base">${job.title}</span>\n</div>`;
-                    if (isExpanded) {
-                        html += `<div class='flex flex-col md:flex-row gap-2 mt-2 items-stretch'>\n    <div class='flex-1'>\n        <div class=\"space-y-2\">`;
-                        (currentPlaylistPlayers || []).forEach((user, idx) => {
-                            const stat = playlist.stats.find(s => s.username === user && s.jobUrl === job.url) || {};
-                            let placement = stat.placement || '';
-                            let isDNF = placement === 'DNF' || placement === 0;
-                            const statNotes = stat.statNotes || '';
-                            // Fastest/slowest lap dropdown
-                            let fastestLap = stat.fastestLap;
-                            let slowestLap = stat.slowestLap;
-                            let lapDropdown = '';
-                            if (fastestLap === true) lapDropdown = 'Fastest';
-                            else if (slowestLap === true) lapDropdown = 'Slowest';
-                            else lapDropdown = '';
-                            // Points calculation
-                            let points = '';
-                            if (isDNF) {
-                                points = 0;
-                            } else if (placement && placement >= 1) {
-                                points = pointsTable[placement-1] !== undefined ? pointsTable[placement-1] : 0;
-                            }
-                            // Placement options only up to number of players
-                            const placementOptions = Array.from({length: (currentPlaylistPlayers || []).length}, (_,i) => `<option value="${i+1}"${placement==i+1?' selected':''}>${i+1}</option>`).join('');
-                            html += `<div class="flex items-center space-x-2 text-xs">\n<span class="w-20 font-semibold">${user}</span>\n<select class="stat-input border rounded px-1 py-0.5 w-16 minimal-card" data-job="${job.url}" data-user="${user}" data-field="placement">\n<option value=""></option>${placementOptions}<option value="DNF"${isDNF?' selected':''}>DNF</option></select>\n<span class="text-gray-400">P</span>\n<select class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" data-job="${job.url}" data-user="${user}" data-field="lapType">\n<option value=""${lapDropdown===''?' selected':''}></option><option value="Fastest"${lapDropdown==='Fastest'?' selected':''}>Fastest</option><option value="Slowest"${lapDropdown==='Slowest'?' selected':''}>Slowest</option></select>\n<span class="text-gray-400">F/L</span>\n<input type="text" class="stat-input border rounded w-20 px-1 py-0.5 minimal-card" placeholder="Note" data-job="${job.url}" data-user="${user}" data-field="statNotes" value="${statNotes}">\n<span class="ml-2 font-bold text-blue-600">${points}</span>\n</div>`;
-                        });
-                        html += `</div></div>\n    <div class='minimal-card p-1 text-xs w-full md:w-56 ml-0 md:ml-6 flex flex-row flex-wrap items-center gap-2 h-full overflow-hidden'>\n        ${info.map(item => `<span class='truncate max-w-[120px]'>${item}</span>`).join('')}\n    </div>\n</div>`;
-                    }
-                    html += `</div>`;
-                    return html;
-                }).join('');
-
-                // Attach click handler for job-header after rendering
-                document.querySelectorAll('.job-header').forEach(header => {
-                    header.onclick = (e) => {
-                        const card = header.closest('.minimal-card[data-job]');
-                        expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
-                        console.log('Clicked job header:', card.dataset.job, 'ExpandedJobUrl now:', expandedJobUrl);
-                        viewPlaylist(currentPlaylistId);
-                    };
-                });
-
-                // Render stats table for all jobs and users
                 renderStatsTable(playlist);
 
                 currentPlaylistPlayers = playlist.players || [];
