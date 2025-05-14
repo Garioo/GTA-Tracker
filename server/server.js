@@ -193,6 +193,13 @@ app.put('/api/playlists/:id', async (req, res) => {
   res.json(playlist);
 });
 
+// Delete playlist
+app.delete('/api/playlists/:id', async (req, res) => {
+  const result = await Playlist.findByIdAndDelete(req.params.id);
+  if (!result) return res.status(404).json({ error: 'Playlist not found' });
+  res.json({ success: true });
+});
+
 // Add jobs to playlist
 app.post('/api/playlists/:id/jobs', async (req, res) => {
   const { jobs } = req.body;
@@ -274,20 +281,6 @@ app.put('/api/playlists/:id/players', async (req, res) => {
   playlist.updatedAt = new Date();
   await playlist.save();
   res.json(playlist);
-});
-
-// Delete a playlist
-app.delete('/api/playlists/:id', async (req, res) => {
-  try {
-    const result = await Playlist.deleteOne({ _id: req.params.id });
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ error: 'Playlist not found' });
-    }
-    res.json({ success: true, message: 'Playlist deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting playlist:', error);
-    res.status(500).json({ error: 'Failed to delete playlist' });
-  }
 });
 
 app.listen(port, '0.0.0.0', () => {
