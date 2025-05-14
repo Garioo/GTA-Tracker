@@ -310,10 +310,14 @@ const playlists = {
             const result = await API.playlists.delete(id);
             console.log('Delete result:', result);
             
-            // Remove from local state regardless of whether it was just deleted or already deleted
-            state.playlists = state.playlists.filter(p => p._id !== id);
-            playlists.render();
-            navigation.showPlaylists();
+            // Only remove from local state if we got a success response
+            if (result && result.success) {
+                state.playlists = state.playlists.filter(p => p._id !== id);
+                playlists.render();
+                navigation.showPlaylists();
+            } else {
+                utils.showError('Failed to delete playlist: Unexpected response from server');
+            }
         } catch (error) {
             console.error('Delete playlist error:', error);
             utils.showError('Failed to delete playlist: ' + error.message);
