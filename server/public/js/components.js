@@ -58,25 +58,62 @@ const PlaylistDetails = (playlist) => `
         </button>
         <h2 id="playlistDetailsTitle" class="text-2xl font-bold">${playlist.name}</h2>
     </div>
-    <div class="minimal-card p-4">
-        <div class="flex justify-between items-center mb-4">
-            <div>
-                <p id="playlistStats" class="font-semibold">${playlist.jobs.length} jobs</p>
-                <p id="playlistDates" class="text-sm">
-                    Created: ${new Date(playlist.createdAt).toLocaleDateString()}
-                </p>
-            </div>
-            <div class="flex space-x-2">
-                <button id="addJobsToPlaylist" class="minimal-btn">
-                    <i class="fas fa-plus mr-2"></i>Add Jobs
-                </button>
-                <button id="managePlayersBtn" class="minimal-btn">
-                    <i class="fas fa-users mr-2"></i>Manage Players
-                </button>
+    <div class="flex gap-4">
+        <div class="w-1/3">
+            <div class="minimal-card p-4">
+                <h3 class="font-bold text-lg mb-2">Playlist Stats</h3>
+                <div class="text-sm mb-1">
+                    <i class="fas fa-list mr-1"></i>Total Jobs: <span class="font-semibold">${playlist.jobs.length}</span>
+                </div>
+                <div class="text-sm mb-1">
+                    <i class="fas fa-users mr-1"></i>Total Players: <span class="font-semibold">${playlist.players?.length || 0}</span>
+                </div>
+                <div class="text-sm mb-3">
+                    <i class="fas fa-trophy mr-1"></i>Total Points: <span class="font-semibold">${
+                        playlist.stats?.reduce((total, stat) => {
+                            const points = [15,12,10,8,7,6,5,4,3,2,1,0][stat.placement - 1] || 0;
+                            return total + points;
+                        }, 0) || 0
+                    }</span>
+                </div>
             </div>
         </div>
-        <div id="playlistJobs" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            ${playlist.jobs.map(job => JobCard(job)).join('')}
+        <div class="w-2/3">
+            <div class="minimal-card p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p id="playlistStats" class="font-semibold">${playlist.jobs.length} jobs</p>
+                        <p id="playlistDates" class="text-sm">
+                            Created: ${new Date(playlist.createdAt).toLocaleDateString()}
+                        </p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button id="addJobsToPlaylist" class="minimal-btn">
+                            <i class="fas fa-plus mr-2"></i>Add Jobs
+                        </button>
+                        <button id="managePlayersBtn" class="minimal-btn">
+                            <i class="fas fa-users mr-2"></i>Manage Players
+                        </button>
+                    </div>
+                </div>
+                <div id="playlistJobs" class="grid grid-cols-1 gap-2">
+                    ${playlist.jobs.map(job => `
+                        <div class="job-card p-3 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-semibold">${job.title}</h3>
+                                <div class="text-sm text-muted">
+                                    <span>${job.gameMode}</span> • 
+                                    <span>${job.routeType}</span> • 
+                                    <span>${job.routeLength}</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm">Rating: ${job.rating}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
         </div>
     </div>
 `;
