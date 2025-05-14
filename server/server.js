@@ -95,14 +95,9 @@ app.delete('/api/jobs/:url', (req, res) => {
 
 // Create a playlist
 app.post('/api/playlists', verifyPassword, (req, res) => {
-    const { name, userId } = req.body;
-    if (!name || !userId) {
-        return res.status(400).json({ error: 'Name and userId are required' });
-    }
-
-    const user = users.find(u => u.id === userId);
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({ error: 'Name is required' });
     }
 
     const playlist = {
@@ -110,7 +105,6 @@ app.post('/api/playlists', verifyPassword, (req, res) => {
         name,
         jobs: [],
         scores: {},
-        userId,
         createdAt: new Date(),
         updatedAt: new Date()
     };
