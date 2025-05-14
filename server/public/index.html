@@ -642,7 +642,7 @@
                     if (job.gameMode) info.push(`<span><i class='fas fa-gamepad mr-1'></i>${job.gameMode}</span>`);
                     if (job.routeType) info.push(`<span><i class='fas fa-route mr-1'></i>${job.routeType}</span>`);
                     if (job.routeLength) info.push(`<span><i class='fas fa-ruler mr-1'></i>${job.routeLength}</span>`);
-                    let html = `<div class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left cursor-pointer hover:ring-2 hover:ring-blue-400 focus:outline-none" tabindex="0" role="button" data-job="${job.url}">\n<div class="flex items-center">\n<i class="fas fa-flag-checkered text-blue-700 mr-2"></i>\n<span class="font-bold text-base">${job.title}</span>\n</div>`;
+                    let html = `<div class="minimal-card p-2 shadow flex flex-col transition-all duration-200 text-left focus:outline-none" data-job="${job.url}">\n<div class="flex items-center cursor-pointer job-header" data-job="${job.url}">\n<i class="fas fa-flag-checkered text-blue-700 mr-2"></i>\n<span class="font-bold text-base">${job.title}</span>\n</div>`;
                     if (isExpanded) {
                         html += `<div class='flex flex-col md:flex-row gap-2 mt-2 items-stretch'>\n    <div class='flex-1'>\n        <div class=\"space-y-2\">`;
                         (currentPlaylistPlayers || []).forEach((user, idx) => {
@@ -760,12 +760,11 @@
                 document.getElementById('playlistJobs').innerHTML = html;
 
                 // Edit button logic
-                document.querySelectorAll('.minimal-card[data-job]').forEach(card => {
-                    card.onclick = (e) => {
-                        if (!e.target.closest('input,select,textarea,button')) {
-                            expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
-                            renderStatsTable(playlist);
-                        }
+                document.querySelectorAll('.job-header').forEach(header => {
+                    header.onclick = (e) => {
+                        const card = header.closest('.minimal-card[data-job]');
+                        expandedJobUrl = card.dataset.job === expandedJobUrl ? null : card.dataset.job;
+                        renderStatsTable(playlist);
                     };
                 });
 
