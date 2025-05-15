@@ -21,10 +21,12 @@ const JobCard = (job) => `
 `;
 
 const JobCardCompact = (job, index = null) => `
-    <div class="minimal-card flex items-start p-2 shadow rounded mb-2 hover:bg-gray-50 transition-colors">
+    <div class="minimal-card flex items-start p-2 shadow rounded mb-2 hover:bg-gray-50 transition-colors cursor-pointer" 
+         onclick="toggleJobSelection(this.querySelector('input[type=checkbox]'), ${JSON.stringify(job).replace(/\"/g, '&quot;')})">
         <div class="flex items-center mr-2">
             <input type="checkbox" class="h-4 w-4 text-blue-600 rounded focus:ring-blue-500" 
-                   onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/\"/g, '&quot;')})">
+                   onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/\"/g, '&quot;')})"
+                   onclick="event.stopPropagation()">
             ${index !== null ? `
                 <div class="ml-2 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm">
                     ${index + 1}
@@ -33,7 +35,7 @@ const JobCardCompact = (job, index = null) => `
         </div>
         <div class="flex-1 min-w-0">
             <div class="flex justify-between items-start">
-                <div class="min-w-0">
+                <div class="min-w-0 flex-1">
                     <h4 class="font-bold section-title truncate text-sm">${job.title}</h4>
                     <p class="label text-xs truncate">by ${job.creator}</p>
                 </div>
@@ -53,7 +55,7 @@ const JobCardCompact = (job, index = null) => `
                 </span>
             </div>
             <div class="mt-1 text-xs text-gray-600">
-                <a href="${job.url}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                <a href="${job.url}" target="_blank" class="text-blue-500 hover:text-blue-600" onclick="event.stopPropagation()">
                     <i class="fas fa-external-link-alt mr-1"></i>View on Social Club
                 </a>
             </div>
@@ -230,7 +232,7 @@ const CreatePlaylistModal = () => `
 
 const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-4 w-3/4 h-[600px] shadow-xl flex flex-col">
+        <div class="minimal-card p-4 w-2/3 h-[600px] shadow-xl flex flex-col">
             <h3 class="section-title text-xl mb-3">Add Jobs to Playlist</h3>
             <div class="mb-3">
                 <div class="relative">

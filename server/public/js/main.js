@@ -404,29 +404,34 @@ const modals = {
         // Add search functionality
         const searchInput = document.getElementById('jobSearch');
         if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const jobCards = document.querySelectorAll('#availableJobs .minimal-card');
-                
-                jobCards.forEach(card => {
-                    const title = card.querySelector('.section-title').textContent.toLowerCase();
-                    const creator = card.querySelector('.label').textContent.toLowerCase();
-                    const gameMode = card.querySelector('.bg-blue-100').textContent.toLowerCase();
-                    const routeType = card.querySelector('.bg-green-100').textContent.toLowerCase();
-                    const routeLength = card.querySelector('.bg-purple-100').textContent.toLowerCase();
-                    
-                    if (title.includes(searchTerm) || 
-                        creator.includes(searchTerm) || 
-                        gameMode.includes(searchTerm) ||
-                        routeType.includes(searchTerm) ||
-                        routeLength.includes(searchTerm)) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
+            // Remove any existing event listeners
+            searchInput.removeEventListener('input', modals.handleJobSearch);
+            // Add new event listener
+            searchInput.addEventListener('input', modals.handleJobSearch);
         }
+    },
+    
+    handleJobSearch: (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const jobCards = document.querySelectorAll('#availableJobs .minimal-card');
+        
+        jobCards.forEach(card => {
+            const title = card.querySelector('.section-title').textContent.toLowerCase();
+            const creator = card.querySelector('.label').textContent.toLowerCase();
+            const gameMode = card.querySelector('.bg-blue-100').textContent.toLowerCase();
+            const routeType = card.querySelector('.bg-green-100').textContent.toLowerCase();
+            const routeLength = card.querySelector('.bg-purple-100').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm) || 
+                creator.includes(searchTerm) || 
+                gameMode.includes(searchTerm) ||
+                routeType.includes(searchTerm) ||
+                routeLength.includes(searchTerm)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     },
     
     hideAddJobs: () => {
