@@ -872,14 +872,14 @@ footer {
 }
 
 .job-card h4 {
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.15rem;
 }
 
 .job-card .tags-container {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    margin-top: 0.2rem;
+    margin-top: 0.15rem;
 }
 
 /* Smooth transitions for search */
@@ -914,11 +914,11 @@ footer {
 .job-card .job-tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.05rem 0.2rem;
-    font-size: 0.6rem;
+    padding: 0 0.15rem;
+    font-size: 0.55rem;
     font-weight: 500;
-    margin-right: 0.25rem;
-    margin-bottom: 0.05rem;
+    margin-right: 0.2rem;
+    margin-bottom: 0;
     line-height: 1;
     transition: all 0.2s ease;
 }
@@ -926,8 +926,8 @@ footer {
     opacity: 0.8;
 }
 .job-card .job-tag i {
-    margin-right: 0.15rem;
-    font-size: 0.65rem;
+    margin-right: 0.1rem;
+    font-size: 0.6rem;
     opacity: 0.9;
 }
 
@@ -935,17 +935,17 @@ footer {
 .job-card .job-rating {
     display: inline-flex;
     align-items: center;
-    padding: 0.05rem 0.2rem;
-    font-size: 0.6rem;
+    padding: 0 0.15rem;
+    font-size: 0.55rem;
     font-weight: 500;
     color: var(--accent-500);
-    margin-right: 0.25rem;
+    margin-right: 0.2rem;
     line-height: 1;
 }
 
 .job-card .job-rating i {
-    margin-right: 0.15rem;
-    font-size: 0.65rem;
+    margin-right: 0.1rem;
+    font-size: 0.6rem;
     opacity: 0.9;
 }
 
