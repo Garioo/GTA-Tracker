@@ -23,7 +23,7 @@ export const JobCard = (job) => `
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => {
     const isSelected = state.selectedJobs.has(job.url);
-    const selectedClass = isSelected ? 'border-primary bg-primary/10' : '';
+    const selectedClass = isSelected ? 'border-accent bg-accent/10' : '';
     const selectedAttr = isSelected ? 'true' : 'false';
     const numberOpacity = isSelected ? '' : 'opacity-0';
     
@@ -33,7 +33,7 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
          data-job-id="${job._id || job.id}"
          data-selected="${selectedAttr}">
         ${(playlistIndex != null || selectedNumber != null) ? `
-            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-primary text-text text-xs font-bold shadow-sm">
+            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-accent text-text text-xs font-bold shadow-sm">
                 ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
             </div>
         ` : ''}
@@ -50,18 +50,18 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                 </div>
             </div>
             <div class="flex items-center gap-1.5 mt-1">
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-secondary/20 text-secondary shadow-sm">
                     <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-secondary/20 text-secondary shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent shadow-sm">
                     <i class="fas fa-route mr-0.5"></i>${job.routeType}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-secondary/20 text-secondary shadow-sm">
                     <i class="fas fa-ruler mr-0.5"></i>${job.routeLength}
                 </span>
             </div>
         </div>
-        <div class="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center rounded-full bg-primary text-text text-xs font-bold shadow-sm ${numberOpacity} group-hover:opacity-100 transition-opacity duration-200 selected-number">${selectedNumber || ''}</div>
+        <div class="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center rounded-full bg-accent text-text text-xs font-bold shadow-sm ${numberOpacity} group-hover:opacity-100 transition-opacity duration-200 selected-number">${selectedNumber || ''}</div>
     </div>
     `;
 };
@@ -241,21 +241,23 @@ export const AddJobsModal = () => `
                     <h3 class="text-lg font-semibold">Add Jobs</h3>
                     <p class="text-xs text-muted mt-0.5">Select jobs to add to your playlist</p>
                 </div>
-                <button id="cancelAddJobs" class="text-muted hover:text-text transition-colors">
+                <button id="cancelAddJobs" class="text-muted hover:text-accent transition-colors">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4">
+            <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 <div class="flex items-center gap-2 mb-4">
-                    <div class="relative flex-1">
-                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="input w-full pl-8">
-                        <i class="fas fa-search absolute left-2.5 top-2.5 text-muted text-sm"></i>
+                    <div class="search-container flex-1">
+                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="input w-full">
+                        <i class="fas fa-search"></i>
                     </div>
-                    <select id="jobsFilterDropdown" class="input">
-                        <option value="recentlyPlayed">Recently Played</option>
-                        <option value="mostPlayed">Most Played</option>
-                        <option value="recentlyAdded">Recently Added</option>
-                    </select>
+                    <div class="filter-container">
+                        <select id="jobsFilterDropdown" class="input">
+                            <option value="recentlyPlayed">Recently Played</option>
+                            <option value="mostPlayed">Most Played</option>
+                            <option value="recentlyAdded">Recently Added</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="availableJobs" class="space-y-2 relative">
                     <!-- Available jobs will be inserted here -->
@@ -263,7 +265,7 @@ export const AddJobsModal = () => `
             </div>
             <div class="flex justify-between items-center gap-2 p-4 border-t border-border bg-card-bg">
                 <div class="text-sm text-muted">
-                    <span id="selectedCount" class="font-medium">0</span> jobs selected
+                    <span id="selectedCount" class="font-medium text-accent">0</span> jobs selected
                 </div>
                 <div class="flex gap-2">
                     <button id="cancelAddJobsBtn" class="minimal-btn">Cancel</button>

@@ -11,6 +11,10 @@
     --active: #e5e7eb;
     --shadow: rgba(0, 0, 0, 0.04);
     --shadow-hover: rgba(0, 0, 0, 0.08);
+    --accent-light: #a3b17d;
+    --accent-dark: #6b7a4d;
+    --secondary-light: #a5a6e3;
+    --secondary-dark: #6d6ea3;
 }
 
 :root[data-theme="dark"] {
@@ -26,6 +30,10 @@
     --active: #4a5568;
     --shadow: rgba(0, 0, 0, 0.2);
     --shadow-hover: rgba(0, 0, 0, 0.3);
+    --accent-light: #a8b57d;
+    --accent-dark: #7a8a5d;
+    --secondary-light: #3d3e9e;
+    --secondary-dark: #23245a;
 }
 
 body {
@@ -55,6 +63,7 @@ nav {
 
 .minimal-card:hover {
     box-shadow: 0 4px 16px var(--shadow-hover);
+    border-color: var(--accent);
 }
 
 .job-card {
@@ -82,23 +91,24 @@ nav {
 }
 
 .btn {
-    background: var(--primary);
+    background: var(--accent);
     color: var(--text);
     border-radius: 0.5rem;
     padding: 0.5rem 1.25rem;
     font-weight: 600;
     box-shadow: 0 1px 4px var(--shadow);
     transition: all 0.2s ease;
-    border: 1px solid var(--border);
+    border: 1px solid var(--accent-dark);
 }
 
 .btn:hover {
-    background: var(--secondary);
+    background: var(--accent-light);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px var(--shadow-hover);
 }
 
 .btn:active {
+    background: var(--accent-dark);
     transform: translateY(0);
     box-shadow: 0 1px 4px var(--shadow);
 }
@@ -117,11 +127,34 @@ nav {
     transition: all 0.2s ease;
 }
 
-.input:focus {
-    border-color: var(--primary);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(39, 71, 99, 0.2);
+.input:hover {
+    border-color: var(--accent);
     background: var(--hover);
+}
+
+.input:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-light);
+    background: var(--hover);
+}
+
+select.input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2383915f'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+select.input:hover {
+    border-color: var(--accent);
+}
+
+select.input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-light);
 }
 
 .section-title {
@@ -146,6 +179,8 @@ nav {
 
 .minimal-btn:hover {
     background: var(--hover);
+    border-color: var(--accent);
+    color: var(--accent);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px var(--shadow-hover);
 }
@@ -157,9 +192,9 @@ nav {
 }
 
 .minimal-btn.active {
-    background: var(--primary);
+    background: var(--accent);
     color: var(--text);
-    border-color: var(--primary);
+    border-color: var(--accent-dark);
 }
 
 .dark-toggle {
@@ -222,7 +257,7 @@ footer {
 /* Custom scrollbar styles */
 .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: var(--muted) transparent;
+    scrollbar-color: var(--accent) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -234,12 +269,13 @@ footer {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--muted);
+    background: var(--accent);
     border-radius: 4px;
+    border: 2px solid var(--card-bg);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary);
+    background: var(--accent-light);
 }
 
 /* Dark mode scrollbar */
@@ -309,7 +345,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 #loadingOverlay .minimal-card {
     background: var(--card-bg) !important;
-    border: 1px solid var(--border);
+    border: 1px solid var(--accent);
 }
 
 /* Stats table styles */
@@ -354,4 +390,87 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     border-color: var(--primary);
     outline: none;
     box-shadow: 0 0 0 2px rgba(39, 71, 99, 0.2);
+}
+
+/* Search bar enhancements */
+.search-container {
+    position: relative;
+}
+
+.search-container .input {
+    padding-left: 2.5rem;
+}
+
+.search-container i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+}
+
+/* Filter dropdown enhancements */
+.filter-container {
+    position: relative;
+}
+
+.filter-container select {
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2383915f'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+}
+
+/* Stats card enhancements */
+.stats-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+.stats-card .icon {
+    color: var(--accent);
+}
+
+/* Modal enhancements */
+.modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border);
+    padding: 1rem;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border);
+    padding: 1rem;
+    background: var(--card-bg);
+}
+
+/* Loading overlay enhancements */
+#loadingOverlay {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+#loadingOverlay .minimal-card {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--accent);
+}
+
+.loading-spinner {
+    border-color: var(--accent);
+    border-right-color: transparent;
 } 
