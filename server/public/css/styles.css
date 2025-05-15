@@ -565,7 +565,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 [data-selected="true"] {
     border-color: var(--accent-400) !important;
     background: var(--background-50) !important;
-    box-shadow: 0 0 0 1px var(--accent-400), 0 4px 12px var(--background-200);
+    box-shadow: 0 2px 4px var(--background-200);
     transform: translateY(-1px);
 }
 
@@ -575,7 +575,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 [data-selected="true"]:hover {
     background: var(--background-100) !important;
-    box-shadow: 0 0 0 1px var(--accent-400), 0 6px 16px var(--background-300);
+    box-shadow: 0 2px 6px var(--background-300);
 }
 
 /* Selection number styling */
@@ -583,40 +583,27 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--accent-500) !important;
     color: var(--background-50) !important;
     border: 2px solid var(--background-50) !important;
-    box-shadow: 0 2px 8px var(--background-200) !important;
+    box-shadow: 0 1px 3px var(--background-200) !important;
     transition: all 0.2s ease !important;
     font-weight: 600 !important;
 }
 
 [data-selected="true"] .selected-number {
     opacity: 1 !important;
-    transform: scale(1.1) !important;
-    box-shadow: 0 4px 12px var(--background-300) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 4px var(--background-300) !important;
 }
 
 [data-selected="true"]:hover .selected-number {
-    transform: scale(1.2) !important;
+    transform: scale(1.1) !important;
     background: var(--accent-400) !important;
 }
 
 /* Modal specific styles */
-#addJobsModal .job-card {
-    background: var(--background-50);
-    border: 1px solid var(--background-200);
-    transition: all 0.2s ease;
-}
-
-#addJobsModal .job-card:hover {
-    border-color: var(--accent-400);
-    background: var(--background-100);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px var(--background-200);
-}
-
 #addJobsModal [data-selected="true"] {
     border-color: var(--accent-400) !important;
     background: var(--background-50) !important;
-    box-shadow: 0 0 0 1px var(--accent-400), 0 4px 12px var(--background-200);
+    box-shadow: 0 2px 4px var(--background-200);
 }
 
 #addJobsModal [data-selected="true"] h4 {
@@ -625,26 +612,26 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 #addJobsModal [data-selected="true"]:hover {
     background: var(--background-100) !important;
-    box-shadow: 0 0 0 1px var(--accent-400), 0 6px 16px var(--background-300);
+    box-shadow: 0 2px 6px var(--background-300);
 }
 
 #addJobsModal .selected-number {
     background: var(--accent-500) !important;
     color: var(--background-50) !important;
     border: 2px solid var(--background-50) !important;
-    box-shadow: 0 2px 8px var(--background-200) !important;
+    box-shadow: 0 1px 3px var(--background-200) !important;
     transition: all 0.2s ease !important;
     font-weight: 600 !important;
 }
 
 #addJobsModal [data-selected="true"] .selected-number {
     opacity: 1 !important;
-    transform: scale(1.1) !important;
-    box-shadow: 0 4px 12px var(--background-300) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 4px var(--background-300) !important;
 }
 
 #addJobsModal [data-selected="true"]:hover .selected-number {
-    transform: scale(1.2) !important;
+    transform: scale(1.1) !important;
     background: var(--accent-400) !important;
 }
 
