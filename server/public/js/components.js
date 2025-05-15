@@ -20,16 +20,17 @@ const JobCard = (job) => `
     </div>
 `;
 
-const JobCardCompact = (job, index = null) => `
+const JobCardCompact = (job, playlistIndex = null, checked = false, disabled = false) => `
     <div class="minimal-card flex items-start p-1.5 shadow rounded mb-1.5 hover:bg-gray-50 transition-colors cursor-pointer" 
          onclick="toggleJobSelection(this.querySelector('input[type=checkbox]'), ${JSON.stringify(job).replace(/\"/g, '&quot;')})">
         <div class="flex items-center mr-2">
             <input type="checkbox" class="h-3.5 w-3.5 text-blue-600 rounded focus:ring-blue-500" 
                    onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/\"/g, '&quot;')})"
-                   onclick="event.stopPropagation()">
-            ${index !== null ? `
+                   onclick="event.stopPropagation()" 
+                   ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}>
+            ${playlistIndex !== null ? `
                 <div class="ml-1.5 w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs">
-                    ${index + 1}
+                    ${playlistIndex + 1}
                 </div>
             ` : ''}
         </div>

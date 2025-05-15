@@ -169,18 +169,37 @@ const jobs = {
         elements.jobsList.innerHTML = state.jobs.map(job => Components.JobCard(job)).join('');
     },
     
-    renderCompact: (container) => {
+    renderCompact: (container, filter = null) => {
         if (!container) return;
-        
+
+        // Get jobs in the current playlist (if any)
+        const playlistJobs = state.currentPlaylist?.jobs || [];
+
+        // Filtering logic
+        let jobsToShow = [...state.jobs];
+        if (filter === 'recentlyPlayed') {
+            jobsToShow.sort((a, b) => new Date(b.lastPlayed || 0) - new Date(a.lastPlayed || 0));
+        } else if (filter === 'mostPlayed') {
+            jobsToShow.sort((a, b) => (b.playCount || 0) - (a.playCount || 0));
+        } else if (filter === 'recentlyAdded') {
+            jobsToShow.sort((a, b) => new Date(b.creationDate || 0) - new Date(a.creationDate || 0));
+        }
+
         // Get selected jobs in order
         const selectedJobs = Array.from(state.selectedJobs.values());
-        
-        // Render all jobs with numbers for selected ones
-        container.innerHTML = state.jobs.map(job => {
-            const index = selectedJobs.findIndex(j => j.url === job.url);
-            return Components.JobCardCompact(job, index >= 0 ? index : null);
+
+        // Render all jobs with playlist number and selection state
+        container.innerHTML = jobsToShow.map(job => {
+            // If job is in playlist, show its number and keep it checked/disabled
+            const playlistIndex = playlistJobs.findIndex(j => j.url === job.url);
+            if (playlistIndex !== -1) {
+                return Components.JobCardCompact(job, playlistIndex, true, true);
+            }
+            // Otherwise, show as selectable, and show number if selected
+            const selectedIndex = selectedJobs.findIndex(j => j.url === job.url);
+            return Components.JobCardCompact(job, selectedIndex >= 0 ? selectedIndex : null, selectedIndex >= 0, false);
         }).join('');
-        
+
         // Update selected jobs count safely
         const selectedJobsCountElem = document.getElementById('selectedJobsCount');
         if (selectedJobsCountElem) {
@@ -414,6 +433,7 @@ const modals = {
             // Add new event listener
             searchInput.addEventListener('input', modals.handleJobSearch);
         }
+        setupJobsFilterBar();
     },
     
     handleJobSearch: (e) => {
@@ -677,4 +697,18 @@ window.toggleJobSelection = (checkbox, job) => {
     if (container && document.getElementById('selectedJobsCount')) {
         jobs.renderCompact(container);
     }
-}; 
+};
+
+// Add event listeners for filter buttons in the Add Jobs modal
+function setupJobsFilterBar() {
+    const filterBar = document.getElementById('jobsFilterBar');
+    if (!filterBar) return;
+    filterBar.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-blue-500', 'text-white'));
+            btn.classList.add('bg-blue-500', 'text-white');
+            const filter = btn.getAttribute('data-filter');
+            jobs.renderCompact(document.getElementById('availableJobs'), filter);
+        });
+    });
+} 
