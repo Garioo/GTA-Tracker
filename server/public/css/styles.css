@@ -746,4 +746,11 @@ select.input#jobsFilterDropdown,
 }
 #availableJobs::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+}
+
+#availableJobs > *,
+#availableJobs .job-card,
+#availableJobs .grid {
+  max-width: 100%;
+  box-sizing: border-box;
 } 
