@@ -247,9 +247,9 @@ export const AddJobsModal = () => `
             </div>
             <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="search-container flex-1">
-                        <input type="text" id="jobSearch" placeholder="Search races..." class="search-input">
-                        <i class="fas fa-search search-icon"></i>
+                    <div class="search-container flex-1 relative">
+                        <input type="text" id="jobSearch" placeholder="Search races..." class="w-full px-10 py-2 rounded-lg bg-background-50 dark:bg-background-800 text-text-900 dark:text-text-100 border border-background-200 dark:border-background-700 focus:border-accent-400 focus:outline-none transition-colors">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-400 dark:text-text-500 transition-colors"></i>
                     </div>
                     <div class="filter-container">
                         <select id="jobsFilterDropdown" class="input">
