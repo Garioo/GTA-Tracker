@@ -1,4 +1,6 @@
 // Utility functions
+import { state } from './state.js';
+
 export const utils = {
     showLoading: () => {
         state.isLoading = true;
