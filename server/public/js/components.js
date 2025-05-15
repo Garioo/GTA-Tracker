@@ -21,12 +21,12 @@ const JobCard = (job) => `
 `;
 
 const JobCardCompact = (job, index = null) => `
-    <div class="minimal-card flex items-start p-3 shadow rounded mb-2 hover:bg-gray-50 transition-colors">
-        <div class="flex items-center mr-3">
-            <input type="checkbox" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500" 
+    <div class="minimal-card flex items-start p-2 shadow rounded mb-2 hover:bg-gray-50 transition-colors">
+        <div class="flex items-center mr-2">
+            <input type="checkbox" class="h-4 w-4 text-blue-600 rounded focus:ring-blue-500" 
                    onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/\"/g, '&quot;')})">
             ${index !== null ? `
-                <div class="ml-2 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
+                <div class="ml-2 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm">
                     ${index + 1}
                 </div>
             ` : ''}
@@ -34,25 +34,25 @@ const JobCardCompact = (job, index = null) => `
         <div class="flex-1 min-w-0">
             <div class="flex justify-between items-start">
                 <div class="min-w-0">
-                    <h4 class="font-bold section-title truncate">${job.title}</h4>
-                    <p class="label text-sm truncate">by ${job.creator}</p>
+                    <h4 class="font-bold section-title truncate text-sm">${job.title}</h4>
+                    <p class="label text-xs truncate">by ${job.creator}</p>
                 </div>
-                <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 ml-2 flex-shrink-0">
+                <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 ml-2 flex-shrink-0">
                     <i class="fas fa-star mr-1"></i>${job.rating}
                 </div>
             </div>
-            <div class="mt-2 text-sm text-gray-500 flex flex-wrap gap-2">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+            <div class="mt-1 text-xs text-gray-500 flex flex-wrap gap-1">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                     <i class="fas fa-gamepad mr-1"></i>${job.gameMode}
                 </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                     <i class="fas fa-route mr-1"></i>${job.routeType}
                 </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
                     <i class="fas fa-ruler mr-1"></i>${job.routeLength}
                 </span>
             </div>
-            <div class="mt-2 text-sm text-gray-600">
+            <div class="mt-1 text-xs text-gray-600">
                 <a href="${job.url}" target="_blank" class="text-blue-500 hover:text-blue-600">
                     <i class="fas fa-external-link-alt mr-1"></i>View on Social Club
                 </a>
@@ -230,21 +230,21 @@ const CreatePlaylistModal = () => `
 
 const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl flex flex-col">
-            <h3 class="section-title text-xl mb-4">Add Jobs to Playlist</h3>
-            <div class="mb-4">
+        <div class="minimal-card p-4 w-3/4 h-[600px] shadow-xl flex flex-col">
+            <h3 class="section-title text-xl mb-3">Add Jobs to Playlist</h3>
+            <div class="mb-3">
                 <div class="relative">
                     <input type="text" id="jobSearch" placeholder="Search jobs by title, creator, or game mode..." 
                            class="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                 </div>
             </div>
-            <div class="flex-1 overflow-y-auto mb-4 pr-2 custom-scrollbar">
-                <div id="availableJobs" class="grid grid-cols-1 gap-4">
+            <div class="flex-1 overflow-y-auto mb-3 pr-2 custom-scrollbar">
+                <div id="availableJobs" class="grid grid-cols-1 gap-2">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-4 border-t">
+            <div class="flex justify-between items-center pt-3 border-t">
                 <div class="text-sm text-gray-500">
                     <span id="selectedJobsCount" class="font-bold text-blue-600">0</span> jobs selected
                 </div>
