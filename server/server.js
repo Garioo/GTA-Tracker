@@ -268,18 +268,65 @@ app.delete('/api/playlists/:id', async (req, res) => {
 
 // Add jobs to playlist
 app.post('/api/playlists/:id/jobs', async (req, res) => {
-  const { jobs } = req.body;
-  if (!Array.isArray(jobs)) return res.status(400).json({ error: 'Jobs must be an array' });
-  const playlist = await Playlist.findById(req.params.id);
-  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
-  jobs.forEach(job => {
-    if (!playlist.jobs.some(j => j.url === job.url)) {
-      playlist.jobs.push(job);
+  try {
+    const { jobs } = req.body;
+    
+    // Validate jobs array
+    if (!Array.isArray(jobs)) {
+      console.error('Invalid jobs data:', jobs);
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'Jobs must be an array'
+      });
     }
-  });
-  playlist.updatedAt = new Date();
-  await playlist.save();
-  res.json(playlist);
+
+    // Validate each job has required fields
+    for (const job of jobs) {
+      if (!job.url) {
+        console.error('Job missing URL:', job);
+        return res.status(400).json({ 
+          error: 'Invalid job data',
+          message: 'Each job must have a URL'
+        });
+      }
+    }
+
+    const playlist = await Playlist.findById(req.params.id);
+    if (!playlist) {
+      console.error('Playlist not found:', req.params.id);
+      return res.status(404).json({ 
+        error: 'Playlist not found',
+        message: 'The requested playlist does not exist'
+      });
+    }
+
+    // Add new jobs, avoiding duplicates
+    const existingUrls = new Set(playlist.jobs.map(j => j.url));
+    const newJobs = jobs.filter(job => !existingUrls.has(job.url));
+    
+    if (newJobs.length > 0) {
+      playlist.jobs.push(...newJobs);
+      playlist.updatedAt = new Date();
+      await playlist.save();
+      console.log(`Added ${newJobs.length} jobs to playlist ${playlist._id}`);
+    }
+
+    res.json({
+      success: true,
+      playlist: {
+        _id: playlist._id,
+        name: playlist.name,
+        jobs: playlist.jobs,
+        updatedAt: playlist.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error('Error adding jobs:', error);
+    res.status(500).json({ 
+      error: 'Failed to add jobs',
+      details: error.message
+    });
+  }
 });
 
 // Remove job from playlist
