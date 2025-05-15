@@ -281,22 +281,36 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
   try {
     console.log('\n=== Adding Jobs to Playlist ===');
     console.log('Playlist ID:', req.params.id);
-    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    console.log('Raw request body:', JSON.stringify(req.body, null, 2));
     
-    let jobs = req.body.jobs || req.body;
+    // Handle both direct job object and jobs array
+    let jobs;
+    if (req.body.jobs) {
+      jobs = req.body.jobs;
+    } else if (req.body.url) {
+      // Single job object
+      jobs = [req.body];
+    } else {
+      console.error('Invalid request format:', req.body);
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'Request must contain either a job object or jobs array'
+      });
+    }
     
-    // Convert single job to array if needed
+    // Ensure jobs is an array
     if (!Array.isArray(jobs)) {
-      console.log('Converting single job to array');
       jobs = [jobs];
     }
     
+    console.log('Processed jobs array:', JSON.stringify(jobs, null, 2));
+
     // Validate jobs array
-    if (!jobs || jobs.length === 0) {
-      console.error('No jobs data provided');
+    if (jobs.length === 0) {
+      console.error('Empty jobs array');
       return res.status(400).json({ 
         error: 'Invalid request',
-        message: 'No jobs data provided'
+        message: 'Jobs array cannot be empty'
       });
     }
 
