@@ -20,13 +20,13 @@ const JobCard = (job) => `
     </div>
 `;
 
-const JobCardCompact = (job, playlistIndex = null, checked = false, disabled = false) => `
+const JobCardCompact = (job, playlistIndex = null, checked = false, disabled = false, selectedNumber = null) => `
     <div class="minimal-card flex items-start p-1.5 shadow rounded mb-1.5 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}">
         <div class="flex items-center mr-2">
-            ${(playlistIndex !== null || checked) ? `
+            ${(playlistIndex !== null || selectedNumber !== null) ? `
                 <div class="ml-1.5 w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs">
-                    ${(playlistIndex !== null ? playlistIndex + 1 : '')}
+                    ${playlistIndex !== null ? playlistIndex + 1 : selectedNumber}
                 </div>
             ` : ''}
         </div>

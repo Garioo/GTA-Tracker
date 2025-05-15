@@ -193,11 +193,11 @@ const jobs = {
             // If job is in playlist, show its number and keep it checked/disabled
             const playlistIndex = playlistJobs.findIndex(j => j.url === job.url);
             if (playlistIndex !== -1) {
-                return Components.JobCardCompact(job, playlistIndex, true, true);
+                return Components.JobCardCompact(job, playlistIndex, true, true, null);
             }
             // Otherwise, show as selectable, and show number if selected (after playlist jobs)
             const selectedIndex = selectedJobs.findIndex(j => j.url === job.url);
-            return Components.JobCardCompact(job, selectedIndex >= 0 ? playlistJobs.length + selectedIndex : null, selectedIndex >= 0, false);
+            return Components.JobCardCompact(job, null, selectedIndex >= 0, false, selectedIndex >= 0 ? playlistJobs.length + selectedIndex + 1 : null);
         }).join('');
 
         // Attach click event listeners to job cards (not disabled)
