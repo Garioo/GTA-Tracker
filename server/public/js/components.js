@@ -23,7 +23,7 @@ export const JobCard = (job) => `
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
     <div class="minimal-card flex items-start p-2 shadow rounded mb-2 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}"
-         style="max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; background: #fff;">
+         style="width: 100%; border: 1px solid #e5e7eb; background: #fff;">
         <div class="flex items-center mr-2">
             ${(playlistIndex != null || selectedNumber != null) ? `
                 <div style="background:#3b82f6;color:white;width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center;border-radius:9999px;font-weight:bold;font-size:0.75rem;margin-left:0.25rem;">
