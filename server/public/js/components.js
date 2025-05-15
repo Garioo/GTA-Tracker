@@ -233,7 +233,7 @@ const CreatePlaylistModal = () => `
 const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col">
-            <h3 class="section-title text-xl mb-4 flex-shrink-0">Add Jobs to Playlist</h3>
+            <h3 class="section-title text-xl mb-4 flex-shrink-0">Add Jobs to Playlist [DEBUG-123]</h3>
             <div class="flex-1 min-h-0 overflow-y-auto mb-4">
                 <div id="availableJobs" class="grid grid-cols-1 gap-4">
                     <!-- Available jobs will be inserted here -->
