@@ -133,7 +133,6 @@ body {
 nav {
     background: var(--background-50);
     color: var(--text-900);
-    box-shadow: 0 2px 8px var(--background-200);
     border-bottom: 1px solid var(--background-200);
     transition: background-color 0.3s, color 0.3s;
 }
@@ -184,12 +183,10 @@ nav {
 
 .btn:hover {
     background: var(--accent-400);
-    transform: translateY(-1px);
 }
 
 .btn:active {
     background: var(--accent-600);
-    transform: translateY(0);
 }
 
 .label {
@@ -214,7 +211,6 @@ nav {
 .input:focus {
     border-color: var(--accent-400);
     outline: none;
-    box-shadow: 0 0 0 2px var(--accent-200);
     background: var(--background-100);
 }
 
@@ -233,7 +229,7 @@ select.input:hover {
 
 select.input:focus {
     border-color: var(--accent-400);
-    box-shadow: 0 0 0 2px var(--accent-200);
+    outline: none;
 }
 
 .section-title {
@@ -252,7 +248,6 @@ select.input:focus {
     border-radius: 0.5rem;
     padding: 0.5rem 1.25rem;
     font-weight: 600;
-    box-shadow: 0 1px 4px var(--background-200);
     transition: all 0.2s ease;
 }
 
@@ -260,14 +255,10 @@ select.input:focus {
     background: var(--background-100);
     border-color: var(--accent-400);
     color: var(--accent-500);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px var(--background-300);
 }
 
 .minimal-btn:active {
     background: var(--background-200);
-    transform: translateY(0);
-    box-shadow: 0 1px 4px var(--background-200);
 }
 
 .minimal-btn.active {
@@ -377,7 +368,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 /* Modal styles */
 .modal-backdrop {
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
 }
 
 [data-theme="dark"] .modal-backdrop {
@@ -419,7 +409,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 /* Loading overlay */
 #loadingOverlay {
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
 }
 
 #loadingOverlay .minimal-card {
@@ -468,7 +457,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 .stats-table input[type='text']:focus {
     border-color: var(--primary-500);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(39, 71, 99, 0.2);
 }
 
 /* Search bar enhancements */
@@ -583,7 +571,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 /* Loading overlay enhancements */
 #loadingOverlay {
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
 }
 
 #loadingOverlay .minimal-card {
@@ -698,4 +685,72 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 #addJobsModal .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--accent-500);
+}
+
+#addJobsModal .search-container {
+    position: relative;
+    flex: 1;
+}
+
+#addJobsModal .search-container .input {
+    background: var(--background-50);
+    color: var(--text-900);
+    border: 1px solid var(--background-200);
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+#addJobsModal .search-container .input:hover {
+    border-color: var(--accent-300);
+    background: var(--background-100);
+}
+
+#addJobsModal .search-container .input:focus {
+    border-color: var(--accent-400);
+    background: var(--background-100);
+    outline: none;
+}
+
+#addJobsModal .search-container i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-400);
+    transition: color 0.2s ease;
+}
+
+#addJobsModal .search-container .input:hover + i {
+    color: var(--accent-500);
+}
+
+#addJobsModal .search-container .input:focus + i {
+    color: var(--accent-500);
+}
+
+#addJobsModal .filter-container select {
+    appearance: none;
+    background: var(--background-50);
+    color: var(--text-900);
+    border: 1px solid var(--background-200);
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234587ba'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+}
+
+#addJobsModal .filter-container select:hover {
+    border-color: var(--accent-300);
+    background-color: var(--background-100);
+}
+
+#addJobsModal .filter-container select:focus {
+    border-color: var(--accent-400);
+    background-color: var(--background-100);
+    outline: none;
 } 
