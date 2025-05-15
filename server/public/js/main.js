@@ -98,6 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
     playlists.load();
     users.load();
     
+    // Add error event listener
+    document.addEventListener('showError', (e) => {
+        utils.showError(e.detail.message);
+    });
+    
     // Navigation
     elements.showJobs.addEventListener('click', navigation.showJobs);
     elements.showPlaylists.addEventListener('click', navigation.showPlaylists);

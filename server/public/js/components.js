@@ -339,7 +339,11 @@ window.initializeJobSelection = () => {
     
     document.getElementById('confirmAddJobs').addEventListener('click', () => {
         if (selectedJobs.size === 0) {
-            showError('Please select at least one job');
+            // Instead of calling showError directly, dispatch a custom event
+            const event = new CustomEvent('showError', { 
+                detail: { message: 'Please select at least one job' }
+            });
+            document.dispatchEvent(event);
             return;
         }
         // Handle the selected jobs
