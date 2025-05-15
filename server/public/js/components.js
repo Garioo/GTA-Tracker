@@ -241,7 +241,7 @@ const AddJobsModal = () => `
                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                 </div>
             </div>
-            <div class="flex-1 overflow-y-auto mb-3 pr-2 custom-scrollbar">
+            <div class="flex-1 overflow-y-auto mb-3 pr-2 custom-scrollbar" style="max-height: calc(600px - 180px);">
                 <div id="availableJobs" class="grid grid-cols-1 gap-2">
                     <!-- Available jobs will be inserted here -->
                 </div>
