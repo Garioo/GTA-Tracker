@@ -489,73 +489,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-opacity: 0.1 !important;
 }
 
-/* Modal enhancements */
-#addJobsModal .minimal-card {
-    background: var(--card-bg) !important;
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
-}
-
-#addJobsModal .minimal-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 8px 24px var(--shadow-hover);
-}
-
-#addJobsModal .input {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    transition: all 0.2s ease;
-}
-
-#addJobsModal .input:hover {
-    border-color: var(--accent);
-    background: var(--hover);
-}
-
-#addJobsModal .input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-light);
-    background: var(--hover);
-}
-
-#addJobsModal .btn {
-    background: var(--accent);
-    color: var(--text);
-    border: 1px solid var(--accent-dark);
-    transition: all 0.2s ease;
-}
-
-#addJobsModal .btn:hover {
-    background: var(--accent-light);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px var(--shadow-hover);
-}
-
-#addJobsModal .btn:active {
-    background: var(--accent-dark);
-    transform: translateY(0);
-}
-
-#addJobsModal .minimal-btn {
-    background: var(--card-bg);
-    color: var(--text);
-    border: 1px solid var(--border);
-    transition: all 0.2s ease;
-}
-
-#addJobsModal .minimal-btn:hover {
-    background: var(--hover);
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-1px);
-}
-
-#addJobsModal .minimal-btn:active {
-    background: var(--active);
-    transform: translateY(0);
-}
-
-/* Job card enhancements */
+/* Job card hover and selection states */
 .job-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -564,10 +498,76 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 .job-card:hover {
     border-color: var(--accent);
+    background: var(--hover);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--shadow-hover);
 }
 
+/* Selection number styling */
+.selected-number {
+    background: var(--accent) !important;
+    color: var(--text) !important;
+    border: 2px solid var(--card-bg) !important;
+    box-shadow: 0 2px 8px var(--shadow) !important;
+    transition: all 0.2s ease !important;
+}
+
+[data-selected="true"] .selected-number {
+    opacity: 1 !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 4px 12px var(--shadow-hover) !important;
+}
+
+[data-selected="true"]:hover .selected-number {
+    transform: scale(1.2) !important;
+    background: var(--accent-light) !important;
+}
+
+/* Modal specific styles */
+#addJobsModal .job-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+}
+
+#addJobsModal .job-card:hover {
+    border-color: var(--accent);
+    background: var(--hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+#addJobsModal [data-selected="true"] {
+    border-color: var(--accent) !important;
+    background: var(--accent-light) !important;
+    background-opacity: 0.05 !important;
+}
+
+#addJobsModal [data-selected="true"]:hover {
+    background: var(--accent-light) !important;
+    background-opacity: 0.1 !important;
+}
+
+#addJobsModal .selected-number {
+    background: var(--accent) !important;
+    color: var(--text) !important;
+    border: 2px solid var(--card-bg) !important;
+    box-shadow: 0 2px 8px var(--shadow) !important;
+    transition: all 0.2s ease !important;
+}
+
+#addJobsModal [data-selected="true"] .selected-number {
+    opacity: 1 !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 4px 12px var(--shadow-hover) !important;
+}
+
+#addJobsModal [data-selected="true"]:hover .selected-number {
+    transform: scale(1.2) !important;
+    background: var(--accent-light) !important;
+}
+
+/* Job card enhancements */
 .job-card .badge {
     background: var(--accent-light);
     background-opacity: 0.1;
