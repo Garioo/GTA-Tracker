@@ -185,8 +185,8 @@ const jobs = {
             jobsToShow.sort((a, b) => new Date(b.creationDate || 0) - new Date(a.creationDate || 0));
         }
 
-        // Get selected jobs in order
-        const selectedJobs = Array.from(state.selectedJobs.values());
+        // Get selected jobs in order (not in playlist)
+        const selectedJobs = Array.from(state.selectedJobs.values()).filter(job => !playlistJobs.some(j => j.url === job.url));
 
         // Render all jobs with playlist number and selection state
         container.innerHTML = jobsToShow.map(job => {
@@ -195,9 +195,9 @@ const jobs = {
             if (playlistIndex !== -1) {
                 return Components.JobCardCompact(job, playlistIndex, true, true);
             }
-            // Otherwise, show as selectable, and show number if selected
+            // Otherwise, show as selectable, and show number if selected (after playlist jobs)
             const selectedIndex = selectedJobs.findIndex(j => j.url === job.url);
-            return Components.JobCardCompact(job, selectedIndex >= 0 ? selectedIndex : null, selectedIndex >= 0, false);
+            return Components.JobCardCompact(job, selectedIndex >= 0 ? playlistJobs.length + selectedIndex : null, selectedIndex >= 0, false);
         }).join('');
 
         // Update selected jobs count safely
@@ -433,7 +433,7 @@ const modals = {
             // Add new event listener
             searchInput.addEventListener('input', modals.handleJobSearch);
         }
-        setupJobsFilterBar();
+        setupJobsFilterDropdown();
     },
     
     handleJobSearch: (e) => {
@@ -711,4 +711,20 @@ function setupJobsFilterBar() {
             jobs.renderCompact(document.getElementById('availableJobs'), filter);
         });
     });
-} 
+}
+
+// Add event listener for filter dropdown in the Add Jobs modal
+function setupJobsFilterDropdown() {
+    const dropdown = document.getElementById('jobsFilterDropdown');
+    if (!dropdown) return;
+    dropdown.addEventListener('change', () => {
+        jobs.renderCompact(document.getElementById('availableJobs'), dropdown.value);
+    });
+}
+
+// Call setupJobsFilterDropdown when showing the Add Jobs modal
+const originalShowAddJobs = modals.showAddJobs;
+modals.showAddJobs = function() {
+    originalShowAddJobs.call(this);
+    setupJobsFilterDropdown();
+}; 

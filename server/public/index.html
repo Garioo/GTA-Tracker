@@ -90,11 +90,14 @@
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="minimal-card p-6 w-full max-w-2xl shadow-xl overflow-hidden flex flex-col" style="max-height:80vh;">
         <h3 class="section-title text-xl mb-2 flex-shrink-0">Add Jobs to Playlist</h3>
-        <!-- Filter bar -->
-        <div class="flex space-x-2 mb-2 flex-shrink-0" id="jobsFilterBar">
-          <button class="filter-btn btn bg-gray-200 text-gray-700" data-filter="recentlyPlayed">Recently Played</button>
-          <button class="filter-btn btn bg-gray-200 text-gray-700" data-filter="mostPlayed">Most Played</button>
-          <button class="filter-btn btn bg-gray-200 text-gray-700" data-filter="recentlyAdded">Recently Added</button>
+        <!-- Filter dropdown -->
+        <div class="mb-2 flex-shrink-0">
+          <label for="jobsFilterDropdown" class="mr-2 font-medium text-sm">Filter:</label>
+          <select id="jobsFilterDropdown" class="border rounded p-1 text-sm">
+            <option value="recentlyPlayed">Recently Played</option>
+            <option value="mostPlayed">Most Played</option>
+            <option value="recentlyAdded">Recently Added</option>
+          </select>
         </div>
         <!-- Search bar (optional) -->
         <div class="mb-2 flex-shrink-0">
