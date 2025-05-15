@@ -141,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add jobs modal
     document.getElementById('cancelAddJobs')?.addEventListener('click', modals.hideAddJobs);
+    document.getElementById('cancelAddJobsBtn')?.addEventListener('click', modals.hideAddJobs);
     document.getElementById('confirmAddJobs')?.addEventListener('click', async () => {
         if (!state.currentPlaylist) {
             utils.showError('No playlist selected');
