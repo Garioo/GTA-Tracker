@@ -245,7 +245,7 @@ export const AddJobsModal = () => `
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4">
+            <div class="flex-1 overflow-y-auto p-4 bg-white dark:bg-gray-800">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="relative flex-1">
                         <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400">
