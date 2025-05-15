@@ -465,7 +465,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     flex: 1;
 }
 
-.search-container .input {
+.search-container input.input {
     background: var(--background-50);
     color: var(--text-900);
     border: 1px solid var(--background-200);
@@ -475,12 +475,12 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     transition: all 0.2s ease;
 }
 
-.search-container .input:hover {
+.search-container input.input:hover {
     border-color: var(--accent-300);
     background: var(--background-100);
 }
 
-.search-container .input:focus {
+.search-container input.input:focus {
     border-color: var(--accent-400);
     background: var(--background-100);
     outline: none;
@@ -493,29 +493,30 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     transform: translateY(-50%);
     color: var(--text-400);
     transition: color 0.2s ease;
+    pointer-events: none;
 }
 
-.search-container .input:hover + i {
+.search-container input.input:hover + i {
     color: var(--accent-500);
 }
 
-.search-container .input:focus + i {
+.search-container input.input:focus + i {
     color: var(--accent-500);
 }
 
 /* Dark theme specific search styles */
-[data-theme="dark"] .search-container .input {
+[data-theme="dark"] .search-container input.input {
     background: var(--background-800);
     color: var(--text-100);
     border-color: var(--background-700);
 }
 
-[data-theme="dark"] .search-container .input:hover {
+[data-theme="dark"] .search-container input.input:hover {
     background: var(--background-700);
     border-color: var(--accent-500);
 }
 
-[data-theme="dark"] .search-container .input:focus {
+[data-theme="dark"] .search-container input.input:focus {
     background: var(--background-700);
     border-color: var(--accent-400);
 }
@@ -524,8 +525,8 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     color: var(--text-500);
 }
 
-[data-theme="dark"] .search-container .input:hover + i,
-[data-theme="dark"] .search-container .input:focus + i {
+[data-theme="dark"] .search-container input.input:hover + i,
+[data-theme="dark"] .search-container input.input:focus + i {
     color: var(--accent-400);
 }
 
@@ -718,7 +719,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     flex: 1;
 }
 
-#addJobsModal .search-container .input {
+#addJobsModal .search-container input.input {
     background: var(--background-50);
     color: var(--text-900);
     border: 1px solid var(--background-200);
@@ -728,12 +729,12 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     transition: all 0.2s ease;
 }
 
-#addJobsModal .search-container .input:hover {
+#addJobsModal .search-container input.input:hover {
     border-color: var(--accent-300);
     background: var(--background-100);
 }
 
-#addJobsModal .search-container .input:focus {
+#addJobsModal .search-container input.input:focus {
     border-color: var(--accent-400);
     background: var(--background-100);
     outline: none;
@@ -746,13 +747,14 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     transform: translateY(-50%);
     color: var(--text-400);
     transition: color 0.2s ease;
+    pointer-events: none;
 }
 
-#addJobsModal .search-container .input:hover + i {
+#addJobsModal .search-container input.input:hover + i {
     color: var(--accent-500);
 }
 
-#addJobsModal .search-container .input:focus + i {
+#addJobsModal .search-container input.input:focus + i {
     color: var(--accent-500);
 }
 
