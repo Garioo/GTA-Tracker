@@ -21,9 +21,9 @@ export const JobCard = (job) => `
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="minimal-card flex items-center px-1.5 py-1 shadow-sm rounded border border-gray-200 mb-1 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+    <div class="minimal-card flex items-center px-1.5 py-1 shadow-sm rounded border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}"
-         style="background: #fff;">
+         style="background: #fff; width: fit-content; min-width: 300px; max-width: 100%;">
         <div class="flex items-center mr-2">
             ${(playlistIndex != null || selectedNumber != null) ? `
                 <div class="w-5 h-5 flex items-center justify-center rounded-full bg-blue-500 text-white text-xs font-bold">
@@ -229,7 +229,7 @@ export const CreatePlaylistModal = () => `
 
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-3 w-1/2 h-[60vh] shadow-xl overflow-hidden flex flex-col bg-white rounded-lg">
+        <div class="minimal-card p-3 max-w-[500px] h-[60vh] shadow-xl overflow-hidden flex flex-col bg-white rounded-lg">
             <div class="flex items-center justify-between mb-2 pb-2 border-b">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800">Add Jobs to Playlist</h3>
@@ -240,7 +240,7 @@ export const AddJobsModal = () => `
                 </button>
             </div>
             <div class="flex-1 min-h-0 overflow-y-auto pr-1">
-                <div id="availableJobs" class="grid grid-cols-1 gap-0.5">
+                <div id="availableJobs" class="flex flex-col gap-0.5">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
