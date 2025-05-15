@@ -733,4 +733,14 @@ select.input#jobsFilterDropdown,
 }
 .custom-scrollbar-thumb:hover {
     background: #888;
+}
+
+#availableJobs {
+    overflow-y: auto;
+    max-height: 400px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+#availableJobs::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 } 
