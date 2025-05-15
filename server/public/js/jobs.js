@@ -31,7 +31,21 @@ export const jobs = {
         const playlistJobs = state.currentPlaylist?.jobs || [];
         let jobsToShow = [...state.jobs];
         if (filter === 'recentlyPlayed') {
-            jobsToShow.sort((a, b) => new Date(b.lastPlayed || 0) - new Date(a.lastPlayed || 0));
+            // Get the last played playlist from state
+            const lastPlayedPlaylist = state.playlists
+                .filter(p => p.lastPlayed)
+                .sort((a, b) => new Date(b.lastPlayed) - new Date(a.lastPlayed))[0];
+            
+            if (lastPlayedPlaylist) {
+                // Show jobs from the last played playlist first
+                jobsToShow.sort((a, b) => {
+                    const aInLastPlaylist = lastPlayedPlaylist.jobs.some(j => j.url === a.url);
+                    const bInLastPlaylist = lastPlayedPlaylist.jobs.some(j => j.url === b.url);
+                    if (aInLastPlaylist && !bInLastPlaylist) return -1;
+                    if (!aInLastPlaylist && bInLastPlaylist) return 1;
+                    return 0;
+                });
+            }
         } else if (filter === 'mostPlayed') {
             jobsToShow.sort((a, b) => (b.playCount || 0) - (a.playCount || 0));
         } else if (filter === 'recentlyAdded') {

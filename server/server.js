@@ -116,7 +116,8 @@ const playlistSchema = new mongoose.Schema({
   players: [String],
   scores: {},
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
+  lastPlayed: { type: Date }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -642,6 +643,25 @@ app.post('/api/debug/playlist/:id/jobs/:url/delete', async (req, res) => {
       error: 'Debug delete failed',
       details: error.message
     });
+  }
+});
+
+// Update playlist stats
+app.put('/api/playlists/:id/stats', async (req, res) => {
+  try {
+    const { stats } = req.body;
+    const playlist = await Playlist.findById(req.params.id);
+    if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+    
+    // Update stats and set lastPlayed timestamp
+    playlist.stats = stats;
+    playlist.lastPlayed = new Date();
+    await playlist.save();
+    
+    res.json({ success: true, playlist });
+  } catch (error) {
+    console.error('Update stats error:', error);
+    res.status(500).json({ error: 'Failed to update stats', details: error.message });
   }
 });
 

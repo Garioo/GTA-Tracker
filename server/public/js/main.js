@@ -253,10 +253,33 @@ window.editPlaylist = (id) => {
 window.deletePlaylist = playlists.delete;
 window.removeJobFromPlaylist = playlists.removeJob;
 window.showUserSelectModal = modals.showUserSelect;
-window.toggleJobSelection = (cardElem, job) => {
+window.toggleJobSelection = async (cardElem, job) => {
     console.log('toggleJobSelection called for job:', job.title, job.url);
     
-    // Toggle selection in state
+    // Check if job is already in the playlist
+    const playlistJobs = state.currentPlaylist?.jobs || [];
+    const isInPlaylist = playlistJobs.some(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
+    
+    if (isInPlaylist) {
+        // If job is in playlist, remove it
+        utils.showLoading();
+        try {
+            await API.playlists.removeJob(state.currentPlaylist._id, job.url);
+            await playlists.view(state.currentPlaylist._id);
+            // Re-render the jobs list to update the UI
+            const container = document.getElementById('availableJobs');
+            const filterDropdown = document.getElementById('jobsFilterDropdown');
+            const filter = filterDropdown ? filterDropdown.value : null;
+            jobs.renderCompact(container, filter);
+        } catch (error) {
+            utils.showError('Failed to remove job: ' + error.message);
+        } finally {
+            utils.hideLoading();
+        }
+        return;
+    }
+    
+    // Toggle selection in state for jobs not in playlist
     if (state.selectedJobs.has(job.url)) {
         state.selectedJobs.delete(job.url);
         cardElem.classList.remove('bg-blue-50', 'border-blue-500');
@@ -269,7 +292,6 @@ window.toggleJobSelection = (cardElem, job) => {
     
     // Update the job card's visual state
     const selectedJobs = Array.from(state.selectedJobs.values());
-    const playlistJobs = state.currentPlaylist?.jobs || [];
     const selectedIndex = selectedJobs.findIndex(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
     
     // Update the number indicator
