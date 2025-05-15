@@ -770,27 +770,27 @@ select.input#jobsFilterDropdown,
 
 /* Tag colors */
 .job-tag-mode {
-  background: #e0f0ff;
-  color: #2563eb;
+  background: #e6ecfa;
+  color: #3b5bdb;
 }
 .job-tag-type {
-  background: #e6fbe6;
-  color: #059669;
+  background: #eafaf1;
+  color: #2b8a3e;
 }
 .job-tag-length {
-  background: #f3e8ff;
-  color: #7c3aed;
+  background: #f5eefa;
+  color: #9c36b5;
 }
-
 .job-card .job-tag {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.85em;
+  padding: 0.12rem 0.4rem;
+  border-radius: 0.35rem;
+  font-size: 0.78em;
   font-weight: 500;
-  margin-right: 0.5rem;
-  margin-bottom: 0.25rem;
+  margin-right: 0.3rem;
+  margin-bottom: 0.1rem;
+  line-height: 1.2;
 }
 
 #availableJobs .job-card {
