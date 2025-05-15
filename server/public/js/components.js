@@ -246,6 +246,17 @@ export const AddJobsModal = () => `
                 </button>
             </div>
             <div class="flex-1 overflow-y-auto p-4">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="relative flex-1">
+                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-sm"></i>
+                    </div>
+                    <select id="jobsFilterDropdown" class="border rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="recentlyPlayed">Recently Played</option>
+                        <option value="mostPlayed">Most Played</option>
+                        <option value="recentlyAdded">Recently Added</option>
+                    </select>
+                </div>
                 <div id="availableJobs" class="space-y-2 relative">
                     <!-- Available jobs will be inserted here -->
                 </div>
