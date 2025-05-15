@@ -587,6 +587,64 @@ app.get('/api/debug/playlist/:id', async (req, res) => {
   }
 });
 
+// Debug endpoint to delete a job
+app.post('/api/debug/playlist/:id/jobs/:url/delete', async (req, res) => {
+  try {
+    console.log('\n=== Debug: Deleting Job ===');
+    console.log('Playlist ID:', req.params.id);
+    console.log('Job URL:', req.params.url);
+    
+    const playlist = await Playlist.findById(req.params.id);
+    if (!playlist) {
+      console.error('Playlist not found:', req.params.id);
+      return res.status(404).json({ 
+        error: 'Playlist not found',
+        message: 'The requested playlist does not exist'
+      });
+    }
+    
+    console.log('Found playlist with jobs:', playlist.jobs.length);
+    
+    const jobUrl = decodeURIComponent(req.params.url);
+    console.log('Decoded job URL:', jobUrl);
+    
+    const initialJobCount = playlist.jobs.length;
+    playlist.jobs = playlist.jobs.filter(j => j.url !== jobUrl);
+    const finalJobCount = playlist.jobs.length;
+    
+    if (initialJobCount === finalJobCount) {
+      console.error('Job not found in playlist:', jobUrl);
+      return res.status(404).json({ 
+        error: 'Job not found',
+        message: 'The requested job was not found in this playlist'
+      });
+    }
+    
+    console.log(`Removed job. Count before: ${initialJobCount}, after: ${finalJobCount}`);
+    
+    playlist.updatedAt = new Date();
+    await playlist.save();
+    
+    console.log('Playlist updated successfully');
+    
+    res.json({
+      success: true,
+      playlist: {
+        _id: playlist._id,
+        name: playlist.name,
+        jobs: playlist.jobs,
+        updatedAt: playlist.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error('Error in debug delete endpoint:', error);
+    res.status(500).json({ 
+      error: 'Debug delete failed',
+      details: error.message
+    });
+  }
+});
+
 // MongoDB Atlas connection options
 const mongoOptions = {
     useNewUrlParser: true,
