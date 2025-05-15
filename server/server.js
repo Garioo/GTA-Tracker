@@ -285,22 +285,18 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
     
     // Handle both direct job object and jobs array
     let jobs;
-    if (req.body.jobs) {
+    if (Array.isArray(req.body)) {
+      jobs = req.body;
+    } else if (req.body.jobs) {
       jobs = req.body.jobs;
     } else if (req.body.url) {
-      // Single job object
       jobs = [req.body];
     } else {
       console.error('Invalid request format:', req.body);
       return res.status(400).json({ 
         error: 'Invalid request',
-        message: 'Request must contain either a job object or jobs array'
+        message: 'Request must contain either a job object, jobs array, or array of jobs'
       });
-    }
-    
-    // Ensure jobs is an array
-    if (!Array.isArray(jobs)) {
-      jobs = [jobs];
     }
     
     console.log('Processed jobs array:', JSON.stringify(jobs, null, 2));
