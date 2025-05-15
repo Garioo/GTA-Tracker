@@ -170,16 +170,16 @@ const jobs = {
     },
     
     renderCompact: (container) => {
-        if (!state.jobs.length) {
-            container.innerHTML = `
-                <div class="text-center p-4">
-                    <p class="text-muted">No jobs available</p>
-                </div>
-            `;
-            return;
-        }
+        if (!container) return;
         
-        container.innerHTML = state.jobs.map(job => Components.JobCardCompact(job)).join('');
+        // Get selected jobs in order
+        const selectedJobs = Array.from(state.selectedJobs.values());
+        
+        // Render all jobs with numbers for selected ones
+        container.innerHTML = state.jobs.map(job => {
+            const index = selectedJobs.findIndex(j => j.url === job.url);
+            return Components.JobCardCompact(job, index >= 0 ? index : null);
+        }).join('');
     },
     
     search: utils.debounce((query) => {
@@ -395,6 +395,29 @@ const modals = {
         state.selectedJobs.clear();
         // Render available jobs
         jobs.renderCompact(document.getElementById('availableJobs'));
+        
+        // Add search functionality
+        const searchInput = document.getElementById('jobSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const jobCards = document.querySelectorAll('#availableJobs .minimal-card');
+                
+                jobCards.forEach(card => {
+                    const title = card.querySelector('.section-title').textContent.toLowerCase();
+                    const creator = card.querySelector('.label').textContent.toLowerCase();
+                    const gameMode = card.querySelector('.bg-blue-100').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || 
+                        creator.includes(searchTerm) || 
+                        gameMode.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
     },
     
     hideAddJobs: () => {

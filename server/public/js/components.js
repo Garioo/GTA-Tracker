@@ -20,13 +20,36 @@ const JobCard = (job) => `
     </div>
 `;
 
-const JobCardCompact = (job) => `
-    <div class="minimal-card flex items-center p-3 shadow rounded mb-2">
-        <input type="checkbox" class="mr-3 h-5 w-5 text-blue-600 rounded focus:ring-blue-500" 
-               onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/\"/g, '&quot;')})">
+const JobCardCompact = (job, index = null) => `
+    <div class="minimal-card flex items-start p-3 shadow rounded mb-2 hover:bg-gray-50 transition-colors">
+        <div class="flex items-center mr-3">
+            <input type="checkbox" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500" 
+                   onchange="toggleJobSelection(this, ${JSON.stringify(job).replace(/\"/g, '&quot;')})">
+            ${index !== null ? `
+                <span class="ml-2 text-sm font-medium text-gray-500">#${index + 1}</span>
+            ` : ''}
+        </div>
         <div class="flex-1">
-            <h4 class="font-bold section-title">${job.title}</h4>
-            <p class="label text-sm">by ${job.creator}</p>
+            <div class="flex justify-between items-start">
+                <div>
+                    <h4 class="font-bold section-title">${job.title}</h4>
+                    <p class="label text-sm">by ${job.creator}</p>
+                </div>
+                <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    <i class="fas fa-star mr-1"></i>${job.rating}
+                </div>
+            </div>
+            <div class="mt-2 text-sm text-gray-500">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                    <i class="fas fa-gamepad mr-1"></i>${job.gameMode}
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-2">
+                    <i class="fas fa-route mr-1"></i>${job.routeType}
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                    <i class="fas fa-ruler mr-1"></i>${job.routeLength}
+                </span>
+            </div>
         </div>
     </div>
 `;
@@ -202,6 +225,13 @@ const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-3/4 max-h-[80vh] shadow-xl overflow-hidden flex flex-col">
             <h3 class="section-title text-xl mb-4">Add Jobs to Playlist</h3>
+            <div class="mb-4">
+                <div class="relative">
+                    <input type="text" id="jobSearch" placeholder="Search jobs by title, creator, or game mode..." 
+                           class="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
             <div class="flex-1 overflow-y-auto mb-4">
                 <div id="availableJobs" class="grid grid-cols-1 gap-4">
                     <!-- Available jobs will be inserted here -->
