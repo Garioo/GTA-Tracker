@@ -84,7 +84,7 @@ const PlaylistDetails = (playlist) => `
                         </div>
                         <div class="text-2xl font-bold text-green-700">${playlist.players?.length || 0}</div>
                         <div class="text-xs text-green-500 mt-1">
-                            ${playlist.stats?.filter(stat => stat.placement === 1).length || 0} Winners
+                            ${playlist.stats?.filter(stat => stat.placement === 1).length || 0} Wins
                         </div>
                     </div>
                 </div>
@@ -168,10 +168,13 @@ const PlaylistDetails = (playlist) => `
                                     </span>
                                 </div>
                             </div>
-                            <div class="text-right">
+                            <div class="flex items-center space-x-2">
                                 <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                     <i class="fas fa-star mr-1"></i>${job.rating}
                                 </div>
+                                <button onclick="window.removeJobFromPlaylist('${job.url}')" class="minimal-btn bg-red-500 text-white hover:bg-red-600 p-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </div>
                     `).join('')}
