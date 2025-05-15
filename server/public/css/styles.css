@@ -459,43 +459,26 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     outline: none;
 }
 
-/* Search bar enhancements */
-.search-container {
-    position: relative;
-    flex: 1;
-}
-
-.search-container input[type="text"] {
+/* Search bar styles */
+#jobSearch {
     transition: all 0.2s ease;
 }
 
-.search-container input[type="text"]:hover {
-    border-color: var(--accent-300);
-    background: var(--background-100);
+#jobSearch:hover {
+    border-color: #4a5568;
 }
 
-.search-container input[type="text"]:hover + i {
-    color: var(--accent-500);
+#jobSearch:focus {
+    outline: none;
+    border-color: #2d3748;
 }
 
-.search-container i {
-    position: absolute !important;
-    left: 0.75rem !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    color: var(--text-400) !important;
-    transition: color 0.2s ease !important;
-    pointer-events: none !important;
+[data-theme="dark"] #jobSearch:hover {
+    border-color: #a0aec0;
 }
 
-/* Dark theme specific search styles */
-[data-theme="dark"] .search-container input[type="text"]:hover {
-    background: var(--background-700);
-    border-color: var(--accent-500);
-}
-
-[data-theme="dark"] .search-container input[type="text"]:hover + i {
-    color: var(--accent-400);
+[data-theme="dark"] #jobSearch:focus {
+    border-color: #e2e8f0;
 }
 
 /* Filter dropdown enhancements */
