@@ -255,22 +255,41 @@ window.removeJobFromPlaylist = playlists.removeJob;
 window.showUserSelectModal = modals.showUserSelect;
 window.toggleJobSelection = (cardElem, job) => {
     console.log('toggleJobSelection called for job:', job.title, job.url);
-    // If job is already in the playlist, do nothing
-    const playlistJobs = state.currentPlaylist?.jobs || [];
-    if (playlistJobs.some(j => j.url === job.url)) return;
-    // Toggle selection
+    
+    // Toggle selection in state
     if (state.selectedJobs.has(job.url)) {
         state.selectedJobs.delete(job.url);
+        cardElem.classList.remove('bg-blue-50', 'border-blue-500');
+        cardElem.classList.add('hover:bg-gray-50');
     } else {
         state.selectedJobs.set(job.url, job);
+        cardElem.classList.add('bg-blue-50', 'border-blue-500');
+        cardElem.classList.remove('hover:bg-gray-50');
     }
-    // Only update if the modal and container exist
-    const container = document.getElementById('availableJobs');
-    const filterDropdown = document.getElementById('jobsFilterDropdown');
-    const filter = filterDropdown ? filterDropdown.value : null;
-    console.log('Re-rendering jobs.renderCompact with filter:', filter, 'Selected jobs:', Array.from(state.selectedJobs.keys()));
-    if (container && document.getElementById('selectedJobsCount')) {
-        jobs.renderCompact(container, filter);
+    
+    // Update the job card's visual state
+    const selectedJobs = Array.from(state.selectedJobs.values());
+    const playlistJobs = state.currentPlaylist?.jobs || [];
+    const selectedIndex = selectedJobs.findIndex(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
+    
+    // Update the number indicator
+    const numberIndicator = cardElem.querySelector('.flex.items-center.mr-2');
+    if (numberIndicator) {
+        if (selectedIndex >= 0) {
+            numberIndicator.innerHTML = `
+                <div style="background:#3b82f6;color:white;width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center;border-radius:9999px;font-weight:bold;font-size:0.75rem;margin-left:0.375rem;">
+                    ${playlistJobs.length + selectedIndex + 1}
+                </div>
+            `;
+        } else {
+            numberIndicator.innerHTML = '';
+        }
+    }
+    
+    // Update the selected jobs count
+    const selectedJobsCountElem = document.getElementById('selectedJobsCount');
+    if (selectedJobsCountElem) {
+        selectedJobsCountElem.textContent = selectedJobs.length;
     }
 };
 
