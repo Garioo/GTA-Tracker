@@ -80,7 +80,7 @@ export const jobs = {
         container.style.display = '';
         
         // Attach click event listeners to job cards
-        container.querySelectorAll('.minimal-card[data-job-url]').forEach(card => {
+        container.querySelectorAll('.group[data-job-url]').forEach(card => {
             const jobUrl = card.getAttribute('data-job-url');
             const job = state.jobs.find(j => (j.url || '').trim().toLowerCase() === (jobUrl || '').trim().toLowerCase());
             if (job) {
@@ -89,9 +89,9 @@ export const jobs = {
         });
         
         // Update selected jobs count safely
-        const selectedJobsCountElem = document.getElementById('selectedJobsCount');
+        const selectedJobsCountElem = document.getElementById('selectedCount');
         if (selectedJobsCountElem) {
-            selectedJobsCountElem.textContent = selectedJobs.length;
+            selectedJobsCountElem.textContent = state.selectedJobs.size;
         }
     },
 }; 

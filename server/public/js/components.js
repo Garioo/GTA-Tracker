@@ -21,11 +21,17 @@ export const JobCard = (job) => `
     </div>
 `;
 
-export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="group flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => {
+    const isSelected = state.selectedJobs.has(job.url);
+    const selectedClass = isSelected ? 'border-blue-500 bg-blue-50' : '';
+    const selectedAttr = isSelected ? 'true' : 'false';
+    const numberOpacity = isSelected ? '' : 'opacity-0';
+    
+    return `
+    <div class="group flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''} ${selectedClass}"
          data-job-url="${job.url}"
          data-job-id="${job._id || job.id}"
-         data-selected="false">
+         data-selected="${selectedAttr}">
         ${(playlistIndex != null || selectedNumber != null) ? `
             <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-bold shadow-sm">
                 ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
@@ -55,9 +61,10 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                 </span>
             </div>
         </div>
-        <div class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white text-xs font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 selected-number"></div>
+        <div class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white text-xs font-bold shadow-sm ${numberOpacity} group-hover:opacity-100 transition-opacity duration-200 selected-number">${selectedNumber || ''}</div>
     </div>
-`;
+    `;
+};
 
 // Playlist Components
 export const PlaylistCard = (playlist) => `
