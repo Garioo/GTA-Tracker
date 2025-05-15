@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,22 +9,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
-    <nav class="p-4 shadow-lg bg-white dark:bg-gray-800">
+<body class="min-h-screen flex flex-col">
+    <nav class="p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-extrabold flex items-center tracking-tight text-gray-900 dark:text-gray-100">
-                <i class="fas fa-car-side mr-2 text-blue-500"></i>
+            <h1 class="text-2xl font-extrabold flex items-center tracking-tight">
+                <i class="fas fa-car-side mr-2 text-primary"></i>
                 GTA Race Tracker
             </h1>
             <div class="space-x-4 flex items-center">
-                <button id="showJobs" class="minimal-btn bg-blue-500 text-white hover:bg-blue-600">
+                <button id="showJobs" class="minimal-btn">
                     <i class="fas fa-list mr-2"></i>Jobs
                 </button>
-                <button id="showPlaylists" class="minimal-btn bg-blue-500 text-white hover:bg-blue-600">
+                <button id="showPlaylists" class="minimal-btn">
                     <i class="fas fa-music mr-2"></i>Playlists
                 </button>
                 <div id="userSection" class="inline-block"></div>
-                <button id="themeToggle" class="dark-toggle text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" title="Toggle theme">
+                <button id="themeToggle" class="dark-toggle" title="Toggle theme">
                     <i class="fas fa-circle-half-stroke"></i>
                 </button>
             </div>
@@ -34,9 +34,9 @@
         <!-- Jobs Section -->
         <section id="jobsSection" class="space-y-4 fade-in">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Saved Jobs</h2>
+                <h2 class="text-2xl font-bold">Saved Jobs</h2>
                 <div class="flex space-x-2">
-                    <button id="refreshJobs" class="minimal-btn bg-blue-500 text-white hover:bg-blue-600">
+                    <button id="refreshJobs" class="minimal-btn">
                         <i class="fas fa-sync-alt mr-2"></i>Refresh
                     </button>
                 </div>
@@ -48,8 +48,8 @@
         <!-- Playlists Section -->
         <section id="playlistsSection" class="hidden space-y-4 fade-in">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Playlists</h2>
-                <button id="createPlaylist" class="minimal-btn bg-blue-500 text-white hover:bg-blue-600">
+                <h2 class="text-2xl font-bold">Playlists</h2>
+                <button id="createPlaylist" class="minimal-btn">
                     <i class="fas fa-plus mr-2"></i>Create New Playlist
                 </button>
             </div>
@@ -60,7 +60,9 @@
         <!-- Playlist Details Section -->
         <section id="playlistDetailsSection" class="hidden space-y-4 fade-in">
             <div class="flex items-center mb-4">
-                <button id="backToPlaylists" class="minimal-btn mr-4"><i class="fas fa-arrow-left mr-2"></i>Back</button>
+                <button id="backToPlaylists" class="minimal-btn mr-4">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
                 <h2 id="playlistDetailsTitle" class="text-2xl font-bold"></h2>
             </div>
             <div class="minimal-card p-4">
@@ -70,8 +72,12 @@
                         <p id="playlistDates" class="text-sm"></p>
                     </div>
                     <div class="flex space-x-2">
-                        <button id="addJobsToPlaylist" class="minimal-btn"><i class="fas fa-plus mr-2"></i>Add Jobs</button>
-                        <button id="managePlayersBtn" class="minimal-btn"><i class="fas fa-users mr-2"></i>Manage Players</button>
+                        <button id="addJobsToPlaylist" class="minimal-btn">
+                            <i class="fas fa-plus mr-2"></i>Add Jobs
+                        </button>
+                        <button id="managePlayersBtn" class="minimal-btn">
+                            <i class="fas fa-users mr-2"></i>Manage Players
+                        </button>
                     </div>
                 </div>
                 <div id="playlistJobs" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -80,39 +86,39 @@
             </div>
         </section>
     </main>
-    <footer class="mt-auto py-4 text-center text-gray-600 dark:text-gray-400">
+    <footer class="mt-auto py-4 text-center">
         <p>&copy; <span id="yearSpan"></span> GTA Race Tracker. All rights reserved.</p>
     </footer>
     <!-- Create Playlist Modal -->
     <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="modal-title section-title text-2xl mb-4 text-gray-900 dark:text-gray-100">Create New Playlist</h3>
+            <h3 class="modal-title section-title text-2xl mb-4">Create New Playlist</h3>
             <input type="text" id="playlistName" placeholder="Playlist Name" class="input w-full mb-4">
             <div class="flex justify-end space-x-2">
-                <button id="cancelCreate" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200">Cancel</button>
-                <button id="confirmCreate" class="btn bg-blue-500 text-white hover:bg-blue-600">Create</button>
+                <button id="cancelCreate" class="btn">Cancel</button>
+                <button id="confirmCreate" class="btn">Create</button>
             </div>
         </div>
     </div>
     <!-- Add Jobs to Playlist Modal -->
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl flex flex-col backdrop-blur-sm" style="width: 500px; max-height: 80vh;">
-            <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+        <div class="minimal-card rounded-xl shadow-xl flex flex-col backdrop-blur-sm" style="width: 500px; max-height: 80vh;">
+            <div class="flex items-center justify-between p-4 border-b">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Add Jobs</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Select jobs to add to your playlist</p>
+                    <h3 class="text-lg font-semibold">Add Jobs</h3>
+                    <p class="text-xs text-muted mt-0.5">Select jobs to add to your playlist</p>
                 </div>
-                <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                <button id="cancelAddJobs" class="text-muted hover:text-text transition-colors">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 bg-white dark:bg-gray-800">
+            <div class="flex-1 overflow-y-auto p-4">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="relative flex-1">
-                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400">
-                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 dark:text-gray-500 text-sm"></i>
+                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+                        <i class="fas fa-search absolute left-2.5 top-2.5 text-muted text-sm"></i>
                     </div>
-                    <select id="jobsFilterDropdown" class="border dark:border-gray-700 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <select id="jobsFilterDropdown" class="border rounded p-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
                         <option value="recentlyPlayed">Recently Played</option>
                         <option value="mostPlayed">Most Played</option>
                         <option value="recentlyAdded">Recently Added</option>
@@ -122,15 +128,15 @@
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-between items-center gap-2 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between items-center gap-2 p-4 border-t bg-background">
+                <div class="text-sm text-muted">
                     <span id="selectedCount" class="font-medium">0</span> jobs selected
                 </div>
                 <div class="flex gap-2">
-                    <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                    <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium bg-card-bg border border-border hover:bg-primary hover:text-text rounded-lg transition-colors">
                         Cancel
                     </button>
-                    <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-colors shadow-sm">
+                    <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-text bg-primary hover:bg-secondary rounded-lg transition-colors shadow-sm">
                         Add Selected
                     </button>
                 </div>
@@ -140,30 +146,30 @@
     <!-- Edit Playlist Modal -->
     <div id="editPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="modal-title section-title text-2xl mb-4 text-gray-900 dark:text-gray-100">Edit Playlist</h3>
+            <h3 class="modal-title section-title text-2xl mb-4">Edit Playlist</h3>
             <input type="text" id="editPlaylistName" placeholder="Playlist Name" class="input w-full mb-4">
             <div class="flex justify-end space-x-2">
-                <button id="cancelEdit" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200">Cancel</button>
-                <button id="confirmEdit" class="btn bg-blue-500 text-white hover:bg-blue-600">Save Changes</button>
+                <button id="cancelEdit" class="btn">Cancel</button>
+                <button id="confirmEdit" class="btn">Save Changes</button>
             </div>
         </div>
     </div>
     <!-- User Selection Modal -->
     <div id="userSelectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Select User</h3>
+            <h3 class="text-xl font-bold mb-4">Select User</h3>
             <form id="userSelectForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">User</label>
-                    <select id="userDropdown" class="mt-1 w-full p-2 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></select>
+                    <label class="block text-sm font-medium">User</label>
+                    <select id="userDropdown" class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-primary focus:border-primary"></select>
                 </div>
                 <div id="newUserSection" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">New Username</label>
-                    <input type="text" id="newUsername" class="mt-1 w-full p-2 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <label class="block text-sm font-medium">New Username</label>
+                    <input type="text" id="newUsername" class="mt-1 w-full p-2 border rounded focus:ring-2 focus:ring-primary focus:border-primary">
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="button" id="cancelUserSelect" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200">Cancel</button>
-                    <button type="submit" class="btn bg-blue-500 text-white hover:bg-blue-600">Select</button>
+                    <button type="button" id="cancelUserSelect" class="btn">Cancel</button>
+                    <button type="submit" class="btn">Select</button>
                 </div>
             </form>
         </div>
@@ -171,26 +177,25 @@
     <!-- Manage Players Modal -->
     <div id="managePlayersModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="section-title text-xl mb-4 text-gray-900 dark:text-gray-100">Manage Players</h3>
+            <h3 class="section-title text-xl mb-4">Manage Players</h3>
             <form id="managePlayersForm" class="space-y-2 mb-4">
                 <div id="playersCheckboxList"></div>
             </form>
             <div class="flex justify-end space-x-2">
-                <button id="cancelManagePlayers" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200">Cancel</button>
-                <button id="saveManagePlayers" class="btn bg-blue-500 text-white hover:bg-blue-600">Save</button>
+                <button id="cancelManagePlayers" class="btn">Cancel</button>
+                <button id="saveManagePlayers" class="btn">Save</button>
             </div>
         </div>
     </div>
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xl">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div class="minimal-card p-4 rounded-lg shadow-xl">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
     </div>
     <!-- Tailwind safelist for dynamic classes used in JS -->
     <div class="hidden">
-        bg-blue-500 bg-yellow-100 text-yellow-800 bg-green-100 text-green-800 bg-purple-100 text-purple-800 w-5 h-5
-        dark:bg-blue-900/20 dark:bg-yellow-900/30 dark:text-yellow-200 dark:bg-green-900/30 dark:text-green-200 dark:bg-purple-900/30 dark:text-purple-200
+        bg-primary bg-secondary text-accent w-5 h-5
     </div>
     <script src="js/api.js" type="module"></script>
     <script src="js/components.js" type="module"></script>

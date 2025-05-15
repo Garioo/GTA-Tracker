@@ -42,29 +42,32 @@ const elements = {
 
 // Theme handling
 const theme = {
-    set: (isDark) => {
-        document.body.classList.toggle('theme-black', isDark);
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        // Update theme toggle icon
-        elements.themeToggle.innerHTML = isDark 
-            ? '<i class="fas fa-sun"></i>'
-            : '<i class="fas fa-moon"></i>';
-    },
-    
     init: () => {
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        theme.set(savedTheme === 'dark' || (!savedTheme && prefersDark));
+        const html = document.documentElement;
+        
+        if (savedTheme) {
+            html.setAttribute('data-theme', savedTheme);
+        } else {
+            html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        }
         
         // Listen for system theme changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
             if (!localStorage.getItem('theme')) {
-                theme.set(e.matches);
+                html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
             }
         });
     },
     
-    toggle: () => theme.set(!document.body.classList.contains('theme-black'))
+    toggle: () => {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    }
 };
 
 // Navigation
