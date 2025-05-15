@@ -20,7 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Add request logging middleware
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  console.log(`\n[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
   if (req.body && Object.keys(req.body).length > 0) {
     console.log('Request body:', JSON.stringify(req.body, null, 2));
   }
@@ -278,7 +279,7 @@ app.delete('/api/playlists/:id', async (req, res) => {
 // Add jobs to playlist
 app.post('/api/playlists/:id/jobs', async (req, res) => {
   try {
-    console.log('Received request to add jobs:');
+    console.log('\n=== Adding Jobs to Playlist ===');
     console.log('Playlist ID:', req.params.id);
     console.log('Request body:', JSON.stringify(req.body, null, 2));
     
@@ -311,9 +312,9 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
 
     // Validate each job has required fields
     for (const job of jobs) {
-      console.log('Validating job:', job);
+      console.log('Validating job:', JSON.stringify(job, null, 2));
       if (!job.url) {
-        console.error('Job missing URL:', job);
+        console.error('Job missing URL:', JSON.stringify(job, null, 2));
         return res.status(400).json({ 
           error: 'Invalid job data',
           message: 'Each job must have a URL'
@@ -335,7 +336,7 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
     const newJobs = jobs.filter(job => !existingUrls.has(job.url));
     
     if (newJobs.length > 0) {
-      console.log('Adding new jobs:', newJobs);
+      console.log('Adding new jobs:', JSON.stringify(newJobs, null, 2));
       playlist.jobs.push(...newJobs);
       playlist.updatedAt = new Date();
       await playlist.save();
