@@ -142,11 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        const selectedJobs = Array.from(state.selectedJobs.values());
-        if (selectedJobs.length === 0) {
+        const selectedJobElements = document.querySelectorAll('#availableJobs .group[data-selected="true"]');
+        if (selectedJobElements.length === 0) {
             utils.showError('Please select at least one job');
             return;
         }
+        
+        const selectedJobs = Array.from(selectedJobElements).map(el => ({
+            url: el.getAttribute('data-job-url'),
+            id: el.getAttribute('data-job-id')
+        }));
         
         utils.showLoading();
         try {
@@ -154,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const job of selectedJobs) {
                 console.log('Adding job:', job);
                 try {
-                    await API.playlists.addJob(state.currentPlaylist._id, job);
+                    await API.playlists.addJob(state.currentPlaylist._id, job.url);
                 } catch (error) {
                     if (error.message.includes('404') || error.message.includes('not found')) {
                         utils.showError('Playlist not found. Please refresh the page and try again.');

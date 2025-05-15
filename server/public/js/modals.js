@@ -22,7 +22,7 @@ export const modals = {
             filterDropdown.dispatchEvent(new Event('change'));
         }
         // jobs.renderCompact will be called from main.js after import
-        const selectedJobsCountElem = document.getElementById('selectedJobsCount');
+        const selectedJobsCountElem = document.getElementById('selectedCount');
         if (selectedJobsCountElem) {
             selectedJobsCountElem.textContent = '0';
         }
@@ -31,16 +31,24 @@ export const modals = {
             searchInput.removeEventListener('input', modals.handleJobSearch);
             searchInput.addEventListener('input', modals.handleJobSearch);
         }
+        
+        // Initialize job selection after jobs are rendered
+        setTimeout(() => {
+            if (typeof window.initializeJobSelection === 'function') {
+                window.initializeJobSelection();
+            }
+        }, 100);
     },
     handleJobSearch: (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const jobCards = document.querySelectorAll('#availableJobs .minimal-card');
+        const jobCards = document.querySelectorAll('#availableJobs .group');
         jobCards.forEach(card => {
-            const title = card.querySelector('.section-title').textContent.toLowerCase();
-            const creator = card.querySelector('.label').textContent.toLowerCase();
-            const gameMode = card.querySelector('.bg-blue-100').textContent.toLowerCase();
-            const routeType = card.querySelector('.bg-green-100').textContent.toLowerCase();
-            const routeLength = card.querySelector('.bg-purple-100').textContent.toLowerCase();
+            const title = card.querySelector('h4').textContent.toLowerCase();
+            const creator = card.querySelector('p.text-gray-500').textContent.toLowerCase();
+            const gameMode = card.querySelector('.bg-gradient-to-r.from-blue-100').textContent.toLowerCase();
+            const routeType = card.querySelector('.bg-gradient-to-r.from-green-100').textContent.toLowerCase();
+            const routeLength = card.querySelector('.bg-gradient-to-r.from-purple-100').textContent.toLowerCase();
+            
             if (title.includes(searchTerm) || 
                 creator.includes(searchTerm) || 
                 gameMode.includes(searchTerm) ||
