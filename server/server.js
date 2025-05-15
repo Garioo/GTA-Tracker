@@ -54,49 +54,6 @@ app.get('/api/test-db', async (req, res) => {
     }
 });
 
-// MongoDB connection options
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-};
-
-// Connect to MongoDB Atlas
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker';
-
-mongoose.connect(MONGODB_URI, mongoOptions)
-    .then(() => {
-        console.log('Successfully connected to MongoDB Atlas.');
-        // Log the database name we're connected to
-        console.log('Connected to database:', mongoose.connection.db.databaseName);
-    })
-    .catch((error) => {
-        console.error('Error connecting to MongoDB Atlas:', error);
-        process.exit(1);
-    });
-
-// Handle MongoDB connection events
-mongoose.connection.on('error', (err) => {
-    console.error('MongoDB connection error:', err);
-});
-
-mongoose.connection.on('disconnected', () => {
-    console.log('MongoDB disconnected');
-});
-
-// Handle process termination
-process.on('SIGINT', async () => {
-    try {
-        await mongoose.connection.close();
-        console.log('MongoDB connection closed through app termination');
-        process.exit(0);
-    } catch (err) {
-        console.error('Error during MongoDB connection closure:', err);
-        process.exit(1);
-    }
-});
-
 // Define Schemas
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true },
@@ -349,6 +306,60 @@ app.put('/api/playlists/:id/players', async (req, res) => {
   playlist.updatedAt = new Date();
   await playlist.save();
   res.json(playlist);
+});
+
+// MongoDB Atlas connection options
+const mongoOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    w: 'majority'
+};
+
+// Connect to MongoDB Atlas
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker';
+
+mongoose.connect(MONGODB_URI, mongoOptions)
+    .then(() => {
+        console.log('Successfully connected to MongoDB Atlas.');
+        console.log('Connected to database:', mongoose.connection.db.databaseName);
+        
+        // Drop the problematic index if it exists
+        return mongoose.connection.db.collection('playlists').dropIndex('jobs.url_1')
+            .then(() => console.log('Dropped problematic index'))
+            .catch(err => {
+                if (err.code !== 26) { // 26 is the error code for "namespace not found"
+                    console.error('Error dropping index:', err);
+                }
+            });
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB Atlas:', error);
+        process.exit(1);
+    });
+
+// Handle MongoDB connection events
+mongoose.connection.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB disconnected');
+});
+
+// Handle process termination
+process.on('SIGINT', async () => {
+    try {
+        await mongoose.connection.close();
+        console.log('MongoDB connection closed through app termination');
+        process.exit(0);
+    } catch (err) {
+        console.error('Error during MongoDB connection closure:', err);
+        process.exit(1);
+    }
 });
 
 // Update the server listen configuration
