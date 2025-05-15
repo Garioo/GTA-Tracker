@@ -22,7 +22,9 @@ export const JobCard = (job) => `
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
     <div class="group flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''}"
-         data-job-url="${job.url}">
+         data-job-url="${job.url}"
+         data-job-id="${job._id || job.id}"
+         data-selected="false">
         ${(playlistIndex != null || selectedNumber != null) ? `
             <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-bold shadow-sm">
                 ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
@@ -304,4 +306,43 @@ window.Components = {
     AddJobsModal,
     UserSelectModal,
     ManagePlayersModal
+};
+
+window.initializeJobSelection = () => {
+    let selectedCount = 0;
+    const selectedJobs = new Set();
+    
+    document.querySelectorAll('#availableJobs .group').forEach(card => {
+        card.addEventListener('click', () => {
+            const isSelected = card.getAttribute('data-selected') === 'true';
+            const jobId = card.getAttribute('data-job-id');
+            
+            if (isSelected) {
+                card.setAttribute('data-selected', 'false');
+                card.classList.remove('border-blue-500', 'bg-blue-50');
+                card.querySelector('.selected-number').classList.add('opacity-0');
+                selectedJobs.delete(jobId);
+                selectedCount--;
+            } else {
+                card.setAttribute('data-selected', 'true');
+                card.classList.add('border-blue-500', 'bg-blue-50');
+                const numberDiv = card.querySelector('.selected-number');
+                numberDiv.classList.remove('opacity-0');
+                numberDiv.textContent = selectedCount + 1;
+                selectedJobs.add(jobId);
+                selectedCount++;
+            }
+            
+            document.getElementById('selectedCount').textContent = selectedCount;
+        });
+    });
+    
+    document.getElementById('confirmAddJobs').addEventListener('click', () => {
+        if (selectedJobs.size === 0) {
+            showError('Please select at least one job');
+            return;
+        }
+        // Handle the selected jobs
+        return Array.from(selectedJobs);
+    });
 }; 
