@@ -40,8 +40,8 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
         <div class="min-w-0 flex-1 flex flex-col justify-center">
             <div class="flex items-center justify-between">
                 <div class="min-w-0">
-                    <h4 class="text-sm font-medium truncate">${job.title}</h4>
-                    <p class="text-xs text-muted truncate">by ${job.creator}</p>
+                    <h4 class="text-xs font-medium truncate">${job.title}</h4>
+                    <p class="text-[0.6rem] text-muted truncate">by ${job.creator}</p>
                 </div>
             </div>
             <div class="tags-container">
