@@ -262,4 +262,25 @@ body.theme-black .stats-table tbody tr {
     min-width: 300px;
     display: flex;
     flex-direction: column;
+}
+
+/* Add Jobs Modal specific styles */
+#addJobsModal .minimal-card {
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+    max-width: 800px;
+}
+
+#addJobsModal .modal-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#addJobsModal .jobs-container {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
 } 
