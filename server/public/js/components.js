@@ -25,7 +25,7 @@ const JobCardCompact = (job, playlistIndex = null, checked = false, disabled = f
          data-job-url="${job.url}">
         <div class="flex items-center mr-2">
             ${(playlistIndex != null || selectedNumber != null) ? `
-                <div class="ml-1.5 w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs">
+                <div style="background:#3b82f6;color:white;width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center;border-radius:9999px;font-weight:bold;font-size:0.75rem;margin-left:0.375rem;border:2px solid red;">
                     ${playlistIndex != null ? playlistIndex + 1 : (selectedNumber != null ? selectedNumber : '')}
                 </div>
             ` : ''}
