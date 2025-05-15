@@ -320,45 +320,26 @@ footer {
     width: auto;
 }
 
-/* Custom scrollbar styles */
+/* Modern custom scrollbar */
 .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: var(--accent-400) transparent;
+    scrollbar-color: #bbb transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--accent-400);
+    background: #bbb;
     border-radius: 4px;
-    border: 2px solid var(--background-50);
 }
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-500);
+[data-theme="dark"] .custom-scrollbar {
+    scrollbar-color: #444 transparent;
 }
-
-/* Dark mode scrollbar */
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #4b5563;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #6b7280;
-}
-
-body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--background-200);
-}
-
-body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--background-100);
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #444;
 }
 
 /* Modal styles */
