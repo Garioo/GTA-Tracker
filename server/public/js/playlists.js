@@ -54,7 +54,6 @@ export const playlists = {
     },
     removeJob: async (jobUrl) => {
         if (!state.currentPlaylist) return;
-        if (!confirm('Are you sure you want to remove this job from the playlist?')) return;
         utils.showLoading();
         try {
             await API.playlists.removeJob(state.currentPlaylist._id, jobUrl);
