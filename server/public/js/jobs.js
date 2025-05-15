@@ -26,5 +26,42 @@ export const jobs = {
         }
         document.getElementById('jobsList').innerHTML = state.jobs.map(job => Components.JobCard(job)).join('');
     },
-    // ...renderCompact and other job logic will be moved here...
+    renderCompact: (container, filter = null) => {
+        if (!container) return;
+        const playlistJobs = state.currentPlaylist?.jobs || [];
+        let jobsToShow = [...state.jobs];
+        if (filter === 'recentlyPlayed') {
+            jobsToShow.sort((a, b) => new Date(b.lastPlayed || 0) - new Date(a.lastPlayed || 0));
+        } else if (filter === 'mostPlayed') {
+            jobsToShow.sort((a, b) => (b.playCount || 0) - (a.playCount || 0));
+        } else if (filter === 'recentlyAdded') {
+            jobsToShow.sort((a, b) => new Date(b.creationDate || 0) - new Date(a.creationDate || 0));
+        }
+        const selectedJobs = Array.from(state.selectedJobs.values()).filter(job => !playlistJobs.some(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase()));
+        container.innerHTML = jobsToShow.map(job => {
+            const playlistIndex = playlistJobs.findIndex(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
+            if (playlistIndex !== -1) {
+                return Components.JobCardCompact(job, playlistIndex, null, true);
+            }
+            const selectedIndex = selectedJobs.findIndex(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
+            return Components.JobCardCompact(job, null, selectedIndex >= 0 ? playlistJobs.length + selectedIndex + 1 : null, false);
+        }).join('');
+        // Force reflow/repaint for Tailwind classes and browser rendering
+        container.style.display = 'none';
+        container.offsetHeight; // force reflow
+        container.style.display = '';
+        // Attach click event listeners to job cards (not disabled)
+        container.querySelectorAll('.minimal-card[data-job-url]:not(.pointer-events-none)').forEach(card => {
+            const jobUrl = card.getAttribute('data-job-url');
+            const job = state.jobs.find(j => (j.url || '').trim().toLowerCase() === (jobUrl || '').trim().toLowerCase());
+            if (job) {
+                card.onclick = () => window.toggleJobSelection(card, job);
+            }
+        });
+        // Update selected jobs count safely
+        const selectedJobsCountElem = document.getElementById('selectedJobsCount');
+        if (selectedJobsCountElem) {
+            selectedJobsCountElem.textContent = selectedJobs.length;
+        }
+    },
 }; 
