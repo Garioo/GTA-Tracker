@@ -147,16 +147,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        const selectedJobElements = document.querySelectorAll('#availableJobs .group[data-selected="true"]');
-        if (selectedJobElements.length === 0) {
+        if (state.selectedJobs.size === 0) {
             utils.showError('Please select at least one job');
             return;
         }
         
-        const selectedJobs = Array.from(selectedJobElements).map(el => ({
-            url: el.getAttribute('data-job-url'),
-            id: el.getAttribute('data-job-id')
-        }));
+        const selectedJobs = Array.from(state.selectedJobs.values());
         
         utils.showLoading();
         try {
