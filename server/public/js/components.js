@@ -339,58 +339,16 @@ window.initializeJobSelection = () => {
     
     // Add click handlers
     document.querySelectorAll('#availableJobs .group').forEach(card => {
-        card.addEventListener('click', () => {
-            const jobUrl = card.getAttribute('data-job-url');
-            const jobId = card.getAttribute('data-job-id');
-            const isSelected = state.selectedJobs.has(jobUrl);
-            
-            if (isSelected) {
-                // Deselect
-                state.selectedJobs.delete(jobUrl);
-                card.setAttribute('data-selected', 'false');
-                card.classList.remove('border-blue-500', 'bg-blue-50');
-                card.classList.add('hover:bg-gray-50');
-                const numberDiv = card.querySelector('.selected-number');
-                if (numberDiv) {
-                    numberDiv.classList.add('opacity-0');
-                }
-            } else {
-                // Select
-                state.selectedJobs.set(jobUrl, { url: jobUrl, id: jobId });
-                card.setAttribute('data-selected', 'true');
-                card.classList.add('border-blue-500', 'bg-blue-50');
-                card.classList.remove('hover:bg-gray-50');
-                const numberDiv = card.querySelector('.selected-number');
-                if (numberDiv) {
-                    numberDiv.classList.remove('opacity-0');
-                    numberDiv.textContent = state.selectedJobs.size;
-                }
-            }
-            
-            // Update counter
-            const counter = document.getElementById('selectedCount');
-            if (counter) {
-                counter.textContent = state.selectedJobs.size;
-            }
-            
-            // Update all selection numbers
-            let currentNumber = 1;
-            Array.from(state.selectedJobs.keys()).forEach(selectedUrl => {
-                const selectedCard = document.querySelector(`#availableJobs .group[data-job-url="${selectedUrl}"]`);
-                if (selectedCard) {
-                    const selectedNumberDiv = selectedCard.querySelector('.selected-number');
-                    if (selectedNumberDiv) {
-                        selectedNumberDiv.textContent = currentNumber++;
-                    }
-                }
-            });
-
-            // Log selection state for debugging
-            console.log('Selection state:', {
-                stateSelectedJobs: state.selectedJobs.size,
-                dataSelectedElements: document.querySelectorAll('#availableJobs .group[data-selected="true"]').length,
-                selectedUrls: Array.from(state.selectedJobs.keys())
-            });
-        });
+        const jobUrl = card.getAttribute('data-job-url');
+        const job = state.jobs.find(j => (j.url || '').trim().toLowerCase() === (jobUrl || '').trim().toLowerCase());
+        if (job) {
+            card.onclick = () => window.toggleJobSelection(card, job);
+        }
     });
+    
+    // Update counter
+    const counter = document.getElementById('selectedCount');
+    if (counter) {
+        counter.textContent = state.selectedJobs.size;
+    }
 }; 

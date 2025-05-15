@@ -290,39 +290,57 @@ window.toggleJobSelection = async (cardElem, job) => {
     }
     
     // Toggle selection in state for jobs not in playlist
-    if (state.selectedJobs.has(job.url)) {
+    const isSelected = state.selectedJobs.has(job.url);
+    
+    if (isSelected) {
+        // Deselect
         state.selectedJobs.delete(job.url);
-        cardElem.classList.remove('bg-blue-50', 'border-blue-500');
+        cardElem.setAttribute('data-selected', 'false');
+        cardElem.classList.remove('border-blue-500', 'bg-blue-50');
         cardElem.classList.add('hover:bg-gray-50');
     } else {
+        // Select
         state.selectedJobs.set(job.url, job);
-        cardElem.classList.add('bg-blue-50', 'border-blue-500');
+        cardElem.setAttribute('data-selected', 'true');
+        cardElem.classList.add('border-blue-500', 'bg-blue-50');
         cardElem.classList.remove('hover:bg-gray-50');
     }
     
-    // Update the job card's visual state
-    const selectedJobs = Array.from(state.selectedJobs.values());
-    const selectedIndex = selectedJobs.findIndex(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
-    
     // Update the number indicator
-    const numberIndicator = cardElem.querySelector('.flex.items-center.mr-2');
-    if (numberIndicator) {
-        if (selectedIndex >= 0) {
-            numberIndicator.innerHTML = `
-                <div style="background:#3b82f6;color:white;width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center;border-radius:9999px;font-weight:bold;font-size:0.75rem;margin-left:0.375rem;">
-                    ${playlistJobs.length + selectedIndex + 1}
-                </div>
-            `;
+    const numberDiv = cardElem.querySelector('.selected-number');
+    if (numberDiv) {
+        if (!isSelected) {
+            numberDiv.classList.remove('opacity-0');
+            numberDiv.textContent = state.selectedJobs.size;
         } else {
-            numberIndicator.innerHTML = '';
+            numberDiv.classList.add('opacity-0');
         }
     }
     
+    // Update all selection numbers
+    let currentNumber = 1;
+    Array.from(state.selectedJobs.keys()).forEach(selectedUrl => {
+        const selectedCard = document.querySelector(`#availableJobs .group[data-job-url="${selectedUrl}"]`);
+        if (selectedCard) {
+            const selectedNumberDiv = selectedCard.querySelector('.selected-number');
+            if (selectedNumberDiv) {
+                selectedNumberDiv.textContent = currentNumber++;
+            }
+        }
+    });
+    
     // Update the selected jobs count
-    const selectedJobsCountElem = document.getElementById('selectedJobsCount');
-    if (selectedJobsCountElem) {
-        selectedJobsCountElem.textContent = selectedJobs.length;
+    const counter = document.getElementById('selectedCount');
+    if (counter) {
+        counter.textContent = state.selectedJobs.size;
     }
+
+    // Log selection state for debugging
+    console.log('Selection state:', {
+        stateSelectedJobs: state.selectedJobs.size,
+        dataSelectedElements: document.querySelectorAll('#availableJobs .group[data-selected="true"]').length,
+        selectedUrls: Array.from(state.selectedJobs.keys())
+    });
 };
 
 // Add event listeners for filter buttons in the Add Jobs modal
