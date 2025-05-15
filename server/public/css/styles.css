@@ -807,24 +807,71 @@ footer {
     width: 100%;
     box-sizing: border-box;
     position: relative;
-    overflow: visible;
-}
-#availableJobs::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
 }
 
-#availableJobs > *,
-#availableJobs .job-card,
-#availableJobs .grid {
-  max-width: 100%;
-  box-sizing: border-box;
+#availableJobs .job-card {
+    width: 100%;
+    border: 1.5px solid var(--background-200);
+    background: var(--background-50);
+    transition: all 0.2s ease;
+    opacity: 1;
+    height: auto;
+    margin: 0.5rem 0;
+    position: relative;
+    transform: none;
+    pointer-events: auto;
 }
 
-.job-card .job-rating {
-  display: flex;
-  align-items: center;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
+#availableJobs .job-card.hidden {
+    display: none;
+}
+
+#availableJobs .job-card.visible {
+    display: block;
+}
+
+/* Remove any conflicting styles */
+#availableJobs .job-card[style*="opacity"],
+#availableJobs .job-card[style*="height"],
+#availableJobs .job-card[style*="margin"],
+#availableJobs .job-card[style*="position"],
+#availableJobs .job-card[style*="pointer-events"] {
+    opacity: 1 !important;
+    height: auto !important;
+    margin: 0.5rem 0 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure consistent card layout */
+.job-card {
+    min-height: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.job-card > div {
+    width: 100%;
+}
+
+/* Smooth transitions for search */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.job-card.fade-in {
+    animation: fadeIn 0.2s ease-in;
+}
+
+.job-card.fade-out {
+    animation: fadeOut 0.2s ease-out;
 }
 
 /* Tag colors */

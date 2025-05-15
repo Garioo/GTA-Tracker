@@ -48,9 +48,9 @@ export const modals = {
         jobCards.forEach(card => {
             const title = card.querySelector('h4')?.textContent.toLowerCase() || '';
             const creator = card.querySelector('p.text-gray-500')?.textContent.toLowerCase() || '';
-            const gameMode = card.querySelector('.bg-gradient-to-r.from-blue-100')?.textContent.toLowerCase() || '';
-            const routeType = card.querySelector('.bg-gradient-to-r.from-green-100')?.textContent.toLowerCase() || '';
-            const routeLength = card.querySelector('.bg-gradient-to-r.from-purple-100')?.textContent.toLowerCase() || '';
+            const gameMode = card.querySelector('.job-tag-mode')?.textContent.toLowerCase() || '';
+            const routeType = card.querySelector('.job-tag-type')?.textContent.toLowerCase() || '';
+            const routeLength = card.querySelector('.job-tag-length')?.textContent.toLowerCase() || '';
             
             const isVisible = searchTerm === '' || 
                 title.includes(searchTerm) || 
@@ -61,15 +61,13 @@ export const modals = {
             
             if (isVisible) {
                 visibleCount++;
+                card.classList.remove('hidden');
+                card.classList.add('visible', 'fade-in');
+                card.classList.remove('fade-out');
+            } else {
+                card.classList.add('hidden', 'fade-out');
+                card.classList.remove('visible', 'fade-in');
             }
-            
-            // Use opacity and pointer-events instead of display to maintain layout
-            card.style.opacity = isVisible ? '1' : '0';
-            card.style.pointerEvents = isVisible ? 'auto' : 'none';
-            card.style.position = isVisible ? 'relative' : 'absolute';
-            card.style.height = isVisible ? '72px' : '0';
-            card.style.margin = isVisible ? '' : '0';
-            card.style.padding = isVisible ? '' : '0';
         });
 
         // Show "no results" message if needed
