@@ -269,19 +269,40 @@ app.delete('/api/playlists/:id', async (req, res) => {
 // Add jobs to playlist
 app.post('/api/playlists/:id/jobs', async (req, res) => {
   try {
+    console.log('Received request to add jobs:');
+    console.log('Playlist ID:', req.params.id);
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    
     const { jobs } = req.body;
     
     // Validate jobs array
+    if (!jobs) {
+      console.error('No jobs data provided');
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'No jobs data provided'
+      });
+    }
+
     if (!Array.isArray(jobs)) {
-      console.error('Invalid jobs data:', jobs);
+      console.error('Invalid jobs data type:', typeof jobs);
       return res.status(400).json({ 
         error: 'Invalid request',
         message: 'Jobs must be an array'
       });
     }
 
+    if (jobs.length === 0) {
+      console.error('Empty jobs array');
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'Jobs array cannot be empty'
+      });
+    }
+
     // Validate each job has required fields
     for (const job of jobs) {
+      console.log('Validating job:', job);
       if (!job.url) {
         console.error('Job missing URL:', job);
         return res.status(400).json({ 
@@ -305,10 +326,13 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
     const newJobs = jobs.filter(job => !existingUrls.has(job.url));
     
     if (newJobs.length > 0) {
+      console.log('Adding new jobs:', newJobs);
       playlist.jobs.push(...newJobs);
       playlist.updatedAt = new Date();
       await playlist.save();
       console.log(`Added ${newJobs.length} jobs to playlist ${playlist._id}`);
+    } else {
+      console.log('No new jobs to add - all jobs already exist in playlist');
     }
 
     res.json({
