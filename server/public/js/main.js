@@ -707,8 +707,10 @@ window.toggleJobSelection = (cardElem, job) => {
     }
     // Only update if the modal and container exist
     const container = document.getElementById('availableJobs');
+    const filterDropdown = document.getElementById('jobsFilterDropdown');
+    const filter = filterDropdown ? filterDropdown.value : null;
     if (container && document.getElementById('selectedJobsCount')) {
-        jobs.renderCompact(container);
+        jobs.renderCompact(container, filter);
     }
 };
 
