@@ -439,59 +439,118 @@ footer {
 }
 
 /* Search bar and filter styles */
-[data-theme="dark"] #jobSearch {
-    background: #333 !important;
-    color: #fff !important;
-    border-color: #555 !important;
+#jobSearch {
+    background: var(--background-50) !important;
+    color: var(--text-900) !important;
+    border: 1px solid var(--background-200) !important;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
+    border-radius: 0.5rem !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
 }
 
-[data-theme="dark"] #jobSearch + i {
-    color: #999 !important;
+#jobSearch:hover {
+    border-color: var(--accent-300) !important;
+    background: var(--background-100) !important;
 }
 
-/* Single clean dropdown arrow */
+#jobSearch:focus {
+    border-color: var(--accent-400) !important;
+    background: var(--background-100) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(69, 135, 186, 0.1);
+}
+
+#jobSearch + i {
+    color: var(--text-400) !important;
+    transition: color 0.2s ease !important;
+}
+
+#jobSearch:hover + i {
+    color: var(--accent-500) !important;
+}
+
+#jobSearch:focus + i {
+    color: var(--accent-500) !important;
+}
+
+/* Filter dropdown styles */
 #jobsFilterDropdown {
     appearance: none !important;
-    background-color: #fff !important;
-    color: #000 !important;
-    border: 1px solid #ccc !important;
-    border-radius: 8px !important;
-    padding: 8px 32px 8px 12px !important;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background: var(--background-50) !important;
+    color: var(--text-900) !important;
+    border: 1px solid var(--background-200) !important;
+    padding: 0.5rem 2.5rem 0.5rem 1rem !important;
+    border-radius: 0.5rem !important;
+    transition: all 0.2s ease !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234587ba'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
     background-repeat: no-repeat !important;
-    background-position: right 8px center !important;
-    background-size: 16px !important;
+    background-position: right 0.75rem center !important;
+    background-size: 1.25em 1.25em !important;
+    cursor: pointer !important;
+}
+
+#jobsFilterDropdown:hover {
+    border-color: var(--accent-300) !important;
+    background-color: var(--background-100) !important;
+}
+
+#jobsFilterDropdown:focus {
+    border-color: var(--accent-400) !important;
+    background-color: var(--background-100) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(69, 135, 186, 0.1);
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] #jobSearch {
+    background: var(--background-100) !important;
+    color: var(--text-900) !important;
+    border-color: var(--background-300) !important;
+}
+
+[data-theme="dark"] #jobSearch:hover,
+[data-theme="dark"] #jobSearch:focus {
+    background: var(--background-200) !important;
+    border-color: var(--accent-400) !important;
 }
 
 [data-theme="dark"] #jobsFilterDropdown {
-    background-color: #333 !important;
-    color: #fff !important;
-    border-color: #555 !important;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="lightgray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background: var(--background-100) !important;
+    color: var(--text-900) !important;
+    border-color: var(--background-300) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236a9fc8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
 }
 
-/* Remove conflicting select.input rules for this dropdown */
-select.input#jobsFilterDropdown,
-#jobsFilterDropdown.input {
-    background-image: none !important;
+[data-theme="dark"] #jobsFilterDropdown:hover,
+[data-theme="dark"] #jobsFilterDropdown:focus {
+    background: var(--background-200) !important;
+    border-color: var(--accent-400) !important;
 }
 
-/* Scrollbar styles */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
+/* Search container styles */
+.search-container {
+    position: relative;
+    flex: 1;
+    margin-right: 1rem;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+.search-container i {
+    position: absolute !important;
+    left: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
+/* Filter container styles */
+.filter-container {
+    position: relative;
+    min-width: 200px;
 }
 
-[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #555 !important;
+.filter-container select {
+    width: 100%;
 }
 
 /* Modal enhancements */
