@@ -21,7 +21,7 @@ export const JobCard = (job) => `
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="flex items-center px-2 py-1.5 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+    <div class="flex items-center h-12 px-2 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}">
         <div class="flex items-center gap-2 min-w-0 flex-1">
             ${(playlistIndex != null || selectedNumber != null) ? `
@@ -34,7 +34,7 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                     <h4 class="font-medium text-xs truncate">${job.title}</h4>
                     <span class="text-[10px] text-gray-400">by ${job.creator}</span>
                 </div>
-                <div class="flex items-center gap-1 mt-0.5">
+                <div class="flex items-center gap-1">
                     <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800">
                         <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                     </span>
@@ -225,10 +225,10 @@ export const CreatePlaylistModal = () => `
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg shadow-xl overflow-hidden flex flex-col" style="width: 400px; height: 500px;">
-            <div class="flex items-center justify-between p-3 border-b">
+            <div class="flex items-center justify-between p-2 border-b">
                 <div>
                     <h3 class="text-base font-semibold text-gray-800">Add Jobs to Playlist</h3>
-                    <p class="text-[10px] text-gray-500 mt-0.5">Select jobs to add to your playlist</p>
+                    <p class="text-[10px] text-gray-500">Select jobs to add to your playlist</p>
                 </div>
                 <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times"></i>
