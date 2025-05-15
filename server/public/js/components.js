@@ -23,12 +23,12 @@ export const JobCard = (job) => `
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => {
     const isSelected = state.selectedJobs.has(job.url);
-    const selectedClass = isSelected ? 'border-blue-500 bg-blue-50' : '';
+    const selectedClass = isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : '';
     const selectedAttr = isSelected ? 'true' : 'false';
     const numberOpacity = isSelected ? '' : 'opacity-0';
     
     return `
-    <div class="group flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''} ${selectedClass} h-[72px]"
+    <div class="group flex items-center gap-2 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-blue-500 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''} ${selectedClass} h-[72px]"
          data-job-url="${job.url}"
          data-job-id="${job._id || job.id}"
          data-selected="${selectedAttr}">
@@ -40,23 +40,23 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
         <div class="min-w-0 flex-1 flex flex-col justify-center">
             <div class="flex items-center justify-between">
                 <div class="min-w-0">
-                    <h4 class="text-sm font-medium truncate text-gray-900">${job.title}</h4>
-                    <p class="text-xs text-gray-500 truncate">by ${job.creator}</p>
+                    <h4 class="text-sm font-medium truncate text-gray-900 dark:text-gray-100">${job.title}</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">by ${job.creator}</p>
                 </div>
                 <div class="flex items-center gap-1 ml-2">
-                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-100 to-yellow-50 text-yellow-800 shadow-sm">
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-100 to-yellow-50 dark:from-yellow-900/30 dark:to-yellow-800/30 text-yellow-800 dark:text-yellow-200 shadow-sm">
                         <i class="fas fa-star mr-0.5"></i>${job.rating}
                     </span>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 mt-1">
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-blue-50 text-blue-800 shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-800 dark:text-blue-200 shadow-sm">
                     <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-green-50 text-green-800 shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/30 text-green-800 dark:text-green-200 shadow-sm">
                     <i class="fas fa-route mr-0.5"></i>${job.routeType}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-100 to-purple-50 text-purple-800 shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-800/30 text-purple-800 dark:text-purple-200 shadow-sm">
                     <i class="fas fa-ruler mr-0.5"></i>${job.routeLength}
                 </span>
             </div>
@@ -235,23 +235,23 @@ export const CreatePlaylistModal = () => `
 
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl shadow-xl flex flex-col backdrop-blur-sm" style="width: 500px; max-height: 80vh;">
-            <div class="flex items-center justify-between p-4 border-b">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl flex flex-col backdrop-blur-sm" style="width: 500px; max-height: 80vh;">
+            <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900">Add Jobs</h3>
-                    <p class="text-xs text-gray-500 mt-0.5">Select jobs to add to your playlist</p>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Add Jobs</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Select jobs to add to your playlist</p>
                 </div>
-                <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="flex-1 overflow-y-auto p-4">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="relative flex-1">
-                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-sm"></i>
+                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400">
+                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 dark:text-gray-500 text-sm"></i>
                     </div>
-                    <select id="jobsFilterDropdown" class="border rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select id="jobsFilterDropdown" class="border dark:border-gray-700 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                         <option value="recentlyPlayed">Recently Played</option>
                         <option value="mostPlayed">Most Played</option>
                         <option value="recentlyAdded">Recently Added</option>
@@ -261,12 +261,12 @@ export const AddJobsModal = () => `
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-between items-center gap-2 p-4 border-t bg-gray-50">
-                <div class="text-sm text-gray-600">
+            <div class="flex justify-between items-center gap-2 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                <div class="text-sm text-gray-600 dark:text-gray-400">
                     <span id="selectedCount" class="font-medium">0</span> jobs selected
                 </div>
                 <div class="flex gap-2">
-                    <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors">
+                    <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-lg transition-colors">
                         Cancel
                     </button>
                     <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-colors shadow-sm">
