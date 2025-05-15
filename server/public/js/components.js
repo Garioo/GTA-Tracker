@@ -326,6 +326,8 @@ window.initializeJobSelection = () => {
     document.querySelectorAll('#availableJobs .group').forEach(card => {
         card.addEventListener('click', () => {
             const isSelected = card.getAttribute('data-selected') === 'true';
+            const jobUrl = card.getAttribute('data-job-url');
+            const jobId = card.getAttribute('data-job-id');
             
             if (isSelected) {
                 // Deselect
@@ -336,6 +338,8 @@ window.initializeJobSelection = () => {
                     numberDiv.classList.add('opacity-0');
                 }
                 selectedCount--;
+                // Remove from state
+                state.selectedJobs.delete(jobUrl);
             } else {
                 // Select
                 card.setAttribute('data-selected', 'true');
@@ -346,6 +350,8 @@ window.initializeJobSelection = () => {
                     numberDiv.textContent = selectedCount + 1;
                 }
                 selectedCount++;
+                // Add to state
+                state.selectedJobs.set(jobUrl, { url: jobUrl, id: jobId });
             }
             
             // Update counter
