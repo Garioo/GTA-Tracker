@@ -491,6 +491,43 @@ app.put('/api/playlists/:id/scores', async (req, res) => {
   }
 });
 
+// Debug endpoint to check raw database content
+app.get('/api/debug/playlist/:id', async (req, res) => {
+  try {
+    console.log('\n=== Debug: Raw Playlist Data ===');
+    console.log('Playlist ID:', req.params.id);
+    
+    // Get raw data from database
+    const rawPlaylist = await mongoose.connection.db.collection('playlists')
+      .findOne({ _id: new mongoose.Types.ObjectId(req.params.id) });
+    
+    if (!rawPlaylist) {
+      console.log('Playlist not found in raw data');
+      return res.status(404).json({ 
+        error: 'Playlist not found',
+        message: 'The requested playlist does not exist'
+      });
+    }
+    
+    console.log('Raw playlist data:', JSON.stringify(rawPlaylist, null, 2));
+    
+    // Get the playlist through Mongoose model for comparison
+    const mongoosePlaylist = await Playlist.findById(req.params.id).lean();
+    console.log('Mongoose playlist data:', JSON.stringify(mongoosePlaylist, null, 2));
+    
+    res.json({
+      raw: rawPlaylist,
+      mongoose: mongoosePlaylist
+    });
+  } catch (error) {
+    console.error('Error in debug endpoint:', error);
+    res.status(500).json({ 
+      error: 'Debug endpoint failed',
+      details: error.message
+    });
+  }
+});
+
 // MongoDB Atlas connection options
 const mongoOptions = {
     useNewUrlParser: true,
