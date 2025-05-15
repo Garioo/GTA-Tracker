@@ -230,16 +230,28 @@ export const CreatePlaylistModal = () => `
 
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col">
-            <h3 class="section-title text-xl mb-4 flex-shrink-0">Add Jobs to Playlist [DEBUG-123]</h3>
-            <div class="flex-1 min-h-0 overflow-y-auto mb-4">
-                <div id="availableJobs" class="grid grid-cols-1 gap-1">
+        <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col bg-white rounded-lg">
+            <div class="flex items-center justify-between mb-6 border-b pb-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-800">Add Jobs to Playlist</h3>
+                    <p class="text-sm text-gray-500 mt-1">Select the jobs you want to add to your playlist</p>
+                </div>
+                <button id="cancelAddJobs" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="flex-1 min-h-0 overflow-y-auto mb-6 pr-2">
+                <div id="availableJobs" class="grid grid-cols-1 gap-3">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-end space-x-2 flex-shrink-0">
-                <button id="cancelAddJobs" class="btn bg-gray-300">Cancel</button>
-                <button id="confirmAddJobs" class="btn">Add Selected Jobs</button>
+            <div class="flex justify-end space-x-3 border-t pt-4">
+                <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors">
+                    Cancel
+                </button>
+                <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors">
+                    Add Selected Jobs
+                </button>
             </div>
         </div>
     </div>
