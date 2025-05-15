@@ -131,23 +131,16 @@ const API = {
             }
         },
 
-        async addJob(id, job) {
-            // Send only the essential job data
-            const jobData = {
-                url: job.url,
-                title: job.title,
-                creator: job.creator,
-                rating: job.rating,
-                gameMode: job.gameMode,
-                routeType: job.routeType,
-                routeLength: job.routeLength
-            };
+        async addJob(id, jobs) {
+            // Ensure jobs is an array
+            const jobsArray = Array.isArray(jobs) ? jobs : [jobs];
             
-            console.log('Sending job data:', jobData);
+            // Send the jobs array
+            console.log('Sending jobs data:', jobsArray);
             const response = await fetch(`${API.baseUrl}/playlists/${id}/jobs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ job: jobData })
+                body: JSON.stringify({ jobs: jobsArray })
             });
             return API.handleResponse(response);
         },

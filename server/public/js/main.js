@@ -153,26 +153,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        const selectedJobs = Array.from(selectedJobElements).map(el => ({
-            url: el.getAttribute('data-job-url'),
-            id: el.getAttribute('data-job-id')
-        }));
+        const selectedJobs = Array.from(selectedJobElements).map(el => {
+            const jobUrl = el.getAttribute('data-job-url');
+            const job = state.jobs.find(j => (j.url || '').trim().toLowerCase() === (jobUrl || '').trim().toLowerCase());
+            if (!job) {
+                throw new Error(`Job not found: ${jobUrl}`);
+            }
+            return job;
+        });
         
         utils.showLoading();
         try {
             console.log('Adding jobs to playlist:', selectedJobs);
-            for (const job of selectedJobs) {
-                console.log('Adding job:', job);
-                try {
-                    await API.playlists.addJob(state.currentPlaylist._id, job.url);
-                } catch (error) {
-                    if (error.message.includes('404') || error.message.includes('not found')) {
-                        utils.showError('Playlist not found. Please refresh the page and try again.');
-                        return;
-                    }
-                    throw error;
-                }
-            }
+            await API.playlists.addJob(state.currentPlaylist._id, selectedJobs);
             console.log('Jobs added successfully');
             await playlists.view(state.currentPlaylist._id);
             modals.hideAddJobs();
