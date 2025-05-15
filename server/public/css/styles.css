@@ -742,13 +742,13 @@ select.input#jobsFilterDropdown,
 }
 
 #availableJobs {
+    overflow-x: hidden;
     overflow-y: auto;
     max-height: 400px;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;     /* Firefox */
-    overflow-x: hidden;
     width: 100%;
     box-sizing: border-box;
+    position: relative;
+    overflow: visible;
 }
 #availableJobs::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
