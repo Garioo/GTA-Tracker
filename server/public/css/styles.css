@@ -460,25 +460,14 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 }
 
 /* Search bar styles */
-#jobSearch {
-    transition: all 0.2s ease;
+[data-theme="dark"] #jobSearch {
+    background: #333 !important;
+    color: #fff !important;
+    border-color: #555 !important;
 }
 
-#jobSearch:hover {
-    border-color: #4a5568;
-}
-
-#jobSearch:focus {
-    outline: none;
-    border-color: #2d3748;
-}
-
-[data-theme="dark"] #jobSearch:hover {
-    border-color: #a0aec0;
-}
-
-[data-theme="dark"] #jobSearch:focus {
-    border-color: #e2e8f0;
+[data-theme="dark"] #jobSearch + i {
+    color: #999 !important;
 }
 
 /* Filter dropdown enhancements */
