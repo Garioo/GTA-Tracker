@@ -180,6 +180,9 @@ const jobs = {
             const index = selectedJobs.findIndex(j => j.url === job.url);
             return Components.JobCardCompact(job, index >= 0 ? index : null);
         }).join('');
+        
+        // Update selected jobs count
+        document.getElementById('selectedJobsCount').textContent = selectedJobs.length;
     },
     
     search: utils.debounce((query) => {
@@ -395,6 +398,8 @@ const modals = {
         state.selectedJobs.clear();
         // Render available jobs
         jobs.renderCompact(document.getElementById('availableJobs'));
+        // Update selected jobs count
+        document.getElementById('selectedJobsCount').textContent = '0';
         
         // Add search functionality
         const searchInput = document.getElementById('jobSearch');
@@ -407,10 +412,14 @@ const modals = {
                     const title = card.querySelector('.section-title').textContent.toLowerCase();
                     const creator = card.querySelector('.label').textContent.toLowerCase();
                     const gameMode = card.querySelector('.bg-blue-100').textContent.toLowerCase();
+                    const routeType = card.querySelector('.bg-green-100').textContent.toLowerCase();
+                    const routeLength = card.querySelector('.bg-purple-100').textContent.toLowerCase();
                     
                     if (title.includes(searchTerm) || 
                         creator.includes(searchTerm) || 
-                        gameMode.includes(searchTerm)) {
+                        gameMode.includes(searchTerm) ||
+                        routeType.includes(searchTerm) ||
+                        routeLength.includes(searchTerm)) {
                         card.style.display = '';
                     } else {
                         card.style.display = 'none';
@@ -653,4 +662,6 @@ window.toggleJobSelection = (checkbox, job) => {
     } else {
         state.selectedJobs.delete(job.url);
     }
+    // Update the display to show new numbers
+    jobs.renderCompact(document.getElementById('availableJobs'));
 }; 

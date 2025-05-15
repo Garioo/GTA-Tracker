@@ -50,6 +50,11 @@ const JobCardCompact = (job, index = null) => `
                     <i class="fas fa-ruler mr-1"></i>${job.routeLength}
                 </span>
             </div>
+            <div class="mt-2 text-sm text-gray-600">
+                <a href="${job.url}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                    <i class="fas fa-external-link-alt mr-1"></i>View on Social Club
+                </a>
+            </div>
         </div>
     </div>
 `;
@@ -237,9 +242,14 @@ const AddJobsModal = () => `
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-end space-x-2">
-                <button id="cancelAddJobs" class="btn bg-gray-300 hover:bg-gray-400">Cancel</button>
-                <button id="confirmAddJobs" class="btn bg-blue-500 text-white hover:bg-blue-600">Add Selected Jobs</button>
+            <div class="flex justify-between items-center">
+                <div class="text-sm text-gray-500">
+                    <span id="selectedJobsCount">0</span> jobs selected
+                </div>
+                <div class="flex space-x-2">
+                    <button id="cancelAddJobs" class="btn bg-gray-300 hover:bg-gray-400">Cancel</button>
+                    <button id="confirmAddJobs" class="btn bg-blue-500 text-white hover:bg-blue-600">Add Selected Jobs</button>
+                </div>
             </div>
         </div>
     </div>
