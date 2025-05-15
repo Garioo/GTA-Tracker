@@ -21,11 +21,11 @@ export const JobCard = (job) => `
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="minimal-card flex items-start p-1.5 shadow rounded mb-1.5 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+    <div class="minimal-card flex items-start p-1 shadow rounded mb-1 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}">
-        <div class="flex items-center mr-2">
+        <div class="flex items-center mr-1">
             ${(playlistIndex != null || selectedNumber != null) ? `
-                <div style="background:#3b82f6;color:white;width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center;border-radius:9999px;font-weight:bold;font-size:0.75rem;margin-left:0.375rem;">
+                <div style="background:#3b82f6;color:white;width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center;border-radius:9999px;font-weight:bold;font-size:0.75rem;margin-left:0.25rem;">
                     ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
                 </div>
             ` : ''}
@@ -36,11 +36,11 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                     <h4 class="font-bold section-title truncate text-xs">${job.title}</h4>
                     <p class="label text-xs truncate">by ${job.creator}</p>
                 </div>
-                <div class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 ml-2 flex-shrink-0">
+                <div class="inline-flex items-center px-1 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 ml-1 flex-shrink-0">
                     <i class="fas fa-star mr-0.5"></i>${job.rating}
                 </div>
             </div>
-            <div class="mt-0.5 text-xs text-gray-500 flex flex-wrap gap-1">
+            <div class="mt-0.5 text-xs text-gray-500 flex flex-wrap gap-0.5">
                 <span class="inline-flex items-center px-1 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                     <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                 </span>
