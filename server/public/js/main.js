@@ -170,6 +170,7 @@ const jobs = {
     },
     
     renderCompact: (container, filter = null) => {
+        console.log('jobs.renderCompact called with filter:', filter);
         if (!container) return;
 
         // Get jobs in the current playlist (if any)
@@ -696,6 +697,7 @@ window.deletePlaylist = playlists.delete;
 window.removeJobFromPlaylist = playlists.removeJob;
 window.showUserSelectModal = modals.showUserSelect;
 window.toggleJobSelection = (cardElem, job) => {
+    console.log('toggleJobSelection called for job:', job.title, job.url);
     // If job is already in the playlist, do nothing
     const playlistJobs = state.currentPlaylist?.jobs || [];
     if (playlistJobs.some(j => j.url === job.url)) return;
@@ -709,6 +711,7 @@ window.toggleJobSelection = (cardElem, job) => {
     const container = document.getElementById('availableJobs');
     const filterDropdown = document.getElementById('jobsFilterDropdown');
     const filter = filterDropdown ? filterDropdown.value : null;
+    console.log('Re-rendering jobs.renderCompact with filter:', filter, 'Selected jobs:', Array.from(state.selectedJobs.keys()));
     if (container && document.getElementById('selectedJobsCount')) {
         jobs.renderCompact(container, filter);
     }
