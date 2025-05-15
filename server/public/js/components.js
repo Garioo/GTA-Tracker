@@ -310,24 +310,58 @@ window.Components = {
 };
 
 window.initializeJobSelection = () => {
+    let selectedCount = 0;
+    
+    // Clear any existing selections
+    document.querySelectorAll('#availableJobs .group').forEach(card => {
+        card.setAttribute('data-selected', 'false');
+        card.classList.remove('border-blue-500', 'bg-blue-50');
+        const numberDiv = card.querySelector('.selected-number');
+        if (numberDiv) {
+            numberDiv.classList.add('opacity-0');
+        }
+    });
+    
+    // Add click handlers
     document.querySelectorAll('#availableJobs .group').forEach(card => {
         card.addEventListener('click', () => {
             const isSelected = card.getAttribute('data-selected') === 'true';
             
             if (isSelected) {
+                // Deselect
                 card.setAttribute('data-selected', 'false');
                 card.classList.remove('border-blue-500', 'bg-blue-50');
-                card.querySelector('.selected-number').classList.add('opacity-0');
+                const numberDiv = card.querySelector('.selected-number');
+                if (numberDiv) {
+                    numberDiv.classList.add('opacity-0');
+                }
+                selectedCount--;
             } else {
+                // Select
                 card.setAttribute('data-selected', 'true');
                 card.classList.add('border-blue-500', 'bg-blue-50');
                 const numberDiv = card.querySelector('.selected-number');
-                numberDiv.classList.remove('opacity-0');
-                numberDiv.textContent = document.querySelectorAll('#availableJobs .group[data-selected="true"]').length;
+                if (numberDiv) {
+                    numberDiv.classList.remove('opacity-0');
+                    numberDiv.textContent = selectedCount + 1;
+                }
+                selectedCount++;
             }
             
-            document.getElementById('selectedCount').textContent = 
-                document.querySelectorAll('#availableJobs .group[data-selected="true"]').length;
+            // Update counter
+            const counter = document.getElementById('selectedCount');
+            if (counter) {
+                counter.textContent = selectedCount;
+            }
+            
+            // Update all selection numbers
+            let currentNumber = 1;
+            document.querySelectorAll('#availableJobs .group[data-selected="true"]').forEach(selectedCard => {
+                const selectedNumberDiv = selectedCard.querySelector('.selected-number');
+                if (selectedNumberDiv) {
+                    selectedNumberDiv.textContent = currentNumber++;
+                }
+            });
         });
     });
 }; 
