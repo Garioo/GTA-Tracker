@@ -195,8 +195,12 @@ app.get('/api/playlists', async (req, res) => {
 // Get playlist by ID
 app.get('/api/playlists/:id', async (req, res) => {
   try {
-    // Add cache control headers
-    res.set('Cache-Control', 'public, max-age=30'); // Cache for 30 seconds
+    // Prevent caching
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
     
     console.log('\n=== Fetching Playlist ===');
     console.log('Playlist ID:', req.params.id);
@@ -230,14 +234,16 @@ app.get('/api/playlists/:id', async (req, res) => {
       players: Array.isArray(playlist.players) ? playlist.players : [],
       scores: playlist.scores || {},
       createdAt: playlist.createdAt,
-      updatedAt: playlist.updatedAt
+      updatedAt: playlist.updatedAt,
+      timestamp: Date.now() // Add timestamp to force fresh data
     };
     
     console.log('Returning playlist:', {
       _id: safePlaylist._id,
       name: safePlaylist.name,
       jobCount: safePlaylist.jobs.length,
-      jobs: safePlaylist.jobs
+      jobs: safePlaylist.jobs,
+      timestamp: safePlaylist.timestamp
     });
     
     res.json(safePlaylist);
