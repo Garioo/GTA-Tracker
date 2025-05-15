@@ -249,4 +249,12 @@ body.theme-black .stats-table tbody tr {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #666;
+}
+
+.add-jobs-modal-fixed {
+    height: 320px !important;
+    max-width: 384px !important;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
 } 
