@@ -469,18 +469,28 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 /* Single clean dropdown arrow */
 #jobsFilterDropdown {
     appearance: none !important;
-    background-image: url('data:image/svg+xml;utf8,<svg fill=%22%23666%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/><path d=%22M0 0h24v24H0z%22 fill=%22none%22/></svg>') !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 8px !important;
+    padding: 8px 32px 8px 12px !important;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
     background-repeat: no-repeat !important;
     background-position: right 8px center !important;
     background-size: 16px !important;
-    padding-right: 32px !important;
 }
 
 [data-theme="dark"] #jobsFilterDropdown {
-    background: #333 !important;
+    background-color: #333 !important;
     color: #fff !important;
     border-color: #555 !important;
-    background-image: url('data:image/svg+xml;utf8,<svg fill=%22%23999%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/><path d=%22M0 0h24v24H0z%22 fill=%22none%22/></svg>') !important;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="lightgray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+
+/* Remove conflicting select.input rules for this dropdown */
+select.input#jobsFilterDropdown,
+#jobsFilterDropdown.input {
+    background-image: none !important;
 }
 
 /* Scrollbar styles */
