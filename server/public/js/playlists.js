@@ -2,6 +2,7 @@
 import { utils } from './utils.js';
 import { state } from './state.js';
 import * as Components from './components.js';
+import { navigation } from './main.js';
 
 export const playlists = {
     load: async () => {

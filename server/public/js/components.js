@@ -83,7 +83,7 @@ export const PlaylistCard = (playlist) => `
     </div>
 `;
 
-const PlaylistDetails = (playlist) => `
+export const PlaylistDetails = (playlist) => `
     <div class="flex items-center mb-4">
         <button id="backToPlaylists" class="minimal-btn mr-4">
             <i class="fas fa-arrow-left mr-2"></i>Back

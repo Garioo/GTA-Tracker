@@ -68,7 +68,7 @@ const theme = {
 };
 
 // Navigation
-const navigation = {
+export const navigation = {
     showSection: (section) => {
         elements.jobsSection.classList.add('hidden');
         elements.playlistsSection.classList.add('hidden');
