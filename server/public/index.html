@@ -86,40 +86,48 @@
             </div>
         </div>
     </div>
-    <!-- Add Jobs to Playlist Modal (Final Fix) -->
+    <!-- Add Jobs to Playlist Modal -->
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="minimal-card p-6 shadow-xl">
-        <div class="modal-content">
-          <h3 class="section-title text-xl mb-2">Add Jobs to Playlist</h3>
-          <!-- Filter dropdown -->
-          <div class="mb-2">
-            <label for="jobsFilterDropdown" class="mr-2 font-medium text-sm">Filter:</label>
-            <select id="jobsFilterDropdown" class="border rounded p-1 text-sm">
-              <option value="recentlyPlayed">Recently Played</option>
-              <option value="mostPlayed">Most Played</option>
-              <option value="recentlyAdded">Recently Added</option>
-            </select>
-          </div>
-          <!-- Search bar (optional) -->
-          <div class="mb-2">
-            <div class="relative">
-              <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-              <i class="fas fa-search absolute left-2.5 top-3 text-gray-400 text-sm"></i>
+        <div class="bg-white rounded-xl shadow-xl flex flex-col backdrop-blur-sm" style="width: 500px; max-height: 80vh;">
+            <div class="flex items-center justify-between p-4 border-b">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900">Add Jobs</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Select jobs to add to your playlist</p>
+                </div>
+                <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-          </div>
-          <!-- Scrollable jobs list -->
-          <div class="jobs-container custom-scrollbar">
-            <div id="availableJobs" class="grid grid-cols-1 gap-4 h-full">
-              <!-- Available jobs will be inserted here -->
+            <div class="flex-1 overflow-y-auto p-4">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="relative flex-1">
+                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-sm"></i>
+                    </div>
+                    <select id="jobsFilterDropdown" class="border rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="recentlyPlayed">Recently Played</option>
+                        <option value="mostPlayed">Most Played</option>
+                        <option value="recentlyAdded">Recently Added</option>
+                    </select>
+                </div>
+                <div id="availableJobs" class="space-y-2 relative">
+                    <!-- Available jobs will be inserted here -->
+                </div>
             </div>
-          </div>
-          <!-- Footer -->
-          <div class="flex justify-end space-x-2 mt-4">
-            <button id="cancelAddJobs" class="btn bg-gray-300">Cancel</button>
-            <button id="confirmAddJobs" class="btn bg-blue-500 text-white">Add Selected Jobs</button>
-          </div>
+            <div class="flex justify-between items-center gap-2 p-4 border-t bg-gray-50">
+                <div class="text-sm text-gray-600">
+                    <span id="selectedCount" class="font-medium">0</span> jobs selected
+                </div>
+                <div class="flex gap-2">
+                    <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-colors shadow-sm">
+                        Add Selected
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
     <!-- Edit Playlist Modal -->
     <div id="editPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
