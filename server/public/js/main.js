@@ -401,9 +401,11 @@ const modals = {
         state.selectedJobs.clear();
         // Render available jobs
         jobs.renderCompact(document.getElementById('availableJobs'));
-        // Update selected jobs count
-        document.getElementById('selectedJobsCount').textContent = '0';
-        
+        // Only update if the element exists
+        const selectedJobsCountElem = document.getElementById('selectedJobsCount');
+        if (selectedJobsCountElem) {
+            selectedJobsCountElem.textContent = '0';
+        }
         // Add search functionality
         const searchInput = document.getElementById('jobSearch');
         if (searchInput) {
