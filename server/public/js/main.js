@@ -191,11 +191,11 @@ const jobs = {
 
         // Render all jobs with playlist number and selection state
         container.innerHTML = jobsToShow.map(job => {
-            const playlistIndex = playlistJobs.findIndex(j => j.url === job.url);
+            const playlistIndex = playlistJobs.findIndex(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
             if (playlistIndex !== -1) {
                 return Components.JobCardCompact(job, playlistIndex, null, true);
             }
-            const selectedIndex = selectedJobs.findIndex(j => j.url === job.url);
+            const selectedIndex = selectedJobs.findIndex(j => (j.url || '').trim().toLowerCase() === (job.url || '').trim().toLowerCase());
             return Components.JobCardCompact(job, null, selectedIndex >= 0 ? playlistJobs.length + selectedIndex + 1 : null, false);
         }).join('');
 
