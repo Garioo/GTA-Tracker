@@ -245,22 +245,14 @@ export const AddJobsModal = () => `
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="relative flex-1">
-                        <input type="text" id="jobSearch" placeholder="Search races..." style="width: 100%; padding: 8px 32px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000;">
-                        <i class="fas fa-search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+            <div class="flex-1 overflow-y-auto p-4">
+                <div class="custom-scrollbar-outer" style="height: 400px;">
+                    <div class="custom-scrollbar-inner" id="availableJobs">
+                        <!-- Available jobs will be inserted here -->
                     </div>
-                    <div class="filter-container">
-                        <select id="jobsFilterDropdown">
-                            <option value="recentlyPlayed">Recently Played</option>
-                            <option value="mostPlayed">Most Played</option>
-                            <option value="recentlyAdded">Recently Added</option>
-                        </select>
+                    <div class="custom-scrollbar-track">
+                        <div class="custom-scrollbar-thumb"></div>
                     </div>
-                </div>
-                <div id="availableJobs" class="grid grid-cols-1 gap-3 relative">
-                    <!-- Available jobs will be inserted here -->
                 </div>
             </div>
             <div class="flex justify-between items-center gap-4 p-4 border-t border-border bg-card-bg">
