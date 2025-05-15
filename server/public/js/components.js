@@ -232,7 +232,7 @@ export const AddJobsModal = () => `
         <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col">
             <h3 class="section-title text-xl mb-4 flex-shrink-0">Add Jobs to Playlist [DEBUG-123]</h3>
             <div class="flex-1 min-h-0 overflow-y-auto mb-4">
-                <div id="availableJobs" class="grid grid-cols-1 gap-4">
+                <div id="availableJobs" class="grid grid-cols-1 gap-1">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
