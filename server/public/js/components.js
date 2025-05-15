@@ -21,12 +21,12 @@ export const JobCard = (job) => `
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="minimal-card flex items-center p-2 shadow-sm rounded border border-gray-200 mb-2 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+    <div class="minimal-card flex items-center px-1.5 py-1 shadow-sm rounded border border-gray-200 mb-1 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}"
          style="background: #fff;">
-        <div class="flex items-center mr-3">
+        <div class="flex items-center mr-2">
             ${(playlistIndex != null || selectedNumber != null) ? `
-                <div class="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white text-xs font-bold">
+                <div class="w-5 h-5 flex items-center justify-center rounded-full bg-blue-500 text-white text-xs font-bold">
                     ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
                 </div>
             ` : ''}
@@ -34,23 +34,25 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
         <div class="flex-1 min-w-0">
             <div class="flex justify-between items-center">
                 <div class="min-w-0">
-                    <h4 class="font-medium text-sm truncate">${job.title}</h4>
-                    <p class="text-xs text-gray-500 truncate">by ${job.creator}</p>
+                    <div class="flex items-center gap-1.5">
+                        <h4 class="font-medium text-xs truncate">${job.title}</h4>
+                        <span class="text-[10px] text-gray-400">by ${job.creator}</span>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-2 ml-2">
-                    <div class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                <div class="flex items-center ml-1.5">
+                    <div class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800">
                         <i class="fas fa-star mr-0.5"></i>${job.rating}
                     </div>
                 </div>
             </div>
-            <div class="mt-1 flex flex-wrap gap-1">
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+            <div class="mt-0.5 flex flex-wrap gap-0.5">
+                <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800">
                     <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800">
                     <i class="fas fa-route mr-0.5"></i>${job.routeType}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-purple-100 text-purple-800">
                     <i class="fas fa-ruler mr-0.5"></i>${job.routeLength}
                 </span>
             </div>
