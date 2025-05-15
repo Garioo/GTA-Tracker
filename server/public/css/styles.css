@@ -849,10 +849,22 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 0.75rem;
 }
 
 .job-card > div {
     width: 100%;
+}
+
+.job-card h4 {
+    margin-bottom: 0.25rem;
+}
+
+.job-card .tags-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
 }
 
 /* Smooth transitions for search */
@@ -876,47 +888,65 @@ footer {
 
 /* Tag colors */
 .job-tag-mode {
-  color: var(--primary-500);
+    color: var(--primary-500);
 }
 .job-tag-type {
-  color: var(--secondary-500);
+    color: var(--secondary-500);
 }
 .job-tag-length {
-  color: var(--accent-500);
+    color: var(--accent-500);
 }
 .job-card .job-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.15rem 0.4rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  margin-right: 0.4rem;
-  margin-bottom: 0.15rem;
-  line-height: 1.1;
-  transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.65rem;
+    font-weight: 500;
+    margin-right: 0.3rem;
+    margin-bottom: 0.1rem;
+    line-height: 1;
+    transition: all 0.2s ease;
 }
 .job-card .job-tag:hover {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 .job-card .job-tag i {
-  margin-right: 0.25rem;
-  font-size: 0.75rem;
-  opacity: 0.9;
+    margin-right: 0.2rem;
+    font-size: 0.7rem;
+    opacity: 0.9;
+}
+
+/* Rating badge */
+.job-card .job-rating {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--accent-500);
+    margin-right: 0.3rem;
+    line-height: 1;
+}
+
+.job-card .job-rating i {
+    margin-right: 0.2rem;
+    font-size: 0.7rem;
+    opacity: 0.9;
 }
 
 #availableJobs .job-card {
-  width: 100%;
-  border: 1.5px solid var(--background-200);
-  background: var(--background-50);
-  transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+    border: 1.5px solid var(--background-200);
+    background: var(--background-50);
+    transition: border-color 0.2s, background 0.2s;
 }
 #availableJobs .job-card:hover {
-  border-color: var(--accent-400);
-  background: var(--background-100);
-  cursor: pointer;
+    border-color: var(--accent-400);
+    background: var(--background-100);
+    cursor: pointer;
 }
 #availableJobs .job-card[data-selected="true"],
 #availableJobs .job-card[data-selected="true"]:hover {
-  border: 2px solid var(--accent-500);
-  background: var(--accent-50);
+    border: 2px solid var(--accent-500);
+    background: var(--accent-50);
 } 

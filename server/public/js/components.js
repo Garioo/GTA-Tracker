@@ -41,23 +41,14 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
             <div class="flex items-center justify-between">
                 <div class="min-w-0">
                     <h4 class="text-sm font-medium truncate">${job.title}</h4>
-                    <div class="job-rating">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent shadow-sm">
-                            <i class="fas fa-star mr-1"></i>${job.rating}
-                        </span>
-                    </div>
                     <p class="text-xs text-muted truncate">by ${job.creator}</p>
                 </div>
-                <div class="flex items-center gap-2 ml-2">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent shadow-sm">
-                        <i class="fas fa-star mr-1"></i>${job.rating}
-                    </span>
-                </div>
             </div>
-            <div class="flex items-center gap-2 mt-2">
-                <span class="job-tag job-tag-mode"><i class="fas fa-gamepad mr-1"></i>${job.gameMode}</span>
-                <span class="job-tag job-tag-type"><i class="fas fa-route mr-1"></i>${job.routeType}</span>
-                <span class="job-tag job-tag-length"><i class="fas fa-ruler mr-1"></i>${job.routeLength}</span>
+            <div class="tags-container">
+                <span class="job-tag job-tag-mode"><i class="fas fa-gamepad"></i>${job.gameMode}</span>
+                <span class="job-tag job-tag-type"><i class="fas fa-route"></i>${job.routeType}</span>
+                <span class="job-tag job-tag-length"><i class="fas fa-ruler"></i>${job.routeLength}</span>
+                <span class="job-rating"><i class="fas fa-star"></i>${job.rating}</span>
             </div>
         </div>
         <div class="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center rounded-full selected-number ${numberOpacity} group-hover:opacity-100 transition-all duration-200">${selectedNumber || ''}</div>
