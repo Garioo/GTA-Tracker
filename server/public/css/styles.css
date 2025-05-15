@@ -465,69 +465,69 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     flex: 1;
 }
 
-.search-container input.input {
-    background: var(--background-50);
-    color: var(--text-900);
-    border: 1px solid var(--background-200);
-    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-    border-radius: 0.5rem;
-    width: 100%;
-    transition: all 0.2s ease;
+.search-container input[type="text"] {
+    background: var(--background-50) !important;
+    color: var(--text-900) !important;
+    border: 1px solid var(--background-200) !important;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
+    border-radius: 0.5rem !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
 }
 
-.search-container input.input:hover {
-    border-color: var(--accent-300);
-    background: var(--background-100);
+.search-container input[type="text"]:hover {
+    border-color: var(--accent-300) !important;
+    background: var(--background-100) !important;
 }
 
-.search-container input.input:focus {
-    border-color: var(--accent-400);
-    background: var(--background-100);
-    outline: none;
+.search-container input[type="text"]:focus {
+    border-color: var(--accent-400) !important;
+    background: var(--background-100) !important;
+    outline: none !important;
 }
 
 .search-container i {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-400);
-    transition: color 0.2s ease;
-    pointer-events: none;
+    position: absolute !important;
+    left: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: var(--text-400) !important;
+    transition: color 0.2s ease !important;
+    pointer-events: none !important;
 }
 
-.search-container input.input:hover + i {
-    color: var(--accent-500);
+.search-container input[type="text"]:hover + i {
+    color: var(--accent-500) !important;
 }
 
-.search-container input.input:focus + i {
-    color: var(--accent-500);
+.search-container input[type="text"]:focus + i {
+    color: var(--accent-500) !important;
 }
 
 /* Dark theme specific search styles */
-[data-theme="dark"] .search-container input.input {
-    background: var(--background-800);
-    color: var(--text-100);
-    border-color: var(--background-700);
+[data-theme="dark"] .search-container input[type="text"] {
+    background: var(--background-800) !important;
+    color: var(--text-100) !important;
+    border-color: var(--background-700) !important;
 }
 
-[data-theme="dark"] .search-container input.input:hover {
-    background: var(--background-700);
-    border-color: var(--accent-500);
+[data-theme="dark"] .search-container input[type="text"]:hover {
+    background: var(--background-700) !important;
+    border-color: var(--accent-500) !important;
 }
 
-[data-theme="dark"] .search-container input.input:focus {
-    background: var(--background-700);
-    border-color: var(--accent-400);
+[data-theme="dark"] .search-container input[type="text"]:focus {
+    background: var(--background-700) !important;
+    border-color: var(--accent-400) !important;
 }
 
 [data-theme="dark"] .search-container i {
-    color: var(--text-500);
+    color: var(--text-500) !important;
 }
 
-[data-theme="dark"] .search-container input.input:hover + i,
-[data-theme="dark"] .search-container input.input:focus + i {
-    color: var(--accent-400);
+[data-theme="dark"] .search-container input[type="text"]:hover + i,
+[data-theme="dark"] .search-container input[type="text"]:focus + i {
+    color: var(--accent-400) !important;
 }
 
 /* Filter dropdown enhancements */
@@ -719,43 +719,43 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     flex: 1;
 }
 
-#addJobsModal .search-container input.input {
-    background: var(--background-50);
-    color: var(--text-900);
-    border: 1px solid var(--background-200);
-    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-    border-radius: 0.5rem;
-    width: 100%;
-    transition: all 0.2s ease;
+#addJobsModal .search-container input[type="text"] {
+    background: var(--background-50) !important;
+    color: var(--text-900) !important;
+    border: 1px solid var(--background-200) !important;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
+    border-radius: 0.5rem !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
 }
 
-#addJobsModal .search-container input.input:hover {
-    border-color: var(--accent-300);
-    background: var(--background-100);
+#addJobsModal .search-container input[type="text"]:hover {
+    border-color: var(--accent-300) !important;
+    background: var(--background-100) !important;
 }
 
-#addJobsModal .search-container input.input:focus {
-    border-color: var(--accent-400);
-    background: var(--background-100);
-    outline: none;
+#addJobsModal .search-container input[type="text"]:focus {
+    border-color: var(--accent-400) !important;
+    background: var(--background-100) !important;
+    outline: none !important;
 }
 
 #addJobsModal .search-container i {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-400);
-    transition: color 0.2s ease;
-    pointer-events: none;
+    position: absolute !important;
+    left: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: var(--text-400) !important;
+    transition: color 0.2s ease !important;
+    pointer-events: none !important;
 }
 
-#addJobsModal .search-container input.input:hover + i {
-    color: var(--accent-500);
+#addJobsModal .search-container input[type="text"]:hover + i {
+    color: var(--accent-500) !important;
 }
 
-#addJobsModal .search-container input.input:focus + i {
-    color: var(--accent-500);
+#addJobsModal .search-container input[type="text"]:focus + i {
+    color: var(--accent-500) !important;
 }
 
 #addJobsModal .filter-container select {
