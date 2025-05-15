@@ -744,7 +744,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--accent-400);
+    color: var(--text-400);
     transition: color 0.2s ease;
 }
 
