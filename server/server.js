@@ -283,30 +283,20 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
     console.log('Playlist ID:', req.params.id);
     console.log('Request body:', JSON.stringify(req.body, null, 2));
     
-    const { jobs } = req.body;
+    let jobs = req.body.jobs || req.body;
+    
+    // Convert single job to array if needed
+    if (!Array.isArray(jobs)) {
+      console.log('Converting single job to array');
+      jobs = [jobs];
+    }
     
     // Validate jobs array
-    if (!jobs) {
+    if (!jobs || jobs.length === 0) {
       console.error('No jobs data provided');
       return res.status(400).json({ 
         error: 'Invalid request',
         message: 'No jobs data provided'
-      });
-    }
-
-    if (!Array.isArray(jobs)) {
-      console.error('Invalid jobs data type:', typeof jobs);
-      return res.status(400).json({ 
-        error: 'Invalid request',
-        message: 'Jobs must be an array'
-      });
-    }
-
-    if (jobs.length === 0) {
-      console.error('Empty jobs array');
-      return res.status(400).json({ 
-        error: 'Invalid request',
-        message: 'Jobs array cannot be empty'
       });
     }
 
