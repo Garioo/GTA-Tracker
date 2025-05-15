@@ -1,4 +1,5 @@
 // UI rendering functions for GTA Race Tracker
+import { state } from './state.js';
 
 // Job Components
 export const JobCard = (job) => `
@@ -309,32 +310,24 @@ window.Components = {
 };
 
 window.initializeJobSelection = () => {
-    // Clear any existing selections
-    state.selectedJobs.clear();
-    
     document.querySelectorAll('#availableJobs .group').forEach(card => {
         card.addEventListener('click', () => {
             const isSelected = card.getAttribute('data-selected') === 'true';
-            const jobUrl = card.getAttribute('data-job-url');
             
             if (isSelected) {
                 card.setAttribute('data-selected', 'false');
                 card.classList.remove('border-blue-500', 'bg-blue-50');
                 card.querySelector('.selected-number').classList.add('opacity-0');
-                state.selectedJobs.delete(jobUrl);
             } else {
                 card.setAttribute('data-selected', 'true');
                 card.classList.add('border-blue-500', 'bg-blue-50');
                 const numberDiv = card.querySelector('.selected-number');
                 numberDiv.classList.remove('opacity-0');
-                numberDiv.textContent = state.selectedJobs.size + 1;
-                state.selectedJobs.set(jobUrl, {
-                    url: jobUrl,
-                    id: card.getAttribute('data-job-id')
-                });
+                numberDiv.textContent = document.querySelectorAll('#availableJobs .group[data-selected="true"]').length;
             }
             
-            document.getElementById('selectedCount').textContent = state.selectedJobs.size;
+            document.getElementById('selectedCount').textContent = 
+                document.querySelectorAll('#availableJobs .group[data-selected="true"]').length;
         });
     });
 }; 
