@@ -61,7 +61,7 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                 </span>
             </div>
         </div>
-        <div class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white text-xs font-bold shadow-sm ${numberOpacity} group-hover:opacity-100 transition-opacity duration-200 selected-number">${selectedNumber || ''}</div>
+        <div class="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white text-xs font-bold shadow-sm ${numberOpacity} group-hover:opacity-100 transition-opacity duration-200 selected-number">${selectedNumber || ''}</div>
     </div>
     `;
 };
