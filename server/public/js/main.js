@@ -368,4 +368,46 @@ const originalShowAddJobs = modals.showAddJobs;
 modals.showAddJobs = function() {
     originalShowAddJobs.call(this);
     setupJobsFilterDropdown();
-}; 
+};
+
+// Custom Scrollbar Logic
+function initCustomScrollbars() {
+  document.querySelectorAll('.custom-scrollbar-outer').forEach(outer => {
+    const inner = outer.querySelector('.custom-scrollbar-inner');
+    const track = outer.querySelector('.custom-scrollbar-track');
+    const thumb = outer.querySelector('.custom-scrollbar-thumb');
+    if (!inner || !track || !thumb) return;
+
+    function updateThumb() {
+      const ratio = inner.clientHeight / inner.scrollHeight;
+      const thumbHeight = Math.max(ratio * track.offsetHeight, 30);
+      thumb.style.height = thumbHeight + 'px';
+      thumb.style.top = (inner.scrollTop / (inner.scrollHeight - inner.clientHeight)) * (track.offsetHeight - thumbHeight) + 'px';
+    }
+
+    inner.addEventListener('scroll', updateThumb);
+    window.addEventListener('resize', updateThumb);
+    updateThumb();
+
+    // Drag to scroll
+    let isDragging = false, startY, startScroll;
+    thumb.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startY = e.clientY;
+      startScroll = inner.scrollTop;
+      document.body.style.userSelect = 'none';
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const delta = e.clientY - startY;
+      const ratio = (inner.scrollHeight - inner.clientHeight) / (track.offsetHeight - thumb.offsetHeight);
+      inner.scrollTop = startScroll + delta * ratio;
+    });
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      document.body.style.userSelect = '';
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initCustomScrollbars); 
