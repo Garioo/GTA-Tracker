@@ -22,11 +22,12 @@ export const playlists = {
             document.getElementById('playlistsList').innerHTML = `
                 <div class="text-center p-4">
                     <p class="text-muted">No playlists available</p>
-                    <button class="btn mt-4" onclick="modals.showCreatePlaylist()">
+                    <button id="createPlaylistEmpty" class="btn mt-4">
                         <i class="fas fa-plus mr-2"></i>Create Playlist
                     </button>
                 </div>
             `;
+            document.getElementById('createPlaylistEmpty')?.addEventListener('click', modals.showCreatePlaylist);
             return;
         }
         document.getElementById('playlistsList').innerHTML = state.playlists.map(playlist => Components.PlaylistCard(playlist)).join('');

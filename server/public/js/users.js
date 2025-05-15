@@ -1,6 +1,7 @@
 // User-related logic
 import { utils } from './utils.js';
 import { state } from './state.js';
+import { modals } from './modals.js';
 
 export const users = {
     load: async () => {
@@ -36,14 +37,18 @@ export const users = {
         userSection.innerHTML = state.currentUser
             ? `
                 <span class="mr-2">${state.currentUser.username}</span>
-                <button class="minimal-btn" onclick="modals.showUserSelect()">
+                <button id="changeUserBtn" class="minimal-btn">
                     <i class="fas fa-user-edit mr-2"></i>Change
                 </button>
             `
             : `
-                <button class="minimal-btn" onclick="modals.showUserSelect()">
+                <button id="selectUserBtn" class="minimal-btn">
                     <i class="fas fa-user mr-2"></i>Select User
                 </button>
             `;
+        
+        // Add event listeners
+        document.getElementById('changeUserBtn')?.addEventListener('click', modals.showUserSelect);
+        document.getElementById('selectUserBtn')?.addEventListener('click', modals.showUserSelect);
     }
 }; 
