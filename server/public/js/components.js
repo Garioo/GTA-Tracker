@@ -21,41 +21,38 @@ export const JobCard = (job) => `
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="minimal-card flex items-start p-2 shadow rounded mb-2 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+    <div class="minimal-card flex items-center p-2 shadow-sm rounded border border-gray-200 mb-2 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}"
-         style="width: 100%; border: 1px solid #e5e7eb; background: #fff;">
-        <div class="flex items-center mr-2">
+         style="background: #fff;">
+        <div class="flex items-center mr-3">
             ${(playlistIndex != null || selectedNumber != null) ? `
-                <div style="background:#3b82f6;color:white;width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center;border-radius:9999px;font-weight:bold;font-size:0.75rem;margin-left:0.25rem;">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white text-xs font-bold">
                     ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
                 </div>
             ` : ''}
         </div>
         <div class="flex-1 min-w-0">
-            <div class="flex justify-between items-start">
-                <div class="min-w-0 flex-1">
-                    <h4 class="font-bold section-title truncate text-xs">${job.title}</h4>
-                    <p class="label text-xs truncate">by ${job.creator}</p>
+            <div class="flex justify-between items-center">
+                <div class="min-w-0">
+                    <h4 class="font-medium text-sm truncate">${job.title}</h4>
+                    <p class="text-xs text-gray-500 truncate">by ${job.creator}</p>
                 </div>
-                <div class="inline-flex items-center px-1 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 ml-1 flex-shrink-0">
-                    <i class="fas fa-star mr-0.5"></i>${job.rating}
+                <div class="flex items-center space-x-2 ml-2">
+                    <div class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                        <i class="fas fa-star mr-0.5"></i>${job.rating}
+                    </div>
                 </div>
             </div>
-            <div class="mt-0.5 text-xs text-gray-500 flex flex-wrap gap-0.5">
-                <span class="inline-flex items-center px-1 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+            <div class="mt-1 flex flex-wrap gap-1">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                     <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                 </span>
-                <span class="inline-flex items-center px-1 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                     <i class="fas fa-route mr-0.5"></i>${job.routeType}
                 </span>
-                <span class="inline-flex items-center px-1 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
                     <i class="fas fa-ruler mr-0.5"></i>${job.routeLength}
                 </span>
-            </div>
-            <div class="mt-0.5 text-xs text-gray-600">
-                <a href="${job.url}" target="_blank" class="text-blue-500 hover:text-blue-600" onclick="event.stopPropagation()">
-                    <i class="fas fa-external-link-alt mr-0.5"></i>View on Social Club
-                </a>
             </div>
         </div>
     </div>
@@ -230,27 +227,27 @@ export const CreatePlaylistModal = () => `
 
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col bg-white rounded-lg">
-            <div class="flex items-center justify-between mb-6 border-b pb-4">
+        <div class="minimal-card p-4 w-2/3 h-[70vh] shadow-xl overflow-hidden flex flex-col bg-white rounded-lg">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b">
                 <div>
-                    <h3 class="text-2xl font-bold text-gray-800">Add Jobs to Playlist</h3>
-                    <p class="text-sm text-gray-500 mt-1">Select the jobs you want to add to your playlist</p>
+                    <h3 class="text-xl font-semibold text-gray-800">Add Jobs to Playlist</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Select jobs to add to your playlist</p>
                 </div>
-                <button id="cancelAddJobs" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-xl"></i>
+                <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 min-h-0 overflow-y-auto mb-6 pr-2">
-                <div id="availableJobs" class="grid grid-cols-1 gap-3">
+            <div class="flex-1 min-h-0 overflow-y-auto pr-2">
+                <div id="availableJobs" class="grid grid-cols-1 gap-1.5">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-end space-x-3 border-t pt-4">
-                <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors">
+            <div class="flex justify-end space-x-2 mt-4 pt-3 border-t">
+                <button id="cancelAddJobsBtn" class="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors">
                     Cancel
                 </button>
-                <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors">
-                    Add Selected Jobs
+                <button id="confirmAddJobs" class="px-3 py-1.5 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 rounded transition-colors">
+                    Add Selected
                 </button>
             </div>
         </div>
