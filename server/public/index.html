@@ -88,14 +88,14 @@
     </div>
     <!-- Add Jobs to Playlist Modal -->
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="minimal-card p-6 w-3/4 max-h-[80vh] shadow-xl overflow-hidden flex flex-col">
-            <h3 class="section-title text-xl mb-4">Add Jobs to Playlist</h3>
-            <div class="flex-1 overflow-y-auto mb-4">
+        <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col">
+            <h3 class="section-title text-xl mb-4 flex-shrink-0">Add Jobs to Playlist</h3>
+            <div class="flex-1 min-h-0 overflow-y-auto mb-4">
                 <div id="availableJobs" class="grid grid-cols-1 gap-4">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-end space-x-2">
+            <div class="flex justify-end space-x-2 flex-shrink-0">
                 <button id="cancelAddJobs" class="btn bg-gray-300">Cancel</button>
                 <button id="confirmAddJobs" class="btn">Add Selected Jobs</button>
             </div>
