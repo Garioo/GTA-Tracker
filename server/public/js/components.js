@@ -245,10 +245,8 @@ export const AddJobsModal = () => `
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 p-4">
-                <div id="availableJobs">
-                    <!-- Available jobs will be inserted here -->
-                </div>
+            <div id="availableJobs" style="padding: 1rem 1.5rem 0 1.5rem; max-height: 400px; overflow-y: auto;">
+                <!-- Available jobs will be inserted here -->
             </div>
             <div class="flex justify-between items-center gap-4 p-4 border-t border-border bg-card-bg">
                 <div class="text-sm text-muted">
