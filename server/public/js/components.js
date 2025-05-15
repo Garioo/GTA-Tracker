@@ -1,7 +1,7 @@
 // UI rendering functions for GTA Race Tracker
 
 // Job Components
-const JobCard = (job) => `
+export const JobCard = (job) => `
     <div class="job-card p-4">
         <div class="flex justify-between items-start">
             <div>
@@ -20,7 +20,7 @@ const JobCard = (job) => `
     </div>
 `;
 
-const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
+export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
     <div class="minimal-card flex items-start p-1.5 shadow rounded mb-1.5 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}">
         <div class="flex items-center mr-2">
@@ -61,7 +61,7 @@ const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabl
 `;
 
 // Playlist Components
-const PlaylistCard = (playlist) => `
+export const PlaylistCard = (playlist) => `
     <div class="minimal-card p-4 hover:bg-gray-50 transition-colors">
         <div class="flex justify-between items-center">
             <div>
@@ -214,7 +214,7 @@ const PlaylistDetails = (playlist) => `
 `;
 
 // Modal Components
-const CreatePlaylistModal = () => `
+export const CreatePlaylistModal = () => `
     <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
             <h3 class="modal-title section-title text-2xl mb-4">Create New Playlist</h3>
@@ -227,7 +227,7 @@ const CreatePlaylistModal = () => `
     </div>
 `;
 
-const AddJobsModal = () => `
+export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col">
             <h3 class="section-title text-xl mb-4 flex-shrink-0">Add Jobs to Playlist [DEBUG-123]</h3>
@@ -244,7 +244,7 @@ const AddJobsModal = () => `
     </div>
 `;
 
-const UserSelectModal = () => `
+export const UserSelectModal = () => `
     <div id="userSelectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
             <h3 class="text-xl font-bold mb-4">Select User</h3>
@@ -266,7 +266,7 @@ const UserSelectModal = () => `
     </div>
 `;
 
-const ManagePlayersModal = () => `
+export const ManagePlayersModal = () => `
     <div id="managePlayersModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
             <h3 class="section-title text-xl mb-4">Manage Players</h3>
