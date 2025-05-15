@@ -109,8 +109,8 @@ const playerStatSchema = new mongoose.Schema({
 const playlistSchema = new mongoose.Schema({
   name: String,
   jobs: [{
-    ...jobSchema.obj,
-    url: { type: String, required: true, unique: false }
+    type: Object,
+    _id: false
   }],
   stats: [playerStatSchema],
   players: [String],
