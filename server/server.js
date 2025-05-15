@@ -18,6 +18,15 @@ app.use(express.json());
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+  }
+  next();
+});
+
 // Basic health check
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
@@ -464,9 +473,6 @@ app.put('/api/playlists/:id/scores', async (req, res) => {
   }
 });
 
-// Add index for faster playlist lookups
-Playlist.collection.createIndex({ _id: 1 });
-
 // MongoDB Atlas connection options
 const mongoOptions = {
     useNewUrlParser: true,
@@ -481,19 +487,33 @@ const mongoOptions = {
 // Connect to MongoDB Atlas
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Marius:y61C1M8iDn3hbbhr@gtatracker.jjongjz.mongodb.net/gta-tracker?retryWrites=true&w=majority&appName=GTATracker';
 
+// Fix MongoDB indexes
+mongoose.connection.on('connected', async () => {
+  try {
+    // Drop problematic index if it exists
+    try {
+      await mongoose.connection.db.collection('playlists').dropIndex('jobs.url_1');
+      console.log('Dropped problematic index');
+    } catch (err) {
+      if (err.code !== 26) { // 26 is the error code for "namespace not found"
+        console.error('Error dropping index:', err);
+      }
+    }
+
+    // Create new indexes
+    await Playlist.collection.createIndex({ _id: 1 });
+    await Playlist.collection.createIndex({ 'jobs.url': 1 }, { unique: false });
+    console.log('Created new indexes');
+  } catch (err) {
+    console.error('Error setting up indexes:', err);
+  }
+});
+
+// Connect to MongoDB Atlas
 mongoose.connect(MONGODB_URI, mongoOptions)
     .then(() => {
         console.log('Successfully connected to MongoDB Atlas.');
         console.log('Connected to database:', mongoose.connection.db.databaseName);
-        
-        // Drop the problematic index if it exists
-        return mongoose.connection.db.collection('playlists').dropIndex('jobs.url_1')
-            .then(() => console.log('Dropped problematic index'))
-            .catch(err => {
-                if (err.code !== 26) { // 26 is the error code for "namespace not found"
-                    console.error('Error dropping index:', err);
-                }
-            });
     })
     .catch((error) => {
         console.error('Error connecting to MongoDB Atlas:', error);
