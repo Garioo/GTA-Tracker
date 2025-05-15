@@ -181,8 +181,11 @@ const jobs = {
             return Components.JobCardCompact(job, index >= 0 ? index : null);
         }).join('');
         
-        // Update selected jobs count
-        document.getElementById('selectedJobsCount').textContent = selectedJobs.length;
+        // Update selected jobs count safely
+        const selectedJobsCountElem = document.getElementById('selectedJobsCount');
+        if (selectedJobsCountElem) {
+            selectedJobsCountElem.textContent = selectedJobs.length;
+        }
     },
     
     search: utils.debounce((query) => {
@@ -667,6 +670,9 @@ window.toggleJobSelection = (checkbox, job) => {
     } else {
         state.selectedJobs.delete(job.url);
     }
-    // Update the display to show new numbers
-    jobs.renderCompact(document.getElementById('availableJobs'));
+    // Only update if the modal and container exist
+    const container = document.getElementById('availableJobs');
+    if (container && document.getElementById('selectedJobsCount')) {
+        jobs.renderCompact(container);
+    }
 }; 
