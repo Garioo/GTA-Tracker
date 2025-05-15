@@ -491,7 +491,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--accent-400);
+    color: var(--text-400);
     transition: color 0.2s ease;
 }
 
@@ -501,6 +501,32 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 .search-container .input:focus + i {
     color: var(--accent-500);
+}
+
+/* Dark theme specific search styles */
+[data-theme="dark"] .search-container .input {
+    background: var(--background-800);
+    color: var(--text-100);
+    border-color: var(--background-700);
+}
+
+[data-theme="dark"] .search-container .input:hover {
+    background: var(--background-700);
+    border-color: var(--accent-500);
+}
+
+[data-theme="dark"] .search-container .input:focus {
+    background: var(--background-700);
+    border-color: var(--accent-400);
+}
+
+[data-theme="dark"] .search-container i {
+    color: var(--text-500);
+}
+
+[data-theme="dark"] .search-container .input:hover + i,
+[data-theme="dark"] .search-container .input:focus + i {
+    color: var(--accent-400);
 }
 
 /* Filter dropdown enhancements */

@@ -29,7 +29,8 @@ export const modals = {
         const searchInput = document.getElementById('jobSearch');
         if (searchInput) {
             searchInput.removeEventListener('input', modals.handleJobSearch);
-            searchInput.addEventListener('input', modals.handleJobSearch);
+            searchInput.addEventListener('input', utils.debounce(modals.handleJobSearch, 300));
+            searchInput.value = ''; // Clear search input when opening modal
         }
         
         // Initialize job selection after jobs are rendered
@@ -40,20 +41,27 @@ export const modals = {
         }, 100);
     },
     handleJobSearch: (e) => {
-        const searchTerm = e.target.value.toLowerCase();
+        const searchTerm = e.target.value.toLowerCase().trim();
         const jobCards = document.querySelectorAll('#availableJobs .group');
+        let visibleCount = 0;
+
         jobCards.forEach(card => {
-            const title = card.querySelector('h4').textContent.toLowerCase();
-            const creator = card.querySelector('p.text-gray-500').textContent.toLowerCase();
-            const gameMode = card.querySelector('.bg-gradient-to-r.from-blue-100').textContent.toLowerCase();
-            const routeType = card.querySelector('.bg-gradient-to-r.from-green-100').textContent.toLowerCase();
-            const routeLength = card.querySelector('.bg-gradient-to-r.from-purple-100').textContent.toLowerCase();
+            const title = card.querySelector('h4')?.textContent.toLowerCase() || '';
+            const creator = card.querySelector('p.text-gray-500')?.textContent.toLowerCase() || '';
+            const gameMode = card.querySelector('.bg-gradient-to-r.from-blue-100')?.textContent.toLowerCase() || '';
+            const routeType = card.querySelector('.bg-gradient-to-r.from-green-100')?.textContent.toLowerCase() || '';
+            const routeLength = card.querySelector('.bg-gradient-to-r.from-purple-100')?.textContent.toLowerCase() || '';
             
-            const isVisible = title.includes(searchTerm) || 
+            const isVisible = searchTerm === '' || 
+                title.includes(searchTerm) || 
                 creator.includes(searchTerm) || 
                 gameMode.includes(searchTerm) ||
                 routeType.includes(searchTerm) ||
                 routeLength.includes(searchTerm);
+            
+            if (isVisible) {
+                visibleCount++;
+            }
             
             // Use opacity and pointer-events instead of display to maintain layout
             card.style.opacity = isVisible ? '1' : '0';
@@ -63,6 +71,20 @@ export const modals = {
             card.style.margin = isVisible ? '' : '0';
             card.style.padding = isVisible ? '' : '0';
         });
+
+        // Show "no results" message if needed
+        const noResultsMsg = document.getElementById('noSearchResults');
+        if (visibleCount === 0 && searchTerm !== '') {
+            if (!noResultsMsg) {
+                const msg = document.createElement('div');
+                msg.id = 'noSearchResults';
+                msg.className = 'text-center py-4 text-muted';
+                msg.textContent = 'No races found matching your search';
+                document.getElementById('availableJobs').appendChild(msg);
+            }
+        } else if (noResultsMsg) {
+            noResultsMsg.remove();
+        }
     },
     hideAddJobs: () => {
         document.getElementById('addJobsModal').classList.add('hidden');
