@@ -759,4 +759,36 @@ select.input#jobsFilterDropdown,
 #availableJobs .grid {
   max-width: 100%;
   box-sizing: border-box;
+}
+
+.job-card .job-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Tag colors */
+.job-tag-mode {
+  background: #e0f0ff;
+  color: #2563eb;
+}
+.job-tag-type {
+  background: #e6fbe6;
+  color: #059669;
+}
+.job-tag-length {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.job-card .job-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.85em;
+  font-weight: 500;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
 } 
