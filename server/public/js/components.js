@@ -232,28 +232,16 @@ const CreatePlaylistModal = () => `
 
 const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-4 w-full max-w-lg h-auto max-h-[90vh] overflow-hidden flex flex-col border-4 border-red-500 bg-red-100">
-            <h3 class="section-title text-base mb-2 flex-shrink-0">Add Jobs to Playlist</h3>
-            <div class="mb-2 flex-shrink-0">
-                <div class="relative">
-                    <input type="text" id="jobSearch" placeholder="Search jobs..." 
-                           class="w-full p-1.5 pl-8 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                    <i class="fas fa-search absolute left-2.5 top-2 text-gray-400 text-sm"></i>
-                </div>
-            </div>
-            <div class="flex-1 min-h-0 overflow-y-auto mb-2 pr-2 custom-scrollbar">
-                <div id="availableJobs" class="grid grid-cols-1 gap-1.5">
+        <div class="minimal-card p-6 w-3/4 h-[80vh] shadow-xl overflow-hidden flex flex-col">
+            <h3 class="section-title text-xl mb-4 flex-shrink-0">Add Jobs to Playlist</h3>
+            <div class="flex-1 min-h-0 overflow-y-auto mb-4">
+                <div id="availableJobs" class="grid grid-cols-1 gap-4">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t flex-shrink-0">
-                <div class="text-xs text-gray-500">
-                    <span id="selectedJobsCount" class="font-bold text-blue-600">0</span> jobs selected
-                </div>
-                <div class="flex space-x-2">
-                    <button id="cancelAddJobs" class="btn bg-gray-300 hover:bg-gray-400 text-sm py-1 px-3">Cancel</button>
-                    <button id="confirmAddJobs" class="btn bg-blue-500 text-white hover:bg-blue-600 text-sm py-1 px-3">Add Selected</button>
-                </div>
+            <div class="flex justify-end space-x-2 flex-shrink-0">
+                <button id="cancelAddJobs" class="btn bg-gray-300">Cancel</button>
+                <button id="confirmAddJobs" class="btn">Add Selected Jobs</button>
             </div>
         </div>
     </div>
