@@ -229,26 +229,26 @@ export const CreatePlaylistModal = () => `
 
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-4 w-2/3 h-[70vh] shadow-xl overflow-hidden flex flex-col bg-white rounded-lg">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b">
+        <div class="minimal-card p-3 w-1/2 h-[60vh] shadow-xl overflow-hidden flex flex-col bg-white rounded-lg">
+            <div class="flex items-center justify-between mb-2 pb-2 border-b">
                 <div>
-                    <h3 class="text-xl font-semibold text-gray-800">Add Jobs to Playlist</h3>
-                    <p class="text-xs text-gray-500 mt-0.5">Select jobs to add to your playlist</p>
+                    <h3 class="text-lg font-semibold text-gray-800">Add Jobs to Playlist</h3>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Select jobs to add to your playlist</p>
                 </div>
                 <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 min-h-0 overflow-y-auto pr-2">
-                <div id="availableJobs" class="grid grid-cols-1 gap-1.5">
+            <div class="flex-1 min-h-0 overflow-y-auto pr-1">
+                <div id="availableJobs" class="grid grid-cols-1 gap-0.5">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-end space-x-2 mt-4 pt-3 border-t">
-                <button id="cancelAddJobsBtn" class="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors">
+            <div class="flex justify-end space-x-2 mt-2 pt-2 border-t">
+                <button id="cancelAddJobsBtn" class="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors">
                     Cancel
                 </button>
-                <button id="confirmAddJobs" class="px-3 py-1.5 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 rounded transition-colors">
+                <button id="confirmAddJobs" class="px-2 py-1 text-xs font-medium text-white bg-blue-500 hover:bg-blue-600 rounded transition-colors">
                     Add Selected
                 </button>
             </div>
