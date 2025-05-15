@@ -18,8 +18,8 @@ export const modals = {
         const filterDropdown = document.getElementById('jobsFilterDropdown');
         if (filterDropdown) {
             filterDropdown.value = 'recentlyAdded';
-            // Trigger the change event to apply the filter
-            filterDropdown.dispatchEvent(new Event('change'));
+            // Render jobs immediately with the default filter
+            jobs.renderCompact(document.getElementById('availableJobs'), 'recentlyAdded');
         }
         // jobs.renderCompact will be called from main.js after import
         const selectedJobsCountElem = document.getElementById('selectedCount');
