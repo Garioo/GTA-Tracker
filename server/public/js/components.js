@@ -22,7 +22,7 @@ const JobCard = (job) => `
 
 const JobCardCompact = (job, playlistIndex = null, checked = false, disabled = false) => `
     <div class="minimal-card flex items-start p-1.5 shadow rounded mb-1.5 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
-         data-job-url="${job.url}" ${!disabled ? 'onclick="window.toggleJobSelection(this, ' + JSON.stringify(job).replace(/\"/g, '&quot;') + ')"' : ''}>
+         data-job-url="${job.url}">
         <div class="flex items-center mr-2">
             ${(playlistIndex !== null || checked) ? `
                 <div class="ml-1.5 w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs">

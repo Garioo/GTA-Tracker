@@ -200,6 +200,15 @@ const jobs = {
             return Components.JobCardCompact(job, selectedIndex >= 0 ? playlistJobs.length + selectedIndex : null, selectedIndex >= 0, false);
         }).join('');
 
+        // Attach click event listeners to job cards (not disabled)
+        container.querySelectorAll('.minimal-card[data-job-url]:not(.pointer-events-none)').forEach(card => {
+            const jobUrl = card.getAttribute('data-job-url');
+            const job = state.jobs.find(j => j.url === jobUrl);
+            if (job) {
+                card.onclick = () => window.toggleJobSelection(card, job);
+            }
+        });
+
         // Update selected jobs count safely
         const selectedJobsCountElem = document.getElementById('selectedJobsCount');
         if (selectedJobsCountElem) {
