@@ -184,9 +184,37 @@ app.get('/api/playlists', async (req, res) => {
 
 // Get playlist by ID
 app.get('/api/playlists/:id', async (req, res) => {
-  const playlist = await Playlist.findById(req.params.id);
-  if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
-  res.json(playlist);
+  try {
+    const playlist = await Playlist.findById(req.params.id).lean();
+    if (!playlist) {
+      console.log('Playlist not found:', req.params.id);
+      return res.status(404).json({ 
+        error: 'Playlist not found',
+        message: 'The requested playlist does not exist'
+      });
+    }
+    
+    // Ensure the playlist has all required fields
+    const safePlaylist = {
+      _id: playlist._id,
+      name: playlist.name || '',
+      jobs: playlist.jobs || [],
+      stats: playlist.stats || [],
+      players: playlist.players || [],
+      scores: playlist.scores || {},
+      createdAt: playlist.createdAt,
+      updatedAt: playlist.updatedAt
+    };
+    
+    console.log('Found playlist:', safePlaylist._id);
+    res.json(safePlaylist);
+  } catch (error) {
+    console.error('Error fetching playlist:', error);
+    res.status(500).json({ 
+      error: 'Failed to fetch playlist',
+      details: error.message
+    });
+  }
 });
 
 // Update playlist name
