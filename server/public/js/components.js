@@ -232,16 +232,16 @@ const CreatePlaylistModal = () => `
 
 const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-3 w-2/3 h-[450px] shadow-xl flex flex-col">
-            <h3 class="section-title text-lg mb-2">Add Jobs to Playlist</h3>
+        <div class="minimal-card p-3 w-1/2 h-[400px] shadow-xl flex flex-col">
+            <h3 class="section-title text-base mb-2">Add Jobs to Playlist</h3>
             <div class="mb-2">
                 <div class="relative">
-                    <input type="text" id="jobSearch" placeholder="Search jobs by title, creator, or game mode..." 
+                    <input type="text" id="jobSearch" placeholder="Search jobs..." 
                            class="w-full p-1.5 pl-8 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                     <i class="fas fa-search absolute left-2.5 top-2 text-gray-400 text-sm"></i>
                 </div>
             </div>
-            <div class="flex-1 overflow-y-auto mb-2 pr-2 custom-scrollbar" style="max-height: calc(450px - 120px);">
+            <div class="flex-1 overflow-y-auto mb-2 pr-2 custom-scrollbar" style="max-height: calc(400px - 100px);">
                 <div id="availableJobs" class="grid grid-cols-1 gap-1.5">
                     <!-- Available jobs will be inserted here -->
                 </div>
@@ -252,7 +252,7 @@ const AddJobsModal = () => `
                 </div>
                 <div class="flex space-x-2">
                     <button id="cancelAddJobs" class="btn bg-gray-300 hover:bg-gray-400 text-sm py-1 px-3">Cancel</button>
-                    <button id="confirmAddJobs" class="btn bg-blue-500 text-white hover:bg-blue-600 text-sm py-1 px-3">Add Selected Jobs</button>
+                    <button id="confirmAddJobs" class="btn bg-blue-500 text-white hover:bg-blue-600 text-sm py-1 px-3">Add Selected</button>
                 </div>
             </div>
         </div>
