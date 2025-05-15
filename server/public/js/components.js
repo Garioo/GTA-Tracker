@@ -232,7 +232,7 @@ const CreatePlaylistModal = () => `
 
 const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-4 w-full max-w-sm" style="height: 320px; display: flex; flex-direction: column;">
+        <div class="minimal-card p-4 w-full add-jobs-modal-fixed rounded-xl shadow-xl flex flex-col">
             <h3 class="section-title text-base mb-2">Add Jobs to Playlist</h3>
             <div class="mb-2">
                 <div class="relative">
