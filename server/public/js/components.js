@@ -28,7 +28,7 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
     const numberOpacity = isSelected ? '' : 'opacity-0';
     
     return `
-    <div class="group flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''} ${selectedClass}"
+    <div class="group flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''} ${selectedClass} h-[72px]"
          data-job-url="${job.url}"
          data-job-id="${job._id || job.id}"
          data-selected="${selectedAttr}">
@@ -37,7 +37,7 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                 ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
             </div>
         ` : ''}
-        <div class="min-w-0 flex-1">
+        <div class="min-w-0 flex-1 flex flex-col justify-center">
             <div class="flex items-center justify-between">
                 <div class="min-w-0">
                     <h4 class="text-sm font-medium truncate text-gray-900">${job.title}</h4>
@@ -49,7 +49,7 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                     </span>
                 </div>
             </div>
-            <div class="flex items-center gap-1.5 mt-1.5">
+            <div class="flex items-center gap-1.5 mt-1">
                 <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-blue-50 text-blue-800 shadow-sm">
                     <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                 </span>
