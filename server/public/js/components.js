@@ -232,21 +232,21 @@ const CreatePlaylistModal = () => `
 
 const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="minimal-card p-4 w-[600px] h-[500px] add-jobs-modal-fixed rounded-xl shadow-xl flex flex-col">
-            <h3 class="section-title text-base mb-2">Add Jobs to Playlist</h3>
-            <div class="mb-2">
+        <div class="minimal-card p-4 w-[600px] h-[500px] add-jobs-modal-fixed rounded-xl shadow-xl flex flex-col overflow-hidden">
+            <h3 class="section-title text-base mb-2 flex-shrink-0">Add Jobs to Playlist</h3>
+            <div class="mb-2 flex-shrink-0">
                 <div class="relative">
                     <input type="text" id="jobSearch" placeholder="Search jobs..." 
                            class="w-full p-1.5 pl-8 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                     <i class="fas fa-search absolute left-2.5 top-2 text-gray-400 text-sm"></i>
                 </div>
             </div>
-            <div class="flex-1 overflow-y-auto mb-2 pr-2 custom-scrollbar" style="height: 350px;">
+            <div class="overflow-y-auto mb-2 pr-2 custom-scrollbar flex-1 min-h-0">
                 <div id="availableJobs" class="grid grid-cols-1 gap-1.5">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t">
+            <div class="flex justify-between items-center pt-2 border-t flex-shrink-0">
                 <div class="text-xs text-gray-500">
                     <span id="selectedJobsCount" class="font-bold text-blue-600">0</span> jobs selected
                 </div>
