@@ -282,14 +282,18 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
     console.log('\n=== Adding Jobs to Playlist ===');
     console.log('Playlist ID:', req.params.id);
     console.log('Raw request body:', JSON.stringify(req.body, null, 2));
+    console.log('Content-Type:', req.headers['content-type']);
     
     // Handle both direct job object and jobs array
     let jobs;
     if (Array.isArray(req.body)) {
+      console.log('Received direct array of jobs');
       jobs = req.body;
     } else if (req.body.jobs) {
+      console.log('Received jobs array in object');
       jobs = req.body.jobs;
     } else if (req.body.url) {
+      console.log('Received single job object');
       jobs = [req.body];
     } else {
       console.error('Invalid request format:', req.body);
