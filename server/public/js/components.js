@@ -21,7 +21,7 @@ export const JobCard = (job) => `
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+    <div class="group flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''}"
          data-job-url="${job.url}">
         ${(playlistIndex != null || selectedNumber != null) ? `
             <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-bold shadow-sm">
@@ -52,6 +52,7 @@ export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null,
                 </span>
             </div>
         </div>
+        <div class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white text-xs font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 selected-number"></div>
     </div>
 `;
 
@@ -239,13 +240,18 @@ export const AddJobsModal = () => `
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-end gap-2 p-4 border-t bg-gray-50">
-                <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors">
-                    Cancel
-                </button>
-                <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-colors shadow-sm">
-                    Add Selected
-                </button>
+            <div class="flex justify-between items-center gap-2 p-4 border-t bg-gray-50">
+                <div class="text-sm text-gray-600">
+                    <span id="selectedCount" class="font-medium">0</span> jobs selected
+                </div>
+                <div class="flex gap-2">
+                    <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-colors shadow-sm">
+                        Add Selected
+                    </button>
+                </div>
             </div>
         </div>
     </div>
