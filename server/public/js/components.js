@@ -246,7 +246,7 @@ export const AddJobsModal = () => `
                 </button>
             </div>
             <div class="flex-1 overflow-y-auto p-4">
-                <div id="availableJobs" class="space-y-2">
+                <div id="availableJobs" class="space-y-2 relative">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>

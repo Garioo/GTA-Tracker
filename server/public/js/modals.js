@@ -49,15 +49,19 @@ export const modals = {
             const routeType = card.querySelector('.bg-gradient-to-r.from-green-100').textContent.toLowerCase();
             const routeLength = card.querySelector('.bg-gradient-to-r.from-purple-100').textContent.toLowerCase();
             
-            if (title.includes(searchTerm) || 
+            const isVisible = title.includes(searchTerm) || 
                 creator.includes(searchTerm) || 
                 gameMode.includes(searchTerm) ||
                 routeType.includes(searchTerm) ||
-                routeLength.includes(searchTerm)) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
+                routeLength.includes(searchTerm);
+            
+            // Use opacity and pointer-events instead of display to maintain layout
+            card.style.opacity = isVisible ? '1' : '0';
+            card.style.pointerEvents = isVisible ? 'auto' : 'none';
+            card.style.position = isVisible ? 'relative' : 'absolute';
+            card.style.height = isVisible ? '72px' : '0';
+            card.style.margin = isVisible ? '' : '0';
+            card.style.padding = isVisible ? '' : '0';
         });
     },
     hideAddJobs: () => {
