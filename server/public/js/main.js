@@ -201,6 +201,11 @@ const jobs = {
             return Components.JobCardCompact(job, null, selectedIndex >= 0, false, selectedIndex >= 0 ? playlistJobs.length + selectedIndex + 1 : null);
         }).join('');
 
+        // Force reflow/repaint for Tailwind classes and browser rendering
+        container.style.display = 'none';
+        container.offsetHeight; // force reflow
+        container.style.display = '';
+
         // Attach click event listeners to job cards (not disabled)
         container.querySelectorAll('.minimal-card[data-job-url]:not(.pointer-events-none)').forEach(card => {
             const jobUrl = card.getAttribute('data-job-url');
