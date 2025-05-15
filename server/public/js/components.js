@@ -248,8 +248,8 @@ export const AddJobsModal = () => `
             <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 <div class="flex items-center gap-4 mb-4">
                     <div class="search-container flex-1">
-                        <input type="text" id="jobSearch" placeholder="Search races..." class="input w-full">
-                        <i class="fas fa-search"></i>
+                        <input type="text" id="jobSearch" placeholder="Search races..." class="search-input">
+                        <i class="fas fa-search search-icon"></i>
                     </div>
                     <div class="filter-container">
                         <select id="jobsFilterDropdown" class="input">
