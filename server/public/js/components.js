@@ -368,6 +368,13 @@ window.initializeJobSelection = () => {
                     selectedNumberDiv.textContent = currentNumber++;
                 }
             });
+
+            // Log selection state for debugging
+            console.log('Selection state:', {
+                selectedCount,
+                stateSelectedJobs: state.selectedJobs.size,
+                dataSelectedElements: document.querySelectorAll('#availableJobs .group[data-selected="true"]').length
+            });
         });
     });
 }; 
