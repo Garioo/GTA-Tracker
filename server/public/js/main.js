@@ -191,14 +191,12 @@ const jobs = {
 
         // Render all jobs with playlist number and selection state
         container.innerHTML = jobsToShow.map(job => {
-            // If job is in playlist, show its number and keep it checked/disabled
             const playlistIndex = playlistJobs.findIndex(j => j.url === job.url);
             if (playlistIndex !== -1) {
-                return Components.JobCardCompact(job, playlistIndex, true, true, null);
+                return Components.JobCardCompact(job, playlistIndex, null, true);
             }
-            // Otherwise, show as selectable, and show number if selected (after playlist jobs)
             const selectedIndex = selectedJobs.findIndex(j => j.url === job.url);
-            return Components.JobCardCompact(job, null, selectedIndex >= 0, false, selectedIndex >= 0 ? playlistJobs.length + selectedIndex + 1 : null);
+            return Components.JobCardCompact(job, null, selectedIndex >= 0 ? playlistJobs.length + selectedIndex + 1 : null, false);
         }).join('');
 
         // Force reflow/repaint for Tailwind classes and browser rendering
