@@ -245,14 +245,9 @@ export const AddJobsModal = () => `
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4">
-                <div class="custom-scrollbar-outer" style="height: 400px;">
-                    <div class="custom-scrollbar-inner" id="availableJobs">
-                        <!-- Available jobs will be inserted here -->
-                    </div>
-                    <div class="custom-scrollbar-track">
-                        <div class="custom-scrollbar-thumb"></div>
-                    </div>
+            <div class="flex-1 p-4">
+                <div id="availableJobs">
+                    <!-- Available jobs will be inserted here -->
                 </div>
             </div>
             <div class="flex justify-between items-center gap-4 p-4 border-t border-border bg-card-bg">
