@@ -21,35 +21,32 @@ export const JobCard = (job) => `
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => `
-    <div class="flex items-center h-12 px-2 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
-         data-job-url="${job.url}">
-        <div class="flex items-center gap-2 min-w-0 flex-1">
-            ${(playlistIndex != null || selectedNumber != null) ? `
-                <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center rounded-full bg-blue-500 text-white text-[10px] font-bold">
-                    ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
-                </div>
-            ` : ''}
-            <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-1.5">
-                    <h4 class="font-medium text-xs truncate">${job.title}</h4>
-                    <span class="text-[10px] text-gray-400">by ${job.creator}</span>
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800">
-                        <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
-                    </span>
-                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800">
-                        <i class="fas fa-route mr-0.5"></i>${job.routeType}
-                    </span>
-                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-purple-100 text-purple-800">
-                        <i class="fas fa-ruler mr-0.5"></i>${job.routeLength}
-                    </span>
-                </div>
-            </div>
-            <div class="flex-shrink-0 ml-2">
+    <div class="bg-white rounded border border-gray-200 shadow-sm hover:shadow transition-all cursor-pointer ${disabled ? 'opacity-60 pointer-events-none' : ''}"
+         data-job-url="${job.url}"
+         style="width: 180px;">
+        <div class="p-1.5">
+            <div class="flex items-center justify-between mb-1">
+                ${(playlistIndex != null || selectedNumber != null) ? `
+                    <div class="w-4 h-4 flex items-center justify-center rounded-full bg-blue-500 text-white text-[10px] font-bold">
+                        ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
+                    </div>
+                ` : '<div></div>'}
                 <div class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800">
                     <i class="fas fa-star mr-0.5"></i>${job.rating}
                 </div>
+            </div>
+            <h4 class="font-medium text-xs truncate mb-0.5">${job.title}</h4>
+            <p class="text-[10px] text-gray-500 truncate mb-1">by ${job.creator}</p>
+            <div class="flex flex-wrap gap-0.5">
+                <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800">
+                    <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
+                </span>
+                <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800">
+                    <i class="fas fa-route mr-0.5"></i>${job.routeType}
+                </span>
+                <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-purple-100 text-purple-800">
+                    <i class="fas fa-ruler mr-0.5"></i>${job.routeLength}
+                </span>
             </div>
         </div>
     </div>
@@ -224,7 +221,7 @@ export const CreatePlaylistModal = () => `
 
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl overflow-hidden flex flex-col" style="width: 400px; height: 500px;">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden flex flex-col" style="width: 600px; height: 500px;">
             <div class="flex items-center justify-between p-2 border-b">
                 <div>
                     <h3 class="text-base font-semibold text-gray-800">Add Jobs to Playlist</h3>
@@ -234,8 +231,8 @@ export const AddJobsModal = () => `
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto">
-                <div id="availableJobs" class="divide-y divide-gray-100">
+            <div class="flex-1 overflow-y-auto p-2">
+                <div id="availableJobs" class="grid grid-cols-3 gap-2">
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
