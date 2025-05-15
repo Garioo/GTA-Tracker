@@ -172,8 +172,14 @@ app.post('/api/playlists', async (req, res) => {
 
 // Get all playlists
 app.get('/api/playlists', async (req, res) => {
-  const playlists = await Playlist.find();
-  res.json(playlists);
+  try {
+    const playlists = await Playlist.find().lean();
+    console.log('Found playlists:', playlists.length);
+    res.json(playlists || []); // Ensure we always return an array
+  } catch (error) {
+    console.error('Error fetching playlists:', error);
+    res.status(500).json({ error: 'Failed to fetch playlists', details: error.message });
+  }
 });
 
 // Get playlist by ID
