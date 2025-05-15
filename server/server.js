@@ -185,7 +185,14 @@ app.get('/api/playlists', async (req, res) => {
 // Get playlist by ID
 app.get('/api/playlists/:id', async (req, res) => {
   try {
-    const playlist = await Playlist.findById(req.params.id).lean();
+    // Add cache control headers
+    res.set('Cache-Control', 'public, max-age=30'); // Cache for 30 seconds
+    
+    const playlist = await Playlist.findById(req.params.id)
+      .lean()
+      .select('_id name jobs stats players scores createdAt updatedAt') // Only select needed fields
+      .exec();
+      
     if (!playlist) {
       console.log('Playlist not found:', req.params.id);
       return res.status(404).json({ 
@@ -194,19 +201,19 @@ app.get('/api/playlists/:id', async (req, res) => {
       });
     }
     
-    // Ensure the playlist has all required fields
+    // Ensure the playlist has all required fields with minimal processing
     const safePlaylist = {
       _id: playlist._id,
       name: playlist.name || '',
-      jobs: playlist.jobs || [],
-      stats: playlist.stats || [],
-      players: playlist.players || [],
+      jobs: Array.isArray(playlist.jobs) ? playlist.jobs : [],
+      stats: Array.isArray(playlist.stats) ? playlist.stats : [],
+      players: Array.isArray(playlist.players) ? playlist.players : [],
       scores: playlist.scores || {},
       createdAt: playlist.createdAt,
       updatedAt: playlist.updatedAt
     };
     
-    console.log('Found playlist:', safePlaylist._id);
+    console.log('Found playlist:', safePlaylist._id, 'with', safePlaylist.jobs.length, 'jobs');
     res.json(safePlaylist);
   } catch (error) {
     console.error('Error fetching playlist:', error);
@@ -341,6 +348,53 @@ app.put('/api/playlists/:id/players', async (req, res) => {
   await playlist.save();
   res.json(playlist);
 });
+
+// Update scores for a playlist
+app.put('/api/playlists/:id/scores', async (req, res) => {
+  try {
+    const { scores } = req.body;
+    if (!scores || typeof scores !== 'object') {
+      return res.status(400).json({ 
+        error: 'Invalid scores data',
+        message: 'Scores must be an object'
+      });
+    }
+
+    const playlist = await Playlist.findById(req.params.id);
+    if (!playlist) {
+      return res.status(404).json({ 
+        error: 'Playlist not found',
+        message: 'The requested playlist does not exist'
+      });
+    }
+
+    // Update scores
+    playlist.scores = scores;
+    playlist.updatedAt = new Date();
+    
+    await playlist.save();
+    console.log('Updated scores for playlist:', playlist._id);
+    
+    res.json({
+      success: true,
+      playlist: {
+        _id: playlist._id,
+        name: playlist.name,
+        scores: playlist.scores,
+        updatedAt: playlist.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error('Error updating scores:', error);
+    res.status(500).json({ 
+      error: 'Failed to update scores',
+      details: error.message
+    });
+  }
+});
+
+// Add index for faster playlist lookups
+Playlist.collection.createIndex({ _id: 1 });
 
 // MongoDB Atlas connection options
 const mongoOptions = {
