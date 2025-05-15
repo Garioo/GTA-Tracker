@@ -156,6 +156,7 @@ nav {
     border: 1px solid var(--background-200);
     transition: all 0.3s ease;
     position: relative;
+    padding-top: 1.5rem;
 }
 
 .job-card:hover {
