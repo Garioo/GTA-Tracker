@@ -57,6 +57,7 @@ export const playlists = {
         utils.showLoading();
         try {
             await API.playlists.removeJob(state.currentPlaylist._id, jobUrl);
+            state.selectedJobs.clear();
             await playlists.view(state.currentPlaylist._id);
         } catch (error) {
             utils.showError('Failed to remove job: ' + error.message);

@@ -40,13 +40,23 @@ export const jobs = {
             // Get the last played playlist from state
             const lastPlayedPlaylist = state.playlists
                 .filter(p => p.lastPlayed)
-                .sort((a, b) => new Date(b.lastPlayed) - new Date(a.lastPlayed))[0];
+                .sort((a, b) => {
+                    const dateA = new Date(a.lastPlayed || 0);
+                    const dateB = new Date(b.lastPlayed || 0);
+                    return dateB - dateA;
+                })[0];
+            
+            console.log('Last played playlist:', lastPlayedPlaylist);
             
             if (lastPlayedPlaylist) {
                 // Show jobs from the last played playlist first
                 jobsToShow.sort((a, b) => {
-                    const aInLastPlaylist = lastPlayedPlaylist.jobs.some(j => j.url === a.url);
-                    const bInLastPlaylist = lastPlayedPlaylist.jobs.some(j => j.url === b.url);
+                    const aInLastPlaylist = lastPlayedPlaylist.jobs.some(j => 
+                        (j.url || '').trim().toLowerCase() === (a.url || '').trim().toLowerCase()
+                    );
+                    const bInLastPlaylist = lastPlayedPlaylist.jobs.some(j => 
+                        (j.url || '').trim().toLowerCase() === (b.url || '').trim().toLowerCase()
+                    );
                     if (aInLastPlaylist && !bInLastPlaylist) return -1;
                     if (!aInLastPlaylist && bInLastPlaylist) return 1;
                     return 0;

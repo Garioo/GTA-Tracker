@@ -232,23 +232,28 @@ body.theme-black .stats-table tbody tr {
 
 .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
-    height: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-    margin: 4px;
+    background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #d1d5db;
     border-radius: 4px;
-    border: 2px solid #f1f1f1;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #666;
+    background: #9ca3af;
+}
+
+/* Dark mode scrollbar */
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4b5563;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
 }
 
 .add-jobs-modal-fixed {

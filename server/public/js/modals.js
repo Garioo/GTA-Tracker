@@ -1,6 +1,7 @@
 // Modal-related logic
 import { state } from './state.js';
 import { utils } from './utils.js';
+import { jobs } from './jobs.js';
 
 export const modals = {
     showUserSelect: () => {
@@ -13,6 +14,13 @@ export const modals = {
     showAddJobs: () => {
         document.getElementById('addJobsModal').classList.remove('hidden');
         state.selectedJobs.clear();
+        // Set Recently Added as default filter
+        const filterDropdown = document.getElementById('jobsFilterDropdown');
+        if (filterDropdown) {
+            filterDropdown.value = 'recentlyAdded';
+            // Trigger the change event to apply the filter
+            filterDropdown.dispatchEvent(new Event('change'));
+        }
         // jobs.renderCompact will be called from main.js after import
         const selectedJobsCountElem = document.getElementById('selectedJobsCount');
         if (selectedJobsCountElem) {

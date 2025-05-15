@@ -184,7 +184,10 @@ app.post('/api/playlists', async (req, res) => {
 // Get all playlists
 app.get('/api/playlists', async (req, res) => {
   try {
-    const playlists = await Playlist.find().lean();
+    const playlists = await Playlist.find()
+      .lean()
+      .select('_id name jobs stats players scores createdAt updatedAt lastPlayed')
+      .exec();
     console.log('Found playlists:', playlists.length);
     res.json(playlists || []); // Ensure we always return an array
   } catch (error) {
@@ -208,7 +211,7 @@ app.get('/api/playlists/:id', async (req, res) => {
     
     const playlist = await Playlist.findById(req.params.id)
       .lean()
-      .select('_id name jobs stats players scores createdAt updatedAt') // Only select needed fields
+      .select('_id name jobs stats players scores createdAt updatedAt lastPlayed')
       .exec();
       
     if (!playlist) {
@@ -223,7 +226,8 @@ app.get('/api/playlists/:id', async (req, res) => {
       _id: playlist._id,
       name: playlist.name,
       jobCount: playlist.jobs ? playlist.jobs.length : 0,
-      jobs: playlist.jobs
+      jobs: playlist.jobs,
+      lastPlayed: playlist.lastPlayed
     });
     
     // Ensure the playlist has all required fields with minimal processing
@@ -236,6 +240,7 @@ app.get('/api/playlists/:id', async (req, res) => {
       scores: playlist.scores || {},
       createdAt: playlist.createdAt,
       updatedAt: playlist.updatedAt,
+      lastPlayed: playlist.lastPlayed,
       timestamp: Date.now() // Add timestamp to force fresh data
     };
     
