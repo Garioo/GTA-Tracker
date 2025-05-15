@@ -6,82 +6,82 @@ export const JobCard = (job) => `
     <div class="job-card p-4">
         <div class="flex justify-between items-start">
             <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">${job.title}</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Created by ${job.creator}</p>
+                <h3 class="text-lg font-semibold">${job.title}</h3>
+                <p class="text-sm text-muted">Created by ${job.creator}</p>
             </div>
             <div class="text-right">
-                <p class="text-sm text-gray-600 dark:text-gray-300">Rating: ${job.rating}</p>
+                <p class="text-sm">Rating: ${job.rating}</p>
             </div>
         </div>
         <div class="mt-4 grid grid-cols-1 gap-2 text-sm">
-            <p class="text-gray-700 dark:text-gray-300"><span class="font-medium">Game Mode:</span> ${job.gameMode}</p>
-            <p class="text-gray-700 dark:text-gray-300"><span class="font-medium">Route Type:</span> ${job.routeType}</p>
-            <p class="text-gray-700 dark:text-gray-300"><span class="font-medium">Route Length:</span> ${job.routeLength}</p>
+            <p><span class="font-medium">Game Mode:</span> ${job.gameMode}</p>
+            <p><span class="font-medium">Route Type:</span> ${job.routeType}</p>
+            <p><span class="font-medium">Route Length:</span> ${job.routeLength}</p>
         </div>
     </div>
 `;
 
 export const JobCardCompact = (job, playlistIndex = null, selectedNumber = null, disabled = false) => {
     const isSelected = state.selectedJobs.has(job.url);
-    const selectedClass = isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : '';
+    const selectedClass = isSelected ? 'border-primary bg-primary/10' : '';
     const selectedAttr = isSelected ? 'true' : 'false';
     const numberOpacity = isSelected ? '' : 'opacity-0';
     
     return `
-    <div class="group flex items-center gap-2 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-blue-500 hover:shadow-sm transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''} ${selectedClass} h-[72px]"
+    <div class="group flex items-center gap-2 p-2 bg-card-bg border border-border rounded-lg hover:bg-hover transition-all duration-200 cursor-pointer relative ${disabled ? 'opacity-60 pointer-events-none' : ''} ${selectedClass} h-[72px]"
          data-job-url="${job.url}"
          data-job-id="${job._id || job.id}"
          data-selected="${selectedAttr}">
         ${(playlistIndex != null || selectedNumber != null) ? `
-            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-bold shadow-sm">
+            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-primary text-text text-xs font-bold shadow-sm">
                 ${playlistIndex != null ? playlistIndex + 1 : selectedNumber}
             </div>
         ` : ''}
         <div class="min-w-0 flex-1 flex flex-col justify-center">
             <div class="flex items-center justify-between">
                 <div class="min-w-0">
-                    <h4 class="text-sm font-medium truncate text-gray-900 dark:text-gray-100">${job.title}</h4>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">by ${job.creator}</p>
+                    <h4 class="text-sm font-medium truncate">${job.title}</h4>
+                    <p class="text-xs text-muted truncate">by ${job.creator}</p>
                 </div>
                 <div class="flex items-center gap-1 ml-2">
-                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-100 to-yellow-50 dark:from-yellow-900/30 dark:to-yellow-800/30 text-yellow-800 dark:text-yellow-200 shadow-sm">
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent shadow-sm">
                         <i class="fas fa-star mr-0.5"></i>${job.rating}
                     </span>
                 </div>
             </div>
             <div class="flex items-center gap-1.5 mt-1">
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-800 dark:text-blue-200 shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary shadow-sm">
                     <i class="fas fa-gamepad mr-0.5"></i>${job.gameMode}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/30 text-green-800 dark:text-green-200 shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-secondary/20 text-secondary shadow-sm">
                     <i class="fas fa-route mr-0.5"></i>${job.routeType}
                 </span>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-800/30 text-purple-800 dark:text-purple-200 shadow-sm">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent shadow-sm">
                     <i class="fas fa-ruler mr-0.5"></i>${job.routeLength}
                 </span>
             </div>
         </div>
-        <div class="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white text-xs font-bold shadow-sm ${numberOpacity} group-hover:opacity-100 transition-opacity duration-200 selected-number">${selectedNumber || ''}</div>
+        <div class="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center rounded-full bg-primary text-text text-xs font-bold shadow-sm ${numberOpacity} group-hover:opacity-100 transition-opacity duration-200 selected-number">${selectedNumber || ''}</div>
     </div>
     `;
 };
 
 // Playlist Components
 export const PlaylistCard = (playlist) => `
-    <div class="minimal-card p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+    <div class="minimal-card p-4 hover:bg-hover transition-colors">
         <div class="flex justify-between items-center">
             <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">${playlist.name}</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">${playlist.jobs.length} jobs</p>
+                <h3 class="text-lg font-semibold">${playlist.name}</h3>
+                <p class="text-sm text-muted">${playlist.jobs.length} jobs</p>
             </div>
             <div class="flex space-x-2">
-                <button class="minimal-btn bg-blue-500 text-white hover:bg-blue-600" onclick="window.viewPlaylist('${playlist._id}')">
+                <button class="minimal-btn" onclick="window.viewPlaylist('${playlist._id}')">
                     <i class="fas fa-eye mr-2"></i>View
                 </button>
-                <button class="minimal-btn bg-green-500 text-white hover:bg-green-600" onclick="window.editPlaylist('${playlist._id}')">
+                <button class="minimal-btn" onclick="window.editPlaylist('${playlist._id}')">
                     <i class="fas fa-edit mr-2"></i>Edit
                 </button>
-                <button class="minimal-btn bg-red-500 text-white hover:bg-red-600" onclick="window.deletePlaylist('${playlist._id}')">
+                <button class="minimal-btn" onclick="window.deletePlaylist('${playlist._id}')">
                     <i class="fas fa-trash mr-2"></i>Delete
                 </button>
             </div>
@@ -94,51 +94,51 @@ export const PlaylistDetails = (playlist) => `
         <button id="backToPlaylists" class="minimal-btn mr-4">
             <i class="fas fa-arrow-left mr-2"></i>Back
         </button>
-        <h2 id="playlistDetailsTitle" class="text-2xl font-bold text-gray-900 dark:text-gray-100">${playlist.name}</h2>
+        <h2 id="playlistDetailsTitle" class="text-2xl font-bold">${playlist.name}</h2>
     </div>
     <div class="flex gap-4">
         <div class="w-1/2">
             <div class="minimal-card p-4">
-                <h3 class="font-bold text-lg mb-4 flex items-center text-gray-900 dark:text-gray-100">
-                    <i class="fas fa-chart-bar mr-2 text-blue-500"></i>
+                <h3 class="font-bold text-lg mb-4 flex items-center">
+                    <i class="fas fa-chart-bar mr-2 text-primary"></i>
                     Playlist Overview
                 </h3>
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                        <div class="text-sm text-blue-600 dark:text-blue-400 mb-1">
+                    <div class="bg-primary/10 p-3 rounded-lg">
+                        <div class="text-sm text-primary mb-1">
                             <i class="fas fa-list mr-1"></i>Total Jobs
                         </div>
-                        <div class="text-2xl font-bold text-blue-700 dark:text-blue-300">${playlist.jobs.length}</div>
-                        <div class="text-xs text-blue-500 dark:text-blue-400 mt-1">
+                        <div class="text-2xl font-bold">${playlist.jobs.length}</div>
+                        <div class="text-xs text-muted mt-1">
                             ${playlist.jobs.filter(job => job.gameMode === 'Race').length} Races
                         </div>
                     </div>
-                    <div class="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
-                        <div class="text-sm text-green-600 dark:text-green-400 mb-1">
+                    <div class="bg-secondary/10 p-3 rounded-lg">
+                        <div class="text-sm text-secondary mb-1">
                             <i class="fas fa-users mr-1"></i>Total Players
                         </div>
-                        <div class="text-2xl font-bold text-green-700 dark:text-green-300">${playlist.players?.length || 0}</div>
-                        <div class="text-xs text-green-500 dark:text-green-400 mt-1">
+                        <div class="text-2xl font-bold">${playlist.players?.length || 0}</div>
+                        <div class="text-xs text-muted mt-1">
                             ${playlist.stats?.filter(stat => stat.placement === 1).length || 0} Wins
                         </div>
                     </div>
                 </div>
-                <div class="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg mb-4">
-                    <div class="text-sm text-purple-600 dark:text-purple-400 mb-1">
+                <div class="bg-accent/10 p-3 rounded-lg mb-4">
+                    <div class="text-sm text-accent mb-1">
                         <i class="fas fa-trophy mr-1"></i>Total Points
                     </div>
-                    <div class="text-2xl font-bold text-purple-700 dark:text-purple-300">${
+                    <div class="text-2xl font-bold">${
                         playlist.stats?.reduce((total, stat) => {
                             const points = [15,12,10,8,7,6,5,4,3,2,1,0][stat.placement - 1] || 0;
                             return total + points;
                         }, 0) || 0
                     }</div>
-                    <div class="text-xs text-purple-500 dark:text-purple-400 mt-1">
+                    <div class="text-xs text-muted mt-1">
                         ${playlist.stats?.length || 0} Race Results
                     </div>
                 </div>
-                <div class="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg mb-4">
-                    <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                <div class="bg-card-bg p-3 rounded-lg mb-4 border border-border">
+                    <div class="text-sm text-muted mb-2">
                         <i class="fas fa-chart-line mr-1"></i>Top Performers
                     </div>
                     <div class="space-y-2">
@@ -155,16 +155,16 @@ export const PlaylistDetails = (playlist) => `
                                 .map(([player, points], index) => `
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
-                                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400 mr-2">#${index + 1}</span>
-                                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">${player}</span>
+                                            <span class="text-xs font-medium text-muted mr-2">#${index + 1}</span>
+                                            <span class="text-sm font-medium">${player}</span>
                                         </div>
-                                        <span class="text-sm font-bold text-gray-900 dark:text-gray-100">${points} pts</span>
+                                        <span class="text-sm font-bold">${points} pts</span>
                                     </div>
-                                `).join('') || '<div class="text-sm text-gray-500 dark:text-gray-400">No results yet</div>';
+                                `).join('') || '<div class="text-sm text-muted">No results yet</div>';
                         })()}
                     </div>
                 </div>
-                <div class="text-sm text-gray-500 dark:text-gray-400 flex items-center">
+                <div class="text-sm text-muted flex items-center">
                     <i class="fas fa-calendar mr-1"></i>
                     Created: ${new Date(playlist.createdAt).toLocaleDateString()}
                 </div>
@@ -173,41 +173,41 @@ export const PlaylistDetails = (playlist) => `
         <div class="w-1/2">
             <div class="minimal-card p-4">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg flex items-center text-gray-900 dark:text-gray-100">
-                        <i class="fas fa-flag-checkered mr-2 text-red-500"></i>
+                    <h3 class="font-bold text-lg flex items-center">
+                        <i class="fas fa-flag-checkered mr-2 text-primary"></i>
                         Race Jobs
                     </h3>
                     <div class="flex space-x-2">
-                        <button id="addJobsToPlaylist" class="minimal-btn bg-blue-500 text-white hover:bg-blue-600">
+                        <button id="addJobsToPlaylist" class="minimal-btn">
                             <i class="fas fa-plus mr-2"></i>Add Jobs
                         </button>
-                        <button id="managePlayersBtn" class="minimal-btn bg-green-500 text-white hover:bg-green-600">
+                        <button id="managePlayersBtn" class="minimal-btn">
                             <i class="fas fa-users mr-2"></i>Manage Players
                         </button>
                     </div>
                 </div>
                 <div id="playlistJobs" class="grid grid-cols-1 gap-2">
                     ${playlist.jobs.map(job => `
-                        <div class="job-card p-3 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors rounded-lg">
+                        <div class="job-card p-3 flex justify-between items-center hover:bg-hover transition-colors rounded-lg">
                             <div>
-                                <h3 class="font-semibold text-gray-800 dark:text-gray-200">${job.title}</h3>
-                                <div class="text-sm text-gray-500 dark:text-gray-400">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 mr-2">
+                                <h3 class="font-semibold">${job.title}</h3>
+                                <div class="text-sm text-muted">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/20 text-primary mr-2">
                                         <i class="fas fa-gamepad mr-1"></i>${job.gameMode}
                                     </span>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 mr-2">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-secondary/20 text-secondary mr-2">
                                         <i class="fas fa-route mr-1"></i>${job.routeType}
                                     </span>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-accent/20 text-accent">
                                         <i class="fas fa-ruler mr-1"></i>${job.routeLength}
                                     </span>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200">
+                                <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent">
                                     <i class="fas fa-star mr-1"></i>${job.rating}
                                 </div>
-                                <button onclick="window.removeJobFromPlaylist('${job.url}')" class="minimal-btn bg-red-500 text-white hover:bg-red-600 p-2">
+                                <button onclick="window.removeJobFromPlaylist('${job.url}')" class="minimal-btn">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -223,11 +223,11 @@ export const PlaylistDetails = (playlist) => `
 export const CreatePlaylistModal = () => `
     <div id="createPlaylistModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="modal-title section-title text-2xl mb-4 text-gray-900 dark:text-gray-100">Create New Playlist</h3>
+            <h3 class="modal-title section-title text-2xl mb-4">Create New Playlist</h3>
             <input type="text" id="playlistName" placeholder="Playlist Name" class="input w-full mb-4">
             <div class="flex justify-end space-x-2">
-                <button id="cancelCreate" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200">Cancel</button>
-                <button id="confirmCreate" class="btn bg-blue-500 text-white hover:bg-blue-600">Create</button>
+                <button id="cancelCreate" class="minimal-btn">Cancel</button>
+                <button id="confirmCreate" class="btn">Create</button>
             </div>
         </div>
     </div>
@@ -235,23 +235,23 @@ export const CreatePlaylistModal = () => `
 
 export const AddJobsModal = () => `
     <div id="addJobsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl flex flex-col backdrop-blur-sm" style="width: 500px; max-height: 80vh;">
-            <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+        <div class="minimal-card rounded-xl shadow-xl flex flex-col backdrop-blur-sm" style="width: 500px; max-height: 80vh;">
+            <div class="flex items-center justify-between p-4 border-b border-border">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Add Jobs</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Select jobs to add to your playlist</p>
+                    <h3 class="text-lg font-semibold">Add Jobs</h3>
+                    <p class="text-xs text-muted mt-0.5">Select jobs to add to your playlist</p>
                 </div>
-                <button id="cancelAddJobs" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                <button id="cancelAddJobs" class="text-muted hover:text-text transition-colors">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 bg-white dark:bg-gray-800">
+            <div class="flex-1 overflow-y-auto p-4">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="relative flex-1">
-                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="w-full p-2 pl-8 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400">
-                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 dark:text-gray-500 text-sm"></i>
+                        <input type="text" id="jobSearch" placeholder="Search jobs..." class="input w-full pl-8">
+                        <i class="fas fa-search absolute left-2.5 top-2.5 text-muted text-sm"></i>
                     </div>
-                    <select id="jobsFilterDropdown" class="border dark:border-gray-700 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <select id="jobsFilterDropdown" class="input">
                         <option value="recentlyPlayed">Recently Played</option>
                         <option value="mostPlayed">Most Played</option>
                         <option value="recentlyAdded">Recently Added</option>
@@ -261,17 +261,13 @@ export const AddJobsModal = () => `
                     <!-- Available jobs will be inserted here -->
                 </div>
             </div>
-            <div class="flex justify-between items-center gap-2 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between items-center gap-2 p-4 border-t border-border bg-card-bg">
+                <div class="text-sm text-muted">
                     <span id="selectedCount" class="font-medium">0</span> jobs selected
                 </div>
                 <div class="flex gap-2">
-                    <button id="cancelAddJobsBtn" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-lg transition-colors">
-                        Cancel
-                    </button>
-                    <button id="confirmAddJobs" class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-colors shadow-sm">
-                        Add Selected
-                    </button>
+                    <button id="cancelAddJobsBtn" class="minimal-btn">Cancel</button>
+                    <button id="confirmAddJobs" class="btn">Add Selected</button>
                 </div>
             </div>
         </div>
@@ -281,19 +277,19 @@ export const AddJobsModal = () => `
 export const UserSelectModal = () => `
     <div id="userSelectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Select User</h3>
+            <h3 class="text-xl font-bold mb-4">Select User</h3>
             <form id="userSelectForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">User</label>
-                    <select id="userDropdown" class="mt-1 w-full p-2 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></select>
+                    <label class="block text-sm font-medium">User</label>
+                    <select id="userDropdown" class="input mt-1 w-full"></select>
                 </div>
                 <div id="newUserSection" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">New Username</label>
-                    <input type="text" id="newUsername" class="mt-1 w-full p-2 border dark:border-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <label class="block text-sm font-medium">New Username</label>
+                    <input type="text" id="newUsername" class="input mt-1 w-full">
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="button" id="cancelUserSelect" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200">Cancel</button>
-                    <button type="submit" class="btn bg-blue-500 text-white hover:bg-blue-600">Select</button>
+                    <button type="button" id="cancelUserSelect" class="minimal-btn">Cancel</button>
+                    <button type="submit" class="btn">Select</button>
                 </div>
             </form>
         </div>
@@ -303,13 +299,13 @@ export const UserSelectModal = () => `
 export const ManagePlayersModal = () => `
     <div id="managePlayersModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="minimal-card p-6 w-96 shadow-xl">
-            <h3 class="section-title text-xl mb-4 text-gray-900 dark:text-gray-100">Manage Players</h3>
+            <h3 class="section-title text-xl mb-4">Manage Players</h3>
             <form id="managePlayersForm" class="space-y-2 mb-4">
                 <div id="playersCheckboxList"></div>
             </form>
             <div class="flex justify-end space-x-2">
-                <button id="cancelManagePlayers" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200">Cancel</button>
-                <button id="saveManagePlayers" class="btn bg-blue-500 text-white hover:bg-blue-600">Save</button>
+                <button id="cancelManagePlayers" class="minimal-btn">Cancel</button>
+                <button id="saveManagePlayers" class="btn">Save</button>
             </div>
         </div>
     </div>
@@ -336,11 +332,11 @@ window.initializeJobSelection = () => {
         
         card.setAttribute('data-selected', isSelected ? 'true' : 'false');
         if (isSelected) {
-            card.classList.add('border-blue-500', 'bg-blue-50');
-            card.classList.remove('hover:bg-gray-50');
+            card.classList.add('border-primary', 'bg-primary/10');
+            card.classList.remove('hover:bg-card-bg');
         } else {
-            card.classList.remove('border-blue-500', 'bg-blue-50');
-            card.classList.add('hover:bg-gray-50');
+            card.classList.remove('border-primary', 'bg-primary/10');
+            card.classList.add('hover:bg-card-bg');
         }
         
         const numberDiv = card.querySelector('.selected-number');
