@@ -721,4 +721,245 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     border-color: var(--accent-400);
     background-color: var(--background-100);
     outline: none;
+}
+
+/* Search bar and filter styles */
+[data-theme="dark"] #jobSearch {
+    background: #333 !important;
+    color: #fff !important;
+    border-color: #555 !important;
+}
+
+[data-theme="dark"] #jobSearch + i {
+    color: #999 !important;
+}
+
+[data-theme="dark"] #jobsFilterDropdown {
+    background: #333 !important;
+    color: #fff !important;
+    border-color: #555 !important;
+    background-image: url('data:image/svg+xml;utf8,<svg fill=%22%23999%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/><path d=%22M0 0h24v24H0z%22 fill=%22none%22/></svg>') !important;
+}
+
+/* Scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #555 !important;
+}
+
+/* Modal enhancements */
+.modal-content {
+    background: var(--background-50);
+    border: 1px solid var(--background-200);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--background-200);
+    padding: 1rem;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--background-200);
+    padding: 1rem;
+    background: var(--background-50);
+}
+
+/* Loading overlay enhancements */
+#loadingOverlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+#loadingOverlay .minimal-card {
+    background: var(--background-50) !important;
+    border: 1px solid var(--accent-400);
+}
+
+.loading-spinner {
+    border-color: var(--accent-500);
+    border-right-color: transparent;
+}
+
+/* Selection states */
+[data-selected="true"] {
+    border-color: var(--accent-400) !important;
+    background: var(--background-50) !important;
+    transform: translateY(-1px);
+}
+
+[data-selected="true"] h4 {
+    color: var(--accent-500) !important;
+}
+
+[data-selected="true"]:hover {
+    background: var(--background-100) !important;
+}
+
+/* Selection number styling */
+.selected-number {
+    background: var(--accent-500) !important;
+    color: var(--background-50) !important;
+    border: 2px solid var(--background-50) !important;
+    transition: all 0.2s ease !important;
+    font-weight: 600 !important;
+}
+
+[data-selected="true"] .selected-number {
+    opacity: 1 !important;
+    transform: scale(1.05) !important;
+}
+
+[data-selected="true"]:hover .selected-number {
+    transform: scale(1.1) !important;
+    background: var(--accent-400) !important;
+}
+
+/* Modal specific styles */
+#addJobsModal [data-selected="true"] {
+    border-color: var(--accent-400) !important;
+    background: var(--background-50) !important;
+}
+
+#addJobsModal [data-selected="true"] h4 {
+    color: var(--accent-500) !important;
+}
+
+#addJobsModal [data-selected="true"]:hover {
+    background: var(--background-100) !important;
+}
+
+#addJobsModal .selected-number {
+    background: var(--accent-500) !important;
+    color: var(--background-50) !important;
+    border: 2px solid var(--background-50) !important;
+    transition: all 0.2s ease !important;
+    font-weight: 600 !important;
+}
+
+#addJobsModal [data-selected="true"] .selected-number {
+    opacity: 1 !important;
+    transform: scale(1.05) !important;
+}
+
+#addJobsModal [data-selected="true"]:hover .selected-number {
+    transform: scale(1.1) !important;
+    background: var(--accent-400) !important;
+}
+
+/* Job card enhancements */
+.job-card .badge {
+    background: var(--accent-100);
+    background-opacity: 0.1;
+    color: var(--accent-500);
+    border: 1px solid var(--accent-400);
+    border-opacity: 0.2;
+}
+
+.job-card .badge:hover {
+    background: var(--accent-100);
+    background-opacity: 0.2;
+}
+
+/* Custom scrollbar for modal */
+#addJobsModal .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-400) transparent;
+}
+
+#addJobsModal .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+#addJobsModal .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#addJobsModal .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--accent-400);
+    border-radius: 4px;
+    border: 2px solid var(--background-50);
+}
+
+#addJobsModal .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-500);
+}
+
+#addJobsModal .search-container {
+    position: relative;
+    flex: 1;
+}
+
+#addJobsModal .search-container input[type="text"] {
+    background: var(--background-50) !important;
+    color: var(--text-900) !important;
+    border: 1px solid var(--background-200) !important;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
+    border-radius: 0.5rem !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
+}
+
+#addJobsModal .search-container input[type="text"]:hover {
+    border-color: var(--accent-300) !important;
+    background: var(--background-100) !important;
+}
+
+#addJobsModal .search-container input[type="text"]:focus {
+    border-color: var(--accent-400) !important;
+    background: var(--background-100) !important;
+    outline: none !important;
+}
+
+#addJobsModal .search-container i {
+    position: absolute !important;
+    left: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: var(--text-400) !important;
+    transition: color 0.2s ease !important;
+    pointer-events: none !important;
+}
+
+#addJobsModal .search-container input[type="text"]:hover + i {
+    color: var(--accent-500) !important;
+}
+
+#addJobsModal .search-container input[type="text"]:focus + i {
+    color: var(--accent-500) !important;
+}
+
+#addJobsModal .filter-container select {
+    appearance: none;
+    background: var(--background-50);
+    color: var(--text-900);
+    border: 1px solid var(--background-200);
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234587ba'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+}
+
+#addJobsModal .filter-container select:hover {
+    border-color: var(--accent-300);
+    background-color: var(--background-100);
+}
+
+#addJobsModal .filter-container select:focus {
+    border-color: var(--accent-400);
+    background-color: var(--background-100);
+    outline: none;
 } 

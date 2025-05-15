@@ -252,7 +252,7 @@ export const AddJobsModal = () => `
                         <i class="fas fa-search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #666;"></i>
                     </div>
                     <div class="filter-container">
-                        <select id="jobsFilterDropdown" class="input">
+                        <select id="jobsFilterDropdown" style="padding: 8px 32px 8px 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill=%22%23666%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/><path d=%22M0 0h24v24H0z%22 fill=%22none%22/></svg>'); background-repeat: no-repeat; background-position: right 8px center;">
                             <option value="recentlyPlayed">Recently Played</option>
                             <option value="mostPlayed">Most Played</option>
                             <option value="recentlyAdded">Recently Added</option>
