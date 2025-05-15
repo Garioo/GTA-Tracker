@@ -198,6 +198,9 @@ app.get('/api/playlists/:id', async (req, res) => {
     // Add cache control headers
     res.set('Cache-Control', 'public, max-age=30'); // Cache for 30 seconds
     
+    console.log('\n=== Fetching Playlist ===');
+    console.log('Playlist ID:', req.params.id);
+    
     const playlist = await Playlist.findById(req.params.id)
       .lean()
       .select('_id name jobs stats players scores createdAt updatedAt') // Only select needed fields
@@ -211,6 +214,13 @@ app.get('/api/playlists/:id', async (req, res) => {
       });
     }
     
+    console.log('Found playlist:', {
+      _id: playlist._id,
+      name: playlist.name,
+      jobCount: playlist.jobs ? playlist.jobs.length : 0,
+      jobs: playlist.jobs
+    });
+    
     // Ensure the playlist has all required fields with minimal processing
     const safePlaylist = {
       _id: playlist._id,
@@ -223,7 +233,7 @@ app.get('/api/playlists/:id', async (req, res) => {
       updatedAt: playlist.updatedAt
     };
     
-    console.log('Found playlist:', safePlaylist._id, 'with', safePlaylist.jobs.length, 'jobs');
+    console.log('Returning playlist with jobs:', safePlaylist.jobs.length);
     res.json(safePlaylist);
   } catch (error) {
     console.error('Error fetching playlist:', error);
