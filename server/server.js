@@ -284,7 +284,7 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
     console.log('Raw request body:', JSON.stringify(req.body, null, 2));
     console.log('Content-Type:', req.headers['content-type']);
     
-    // Handle both direct job object and jobs array
+    // Handle different request formats
     let jobs;
     if (Array.isArray(req.body)) {
       console.log('Received direct array of jobs');
@@ -292,6 +292,9 @@ app.post('/api/playlists/:id/jobs', async (req, res) => {
     } else if (req.body.jobs) {
       console.log('Received jobs array in object');
       jobs = req.body.jobs;
+    } else if (req.body.job) {
+      console.log('Received single job in job field');
+      jobs = [req.body.job];
     } else if (req.body.url) {
       console.log('Received single job object');
       jobs = [req.body];
