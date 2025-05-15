@@ -233,7 +233,13 @@ app.get('/api/playlists/:id', async (req, res) => {
       updatedAt: playlist.updatedAt
     };
     
-    console.log('Returning playlist with jobs:', safePlaylist.jobs.length);
+    console.log('Returning playlist:', {
+      _id: safePlaylist._id,
+      name: safePlaylist.name,
+      jobCount: safePlaylist.jobs.length,
+      jobs: safePlaylist.jobs
+    });
+    
     res.json(safePlaylist);
   } catch (error) {
     console.error('Error fetching playlist:', error);
