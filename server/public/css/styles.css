@@ -142,13 +142,11 @@ nav {
     background: var(--background-50) !important;
     color: var(--text-900) !important;
     border-radius: 1rem;
-    box-shadow: 0 2px 8px var(--background-200);
     border: 1px solid var(--background-200);
     transition: all 0.3s ease;
 }
 
 .minimal-card:hover {
-    box-shadow: 0 4px 16px var(--background-300);
     border-color: var(--accent-400);
 }
 
@@ -156,14 +154,12 @@ nav {
     background: var(--background-50);
     color: var(--text-900);
     border-radius: 1rem;
-    box-shadow: 0 2px 8px var(--background-200);
     border: 1px solid var(--background-200);
     transition: all 0.3s ease;
 }
 
 .job-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px var(--background-300);
+    transform: translateY(-1px);
     background: var(--background-100);
 }
 
@@ -182,7 +178,6 @@ nav {
     border-radius: 0.5rem;
     padding: 0.5rem 1.25rem;
     font-weight: 600;
-    box-shadow: 0 1px 4px var(--background-200);
     transition: all 0.2s ease;
     border: 1px solid var(--accent-600);
 }
@@ -190,13 +185,11 @@ nav {
 .btn:hover {
     background: var(--accent-400);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px var(--background-300);
 }
 
 .btn:active {
     background: var(--accent-600);
     transform: translateY(0);
-    box-shadow: 0 1px 4px var(--background-200);
 }
 
 .label {
@@ -481,10 +474,28 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 /* Search bar enhancements */
 .search-container {
     position: relative;
+    flex: 1;
 }
 
 .search-container .input {
-    padding-left: 2.5rem;
+    background: var(--background-50);
+    color: var(--text-900);
+    border: 1px solid var(--background-200);
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.search-container .input:hover {
+    border-color: var(--accent-300);
+    background: var(--background-100);
+}
+
+.search-container .input:focus {
+    border-color: var(--accent-400);
+    background: var(--background-100);
+    outline: none;
 }
 
 .search-container i {
@@ -492,6 +503,15 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
+    color: var(--accent-400);
+    transition: color 0.2s ease;
+}
+
+.search-container .input:hover + i {
+    color: var(--accent-500);
+}
+
+.search-container .input:focus + i {
     color: var(--accent-500);
 }
 
@@ -501,11 +521,28 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 }
 
 .filter-container select {
-    padding-right: 2.5rem;
+    appearance: none;
+    background: var(--background-50);
+    color: var(--text-900);
+    border: 1px solid var(--background-200);
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234587ba'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     background-size: 1.5em 1.5em;
+}
+
+.filter-container select:hover {
+    border-color: var(--accent-300);
+    background-color: var(--background-100);
+}
+
+.filter-container select:focus {
+    border-color: var(--accent-400);
+    background-color: var(--background-100);
+    outline: none;
 }
 
 /* Stats card enhancements */
@@ -519,8 +556,7 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 .stats-card:hover {
     border-color: var(--accent-400);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px var(--background-300);
+    transform: translateY(-1px);
 }
 
 .stats-card .icon {
@@ -531,7 +567,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 .modal-content {
     background: var(--background-50);
     border: 1px solid var(--background-200);
-    box-shadow: 0 4px 16px var(--background-300);
 }
 
 .modal-header {
@@ -565,7 +600,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 [data-selected="true"] {
     border-color: var(--accent-400) !important;
     background: var(--background-50) !important;
-    box-shadow: 0 2px 4px var(--background-200);
     transform: translateY(-1px);
 }
 
@@ -575,7 +609,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 [data-selected="true"]:hover {
     background: var(--background-100) !important;
-    box-shadow: 0 2px 6px var(--background-300);
 }
 
 /* Selection number styling */
@@ -583,7 +616,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--accent-500) !important;
     color: var(--background-50) !important;
     border: 2px solid var(--background-50) !important;
-    box-shadow: 0 1px 3px var(--background-200) !important;
     transition: all 0.2s ease !important;
     font-weight: 600 !important;
 }
@@ -591,7 +623,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 [data-selected="true"] .selected-number {
     opacity: 1 !important;
     transform: scale(1.05) !important;
-    box-shadow: 0 2px 4px var(--background-300) !important;
 }
 
 [data-selected="true"]:hover .selected-number {
@@ -603,7 +634,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 #addJobsModal [data-selected="true"] {
     border-color: var(--accent-400) !important;
     background: var(--background-50) !important;
-    box-shadow: 0 2px 4px var(--background-200);
 }
 
 #addJobsModal [data-selected="true"] h4 {
@@ -612,14 +642,12 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 
 #addJobsModal [data-selected="true"]:hover {
     background: var(--background-100) !important;
-    box-shadow: 0 2px 6px var(--background-300);
 }
 
 #addJobsModal .selected-number {
     background: var(--accent-500) !important;
     color: var(--background-50) !important;
     border: 2px solid var(--background-50) !important;
-    box-shadow: 0 1px 3px var(--background-200) !important;
     transition: all 0.2s ease !important;
     font-weight: 600 !important;
 }
@@ -627,7 +655,6 @@ body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 #addJobsModal [data-selected="true"] .selected-number {
     opacity: 1 !important;
     transform: scale(1.05) !important;
-    box-shadow: 0 2px 4px var(--background-300) !important;
 }
 
 #addJobsModal [data-selected="true"]:hover .selected-number {
