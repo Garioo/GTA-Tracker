@@ -686,11 +686,15 @@ window.editPlaylist = (id) => {
 window.deletePlaylist = playlists.delete;
 window.removeJobFromPlaylist = playlists.removeJob;
 window.showUserSelectModal = modals.showUserSelect;
-window.toggleJobSelection = (checkbox, job) => {
-    if (checkbox.checked) {
-        state.selectedJobs.set(job.url, job);
-    } else {
+window.toggleJobSelection = (cardElem, job) => {
+    // If job is already in the playlist, do nothing
+    const playlistJobs = state.currentPlaylist?.jobs || [];
+    if (playlistJobs.some(j => j.url === job.url)) return;
+    // Toggle selection
+    if (state.selectedJobs.has(job.url)) {
         state.selectedJobs.delete(job.url);
+    } else {
+        state.selectedJobs.set(job.url, job);
     }
     // Only update if the modal and container exist
     const container = document.getElementById('availableJobs');
