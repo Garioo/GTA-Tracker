@@ -956,29 +956,29 @@ footer {
 .job-card .job-tag {
     display: inline-flex;
     align-items: center;
-    padding: 0 0.15rem;
-    font-size: 0.55rem;
-    font-weight: 500;
-    margin-right: 0.2rem;
-    margin-bottom: 0;
-    line-height: 1;
+    padding: 0 0.12rem;
+    font-size: 0.52rem;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.05;
+    border-radius: 0.18rem;
     transition: all 0.2s ease;
 }
 .job-card .job-tag:hover {
     opacity: 0.8;
 }
 .job-card .job-tag i {
-    margin-right: 0.1rem;
-    font-size: 0.6rem;
-    opacity: 0.9;
+    margin-right: 0.09rem;
+    font-size: 0.6em;
+    opacity: 0.8;
 }
 
 /* Rating badge */
 .job-card .job-rating {
     display: inline-flex;
     align-items: center;
-    padding: 0 0.15rem;
-    font-size: 0.55rem;
+    padding: 0 0.12rem;
+    font-size: 0.52rem;
     font-weight: 500;
     color: var(--accent-500);
     margin-right: 0.2rem;
@@ -986,9 +986,9 @@ footer {
 }
 
 .job-card .job-rating i {
-    margin-right: 0.1rem;
-    font-size: 0.6rem;
-    opacity: 0.9;
+    margin-right: 0.09rem;
+    font-size: 0.6em;
+    opacity: 0.8;
 }
 
 #availableJobs .job-card {
